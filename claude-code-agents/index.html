@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Agents — A Live Lesson</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --warm-stone: #faf5f0;
+      --navy: #081f3f;
+      --navy-soft: #e5e9f0;
+      --amber: #d97706;
+      --golden: #fbbf24;
+      --golden-soft: #fef3c7;
+      --card-bg: #ffffff;
+      --border-subtle: rgba(8, 31, 63, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--warm-stone);
+      color: var(--navy);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    html { scroll-snap-type: y proximity; scroll-behavior: smooth; }
+    .layout {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      max-width: 1320px;
+      margin: 0 auto;
+      gap: 24px;
+      padding: 32px 24px 64px;
+    }
+    .toc {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      font-size: 12px;
+    }
+    .toc ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+    .toc li { margin: 0; }
+    .toc a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: var(--navy);
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      opacity: 0.6;
+      position: relative;
+      transition: opacity 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .toc a:hover {
+      opacity: 1;
+      background: var(--amber);
+      color: var(--warm-stone);
+      border-color: var(--amber);
+    }
+    .toc a::after {
+      content: attr(data-label);
+      position: absolute;
+      left: calc(100% + 10px);
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+    }
+    .toc a:hover::after { opacity: 1; }
+    .content { min-width: 0; }
+    .content > section, .content > .hero, .content > .footer { scroll-snap-align: start; }
+    h1, h2, h3 {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-weight: 400;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+    h1 { font-size: 40px; margin: 0 0 8px; }
+    h2 {
+      font-size: 28px;
+      margin: 56px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--amber);
+    }
+    h3 { font-size: 18px; margin: 24px 0 8px; }
+    p { margin: 0 0 16px; }
+    strong { font-weight: 600; }
+    a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+    code, pre, .mono { font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 14px; }
+    code { background: var(--navy-soft); padding: 1px 6px; border-radius: 3px; }
+    pre {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 16px 20px;
+      border-radius: 6px;
+      overflow-x: auto;
+      position: relative;
+      margin: 12px 0;
+    }
+    pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--amber);
+      color: var(--warm-stone);
+      border: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .copy-btn:hover { background: var(--golden); color: var(--navy); }
+    .copy-btn.copied { background: var(--golden); color: var(--navy); }
+    .try-it {
+      background: var(--golden-soft);
+      border-left: 4px solid var(--golden);
+      padding: 18px 22px;
+      margin: 20px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .try-it h3 { margin-top: 0; color: var(--navy); }
+    .try-it ol { padding-left: 22px; margin: 8px 0 0; }
+    .try-it ol li { margin: 6px 0; }
+    .why-it-matters {
+      font-size: 14px;
+      color: var(--navy);
+      opacity: 0.88;
+      border-left: 3px solid var(--amber);
+      padding: 10px 18px;
+      margin: 16px 0;
+    }
+    .why-it-matters strong { color: var(--amber); }
+    .heads-up {
+      background: var(--navy-soft);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin: 12px 0;
+    }
+    .heads-up strong { color: var(--amber); }
+    .prereq {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 14px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin: 20px 0 8px;
+    }
+    .prereq strong { color: var(--golden); }
+    .hero { margin-bottom: 32px; }
+    .hero .kicker {
+      color: var(--amber);
+      font-size: 13px;
+      margin-bottom: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .hero .outcome { font-size: 18px; color: var(--navy); opacity: 0.88; }
+    .hero .byline { font-size: 14px; opacity: 0.7; margin: 8px 0 16px; }
+    .footer {
+      margin-top: 72px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      opacity: 0.75;
+    }
+    .setup-paths {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .setup-paths .path {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 16px 18px;
+    }
+    .setup-paths .path h3 { margin-top: 0; color: var(--amber); font-size: 16px; }
+    .setup-paths .path ol { padding-left: 18px; margin: 0; font-size: 14px; line-height: 1.5; }
+    .setup-paths .path ol li { margin: 6px 0; }
+    .landscape {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .landscape .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 12px;
+    }
+    .landscape .card .name {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 15px;
+      color: var(--navy);
+      margin-bottom: 4px;
+      line-height: 1.1;
+    }
+    .landscape .card .where {
+      color: var(--amber);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .landscape .card .desc { font-size: 12px; line-height: 1.4; opacity: 0.85; }
+    .file-tree {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 18px 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 16px 0;
+    }
+    .file-tree .row { display: flex; align-items: center; gap: 8px; }
+    .file-tree .badge {
+      font-size: 10px;
+      padding: 1px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-always { background: var(--navy); color: var(--warm-stone); }
+    .badge-user { background: var(--amber); color: var(--warm-stone); }
+    .badge-claude { background: var(--golden); color: var(--navy); }
+    .badge-dispatched { background: var(--golden-soft); color: var(--navy); border: 1px solid var(--golden); }
+    .runtime-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+    .runtime-diagram .surface {
+      background: var(--navy-soft);
+      padding: 10px 14px;
+      border-radius: 5px;
+      font-size: 13px;
+      text-align: center;
+      min-width: 100px;
+    }
+    .runtime-diagram .engine {
+      background: var(--amber);
+      color: var(--warm-stone);
+      padding: 14px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .runtime-diagram .target {
+      background: var(--golden-soft);
+      padding: 10px 14px;
+      border-radius: 5px;
+      font-size: 13px;
+      text-align: center;
+      min-width: 100px;
+    }
+    .runtime-diagram .arrow { color: var(--amber); font-size: 24px; font-weight: 600; }
+    .decision-tree {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 18px 22px;
+      margin: 16px 0;
+    }
+    .decision-tree .branch {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border-subtle);
+      font-size: 14px;
+    }
+    .decision-tree .branch:last-child { border-bottom: none; }
+    .decision-tree .branch .q { flex: 1; }
+    .decision-tree .branch .arrow { color: var(--amber); font-weight: 600; }
+    .decision-tree .branch .a { color: var(--amber); font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600; }
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; }
+      .setup-paths { grid-template-columns: 1fr; }
+      .landscape { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ===== NEW: Card-section pattern (prototyped on §4) ===== */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 48px 56px;
+      margin: 32px 0;
+      box-shadow: 0 1px 2px rgba(8,31,63,0.04), 0 8px 24px rgba(8,31,63,0.06);
+      scroll-margin-top: 24px;
+    }
+    .section-card .card-grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 56px;
+      align-items: start;
+    }
+    .section-card .section-num {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 64px;
+      color: var(--amber);
+      line-height: 1;
+      opacity: 0.35;
+      margin-bottom: 8px;
+    }
+    .section-card .section-title {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 44px;
+      line-height: 1.05;
+      margin: 0 0 4px;
+      border: none;
+      padding: 0;
+    }
+    .section-card .section-subtitle {
+      font-style: italic;
+      color: var(--amber);
+      font-size: 16px;
+      margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    .section-card .lede {
+      font-size: 18px;
+      line-height: 1.5;
+      margin: 0 0 28px;
+      color: var(--navy);
+    }
+    .section-card .card-right {
+      background: var(--warm-stone);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .section-card .card-right h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+    }
+    .section-card .card-right pre {
+      margin: 0 0 16px;
+      font-size: 12px;
+      padding: 12px 14px;
+    }
+    .section-card .footnote {
+      margin-top: 28px;
+      font-size: 13px;
+      font-style: italic;
+      opacity: 0.7;
+      border-left: 2px solid var(--amber);
+      padding-left: 12px;
+    }
+    /* Filesystem mental-model visual (used in §4) */
+    .fs-view {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 0 0 14px;
+    }
+    .fs-zone {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.7;
+      position: relative;
+    }
+    .fs-zone .zone-label {
+      position: absolute;
+      top: -10px;
+      left: 14px;
+      background: var(--amber);
+      color: var(--warm-stone);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .fs-zone .fs-row { display: flex; align-items: center; gap: 10px; }
+    .fs-zone .fs-row .badge {
+      font-size: 9px;
+      padding: 1px 7px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .fs-zone .fs-row .badge.personal { background: var(--navy); color: var(--warm-stone); }
+    .fs-zone .fs-row .badge.project { background: var(--amber); color: var(--warm-stone); }
+    .fs-zone .fs-row .badge.local { background: var(--golden-soft); color: var(--navy); border: 1px solid var(--golden); }
+    .fs-zone .fs-row.dim { opacity: 0.4; }
+    .fs-zone .arrow-merge {
+      color: var(--amber);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      text-align: center;
+      margin: 6px 0;
+    }
+    /* Mock file panel (looks like a text-file window) */
+    .mock-file {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 0 0 16px;
+    }
+    .mock-file .file-bar {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 6px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mock-file .file-bar .dots { display: flex; gap: 4px; }
+    .mock-file .file-bar .dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(250,245,240,0.3); }
+    .mock-file .file-body {
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--navy);
+      white-space: pre-wrap;
+    }
+    .mock-file .file-body .comment { color: var(--amber); }
+    /* Numbered step-flow (used in §4 right column) */
+    .step-flow { display: flex; flex-direction: column; gap: 14px; }
+    .step-flow .step {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .step-flow .step .num {
+      background: var(--amber);
+      color: var(--warm-stone);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+    }
+    .step-flow .step .body { font-size: 14px; line-height: 1.5; }
+    .step-flow .step .body code { font-size: 12px; }
+    .share-prompt {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border-subtle);
+      font-size: 13px;
+    }
+    .share-prompt strong { color: var(--amber); }
+    @media (max-width: 980px) {
+      .section-card { padding: 32px 28px; }
+      .section-card .card-grid { grid-template-columns: 1fr; gap: 32px; }
+      .section-card .section-title { font-size: 34px; }
+    }
+
+    /* Solo (full-width inside) variant for showcase sections like §1, §2, §3, §8 */
+    .section-card.solo .section-num {
+      display: inline-block;
+      margin-right: 16px;
+      vertical-align: baseline;
+      font-size: 48px;
+    }
+    .section-card.solo .section-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+    .section-card.solo .section-title { margin: 0; }
+    .section-card.solo .lede { max-width: 760px; }
+
+    /* Larger versions of existing diagrams for use inside cards */
+    .section-card .landscape { grid-template-columns: repeat(5, 1fr); gap: 14px; margin: 24px 0 8px; }
+    .section-card .landscape .card { padding: 16px; }
+    .section-card .landscape .card .name { font-size: 17px; }
+    .section-card .landscape .card .desc { font-size: 13px; }
+    .section-card .runtime-diagram { padding: 32px; margin: 24px 0 8px; }
+    .section-card .file-tree { padding: 22px 28px; font-size: 14px; }
+    .section-card .decision-tree { padding: 22px 28px; }
+    .section-card .decision-tree .branch { font-size: 15px; padding: 12px 0; }
+
+    /* Suggestion cards for "Where to go next" (non-interactive) */
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0 0;
+    }
+    .link-grid .lk-card {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: var(--navy);
+      font-size: 14px;
+    }
+    .link-grid .lk-card .lk-title {
+      display: block;
+      color: var(--amber);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .link-grid .lk-card .lk-desc {
+      font-size: 13px;
+      opacity: 0.85;
+    }
+
+    /* Setup paths look more substantial inside a card */
+    .section-card .setup-paths { margin: 20px 0 12px; gap: 24px; }
+    .section-card .setup-paths .path { padding: 22px 26px; border-radius: 10px; }
+    .section-card .setup-paths .path h3 { font-size: 18px; margin-bottom: 6px; }
+    .section-card .setup-paths .path ol { font-size: 14px; }
+    .section-card .heads-up { padding: 14px 18px; }
+
+    /* Skill-matchmaking visual (used in §6) */
+    .skill-match {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 16px 0 8px;
+    }
+    .skill-match .request {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      align-self: flex-start;
+      max-width: 90%;
+    }
+    .skill-match .skills-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .skill-match .skill-tile {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      opacity: 0.45;
+    }
+    .skill-match .skill-tile.match {
+      opacity: 1;
+      border-color: var(--amber);
+      background: var(--golden-soft);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+    }
+    .skill-match .skill-tile .name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--amber);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .skill-match .skill-tile .desc { font-size: 11px; line-height: 1.4; }
+    .skill-match .match-caption {
+      font-size: 12px;
+      color: var(--amber);
+      font-style: italic;
+      align-self: center;
+      text-align: center;
+    }
+
+    /* Command-flow visual (used in §5) */
+    .cmd-flow {
+      display: grid;
+      grid-template-columns: 1fr 18px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin: 16px 0 8px;
+    }
+    .cmd-flow .box {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12px;
+    }
+    .cmd-flow .box .label {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .cmd-flow .box code {
+      font-family: 'JetBrains Mono', monospace;
+      background: transparent;
+      padding: 0;
+      font-size: 12px;
+    }
+    .cmd-flow .arrow { color: var(--amber); font-size: 20px; text-align: center; font-weight: 600; }
+
+    /* Prediction box visual (used in §1 LLM) */
+    .prediction-box {
+      display: grid;
+      grid-template-columns: auto auto auto auto auto;
+      gap: 14px;
+      align-items: center;
+      justify-content: center;
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 16px 0 8px;
+    }
+    .prediction-box .pred-input {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      padding: 10px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+    }
+    .prediction-box .pred-arrow {
+      color: var(--amber);
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .prediction-box .pred-engine {
+      background: var(--amber);
+      color: var(--warm-stone);
+      padding: 14px 22px;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-family: 'Inter', sans-serif;
+    }
+    .prediction-box .pred-output {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .prediction-box .pred-choice {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      min-width: 140px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .prediction-box .pred-choice.top {
+      border-color: var(--amber);
+      background: var(--golden-soft);
+      font-weight: 600;
+    }
+    .prediction-box .pred-choice .pct {
+      color: var(--amber);
+      font-size: 11px;
+    }
+
+    /* Harness progression (used in §1 LLM) */
+    .harness-stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin: 8px 0 16px;
+    }
+    .harness-row {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 4px 16px;
+      align-items: center;
+    }
+    .harness-row.focus {
+      background: var(--golden-soft);
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+    }
+    .harness-row .harness-label {
+      grid-row: 1 / 3;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .harness-row .harness-label .hnum {
+      background: var(--amber);
+      color: var(--warm-stone);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+    }
+    .harness-row .harness-label .hname {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.1;
+    }
+    .harness-row .harness-flow {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .harness-row .harness-flow .tools-list {
+      display: block;
+      font-size: 12px;
+      opacity: 0.7;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .harness-row .harness-note {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: 12px;
+      opacity: 0.72;
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .harness-expand {
+      text-align: center;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin: 4px 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Definitions stack (used in §1) */
+    .defs { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 16px 0 24px; }
+    .defs .def {
+      background: var(--warm-stone);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      align-items: baseline;
+    }
+    .defs .def .def-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+    }
+    .defs .def .def-text { font-size: 14px; line-height: 1.5; }
+    .defs .def .def-text em { color: var(--navy); opacity: 0.7; }
+
+    /* Agent relationship diagram (used in §1) */
+    .agent-diagram {
+      display: grid;
+      grid-template-columns: 1fr 78px 1.6fr 78px 1fr;
+      gap: 6px;
+      align-items: stretch;
+      margin: 8px 0 12px;
+    }
+    .agent-diagram .actor {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .agent-diagram .actor.center {
+      background: var(--card-bg);
+      border: 2px solid var(--amber);
+    }
+    .agent-diagram .actor .role {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .agent-diagram .actor .name {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 19px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .agent-diagram .actor .desc { font-size: 12px; line-height: 1.45; opacity: 0.82; }
+    .agent-diagram .agent-internals {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr;
+      gap: 5px;
+      align-items: stretch;
+      margin: 2px 0 6px;
+    }
+    .agent-diagram .agent-internals .part {
+      background: var(--golden-soft);
+      border-radius: 7px;
+      padding: 10px 8px;
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .agent-diagram .agent-internals .part .label {
+      display: block;
+      font-weight: 700;
+      color: var(--amber);
+      font-family: 'Inter', sans-serif;
+      margin-bottom: 2px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+    }
+    .agent-diagram .agent-internals .loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--amber);
+      font-weight: 600;
+    }
+    .agent-diagram .arrows {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--amber);
+      font-family: 'Inter', sans-serif;
+    }
+    .agent-diagram .arrows .out { font-weight: 600; }
+    .agent-diagram .arrows .back { opacity: 0.55; font-style: italic; font-size: 11px; }
+
+    /* Examples grouped by category (used in §1) */
+    .examples-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      font-weight: 700;
+      margin: 24px 0 8px;
+    }
+    .agent-examples {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0 0 8px;
+    }
+    .agent-examples .category {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .agent-examples .category.focus {
+      border-color: var(--amber);
+      background: var(--golden-soft);
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12);
+    }
+    .agent-examples .cat-head {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+    .agent-examples .cat-name {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 17px;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .agent-examples .cat-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+    }
+    .agent-examples .cat-desc {
+      font-size: 12px;
+      opacity: 0.75;
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+    .agent-examples .examples-list {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--navy);
+    }
+    .agent-examples .examples-list strong {
+      color: var(--amber);
+      font-weight: 600;
+    }
+
+    /* Subagent workflow visual (used in §9) */
+    .workflow-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 18px 0 8px;
+      align-items: stretch;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+    .flow-row.center { justify-content: center; }
+    .flow-actor {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      padding: 12px 16px;
+      border-radius: 10px;
+      white-space: nowrap;
+      text-align: center;
+      min-width: 110px;
+      flex-shrink: 0;
+    }
+    .flow-actor.you { background: var(--navy-soft); color: var(--navy); }
+    .flow-actor.main { background: var(--amber); color: var(--warm-stone); padding: 14px 18px; }
+    .flow-bubble {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      line-height: 1.45;
+      flex: 1;
+    }
+    .flow-bubble.quote { font-style: italic; }
+    .flow-arrow {
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin: 0;
+    }
+    .flow-arrow .glyph { display: block; font-size: 14px; margin-bottom: 2px; }
+    .flow-subagents {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0;
+    }
+    .subagent-lane {
+      background: var(--golden-soft);
+      border: 1px solid var(--golden);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .subagent-lane .sub-label {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+    .subagent-lane .sub-file {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--navy);
+      opacity: 0.6;
+    }
+    .subagent-lane .sub-action {
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 4px 0 2px;
+    }
+    .subagent-lane .sub-returns {
+      font-size: 11px;
+      font-style: italic;
+      opacity: 0.75;
+      padding-top: 4px;
+      border-top: 1px dashed var(--amber);
+    }
+    .subagent-lane .sub-returns strong { color: var(--amber); font-style: normal; }
+
+    /* View toggle (used in §9 to flip between Detail and Diagram views) */
+    .view-toggle {
+      display: inline-flex;
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 3px;
+      margin: 4px 0 12px;
+    }
+    .view-btn {
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--navy);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, color 0.2s;
+      opacity: 0.65;
+    }
+    .view-btn.active {
+      background: var(--amber);
+      color: var(--warm-stone);
+      opacity: 1;
+    }
+    .view-btn:hover:not(.active) { opacity: 1; }
+    .workflow-view { display: none; }
+    .workflow-view.active {
+      display: block;
+      animation: flipIn 0.45s ease-out;
+      transform-origin: top center;
+    }
+    @keyframes flipIn {
+      from { opacity: 0; transform: perspective(1200px) rotateX(-14deg); }
+      to { opacity: 1; transform: perspective(1200px) rotateX(0deg); }
+    }
+
+    /* Simplified abstract flow (used in §9 Diagram view) */
+    .simple-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0;
+    }
+    .sf-node {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      text-align: center;
+      min-width: 220px;
+    }
+    .sf-node.sf-user {
+      background: var(--navy-soft);
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .sf-node.sf-claude {
+      background: var(--amber);
+      color: var(--warm-stone);
+      font-weight: 700;
+    }
+    .sf-node.sf-process {
+      background: var(--warm-stone);
+      border: 1px dashed var(--border-subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+    .sf-node.sf-agent {
+      background: var(--golden-soft);
+      border: 1px solid var(--golden);
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 100px;
+      padding: 9px 14px;
+    }
+    .sf-node.sf-skill {
+      background: var(--card-bg);
+      border: 1px dashed var(--amber);
+      font-size: 11px;
+      color: var(--amber);
+      min-width: 90px;
+      padding: 6px 12px;
+      font-style: italic;
+    }
+    .sf-node.sf-skill.none {
+      opacity: 0.4;
+      color: var(--navy);
+      border-color: var(--border-subtle);
+    }
+    .sf-node.sf-output {
+      background: var(--navy-soft);
+      font-size: 11px;
+      min-width: 90px;
+      padding: 6px 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .sf-arrow {
+      color: var(--amber);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1;
+      text-align: center;
+    }
+    .sf-arrow.short { font-size: 13px; }
+    .sf-arrow.many {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      margin: 2px 0;
+    }
+    .sf-arrow.many .g { font-size: 14px; letter-spacing: 6px; }
+    .sf-arrow.many .lbl {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+    }
+    .sf-parallel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 620px;
+      margin: 4px 0;
+    }
+    .sf-lane {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    /* Staggered reveal animation */
+    .simple-flow .anim-step {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    }
+    .simple-flow .anim-step.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Two-column layout: directory tree on the left, flow on the right */
+    .simple-flow-layout {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 24px;
+      align-items: start;
+      margin: 8px 0;
+    }
+    .sf-tree {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.85;
+      position: relative;
+    }
+    .sf-tree .tree-header {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.08em;
+    }
+    .sf-tree .tree-row {
+      display: block;
+      border-radius: 4px;
+      padding: 1px 6px;
+      margin-left: -6px;
+      transition: background 0.25s, color 0.25s, transform 0.25s;
+    }
+    .sf-tree .tree-row.callable { color: var(--navy); }
+    .sf-tree .tree-row.consumed {
+      background: var(--golden-soft);
+      color: var(--amber);
+    }
+    .sf-tree .tree-row.pulsing {
+      background: var(--golden-soft);
+      transform: translateX(2px);
+    }
+
+    /* Flying ghost element — temporary clone that animates from tree to diagram slot */
+    .fly-ghost {
+      position: fixed;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: var(--golden-soft);
+      border: 1px solid var(--golden);
+      color: var(--amber);
+      padding: 4px 10px;
+      border-radius: 6px;
+      z-index: 1000;
+      pointer-events: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
+      will-change: transform, opacity;
+    }
+    .fly-ghost.flying { transition: transform 0.85s cubic-bezier(0.3, 0.7, 0.4, 1), opacity 0.3s ease-out; }
+
+    /* Replay button shown after animation completes */
+    .replay-anim {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--navy);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s, border-color 0.2s, color 0.2s;
+      margin: 8px 0 0;
+    }
+    .replay-anim:hover { opacity: 1; border-color: var(--amber); color: var(--amber); }
+
+    /* Skills vs subagents contrast (used in §9) */
+    .contrast-panel {
+      display: grid;
+      grid-template-columns: 1fr 32px 1fr;
+      gap: 12px;
+      align-items: stretch;
+      margin: 16px 0 8px;
+    }
+    .contrast-panel .col {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .contrast-panel .col .ctitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .contrast-panel .col .cdesc { font-size: 13px; line-height: 1.5; }
+    .contrast-panel .vs {
+      align-self: center;
+      text-align: center;
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 18px;
+      color: var(--amber);
+    }
+
+    /* Subagent-dispatch visual (used in §7) */
+    .dispatch {
+      display: grid;
+      grid-template-columns: 1fr 22px 1fr;
+      gap: 10px;
+      align-items: center;
+      margin: 16px 0 8px;
+    }
+    .dispatch .window {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .dispatch .window .titlebar {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 5px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+    }
+    .dispatch .window .body { padding: 10px 12px; font-size: 12px; line-height: 1.5; }
+    .dispatch .arrow { color: var(--amber); font-size: 18px; text-align: center; font-weight: 600; }
+    .dispatch .return-caption {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-size: 12px;
+      color: var(--amber);
+      font-style: italic;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="toc" aria-label="Table of contents">
+      <ol>
+        <li><a href="#hero" data-label="Top">▲</a></li>
+        <li><a href="#setup" data-label="Setup">·</a></li>
+        <li><a href="#s1" data-label="What is an LLM?">1</a></li>
+        <li><a href="#s2" data-label="What is an agent?">2</a></li>
+        <li><a href="#s3" data-label="Claude Code as runtime">3</a></li>
+        <li><a href="#s4" data-label="Lay of the land">4</a></li>
+        <li><a href="#s5" data-label="CLAUDE.md">5</a></li>
+        <li><a href="#s6" data-label="Commands">6</a></li>
+        <li><a href="#s7" data-label="Skills">7</a></li>
+        <li><a href="#s8" data-label="Subagents">8</a></li>
+        <li><a href="#s9" data-label="Subagents working together">9</a></li>
+        <li><a href="#s10" data-label="Recap">★</a></li>
+        <li><a href="#s11" data-label="Where to next">→</a></li>
+      </ol>
+    </nav>
+    <main class="content">
+      <section class="section-card solo hero" id="hero">
+        <div class="kicker">A live lesson · 2026-05-25</div>
+        <h1 style="font-size:54px;margin:8px 0 4px;line-height:1.05;">Claude Code Agents</h1>
+        <div class="byline">Matt · MVP Club</div>
+        <p class="outcome" style="margin-top:18px;">In the next 45-60 minutes you'll learn the mental model behind Claude Code agents and build <strong>one of each</strong> of the four file types — CLAUDE.md, a command, a skill, and a subagent — in a sandbox folder on your own machine.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 8px;">
+          <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:18px;">CLAUDE.md</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">always on</div></div>
+          <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:18px;">Commands</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">you trigger</div></div>
+          <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:18px;">Skills</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">Claude triggers</div></div>
+          <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:18px;">Subagents</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">dispatched</div></div>
+        </div>
+        <div class="prereq" style="margin-top:24px;">
+          <strong>Before we start:</strong> have Claude Code installed (CLI in a terminal, or Desktop App on Mac/Windows) and a folder on your Desktop where we can play. Desktop App users: make sure you're on the <em>Code</em> tab — not Chat or Cowork.
+        </div>
+      </section>
+
+      <section class="section-card solo" id="setup">
+        <div class="section-title-row">
+          <div class="section-num">·</div>
+          <h2 class="section-title">Setup — two ways in</h2>
+        </div>
+        <div class="section-subtitle">pick the path that matches what you have open</div>
+
+        <div class="setup-paths">
+          <div class="path">
+            <h3>Terminal path</h3>
+            <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code CLI in VS Code / Terminal / PowerShell.</p>
+            <ol>
+              <li>Create a folder on your Desktop named <code>lesson-sandbox</code> (right-click → New Folder).</li>
+              <li><strong>Mac:</strong> right-click the folder → <em>"New Terminal at Folder."</em> · <strong>Windows:</strong> right-click inside it in Explorer → <em>"Open in Terminal."</em></li>
+              <li>Type <code>claude</code> + Enter.</li>
+            </ol>
+          </div>
+          <div class="path">
+            <h3>Desktop App path</h3>
+            <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code Desktop App on Mac or Windows.</p>
+            <ol>
+              <li>Create a folder on your Desktop named <code>lesson-sandbox</code>.</li>
+              <li>Open the Desktop App → click the <strong>Code</strong> tab.</li>
+              <li>Select <strong>Local</strong> → <strong>Select folder</strong> → pick <code>lesson-sandbox</code>.</li>
+              <li>Pick a model (Sonnet is fine).</li>
+            </ol>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;">
+          <div class="heads-up"><strong>Approving file writes:</strong> Terminal → press <code>y</code>. Desktop → click <strong>Accept</strong> on the diff.</div>
+          <div class="heads-up"><strong>Seeing your files:</strong> Terminal → use Finder/Explorer. Desktop → click the file icon in the sidebar.</div>
+        </div>
+      </section>
+
+      <section class="section-card solo" id="s1">
+        <div class="section-title-row">
+          <div class="section-num">01</div>
+          <h2 class="section-title">What is an LLM?</h2>
+        </div>
+        <div class="section-subtitle">a prediction machine · the engine inside every agent</div>
+
+        <p class="lede">An LLM is a <strong>prediction machine</strong>. Trained on enormous datasets, it does one thing: given some input, predict the most likely next output. That's the entire engine. <em>What changes from chatbot to agent is the range of things we let it predict.</em></p>
+
+        <div class="prediction-box" aria-label="An LLM predicting the next word">
+          <div class="pred-input">"The sky is…"</div>
+          <div class="pred-arrow">→</div>
+          <div class="pred-engine">LLM</div>
+          <div class="pred-arrow">→</div>
+          <div class="pred-output">
+            <div class="pred-choice top"><span>blue</span><span class="pct">89%</span></div>
+            <div class="pred-choice"><span>cloudy</span><span class="pct">5%</span></div>
+            <div class="pred-choice"><span>falling</span><span class="pct">3%</span></div>
+          </div>
+        </div>
+
+        <div class="examples-head">The "harness" — what we let the LLM predict</div>
+
+        <div class="harness-stack">
+          <div class="harness-row">
+            <div class="harness-label">
+              <span class="hnum">1</span>
+              <span class="hname">Chat</span>
+            </div>
+            <div class="harness-flow"><strong>You type</strong> → LLM → <strong>predicts text back</strong><span class="tools-list">The original interaction layer. ChatGPT in 2022.</span></div>
+            <div class="harness-note">Input is text. The only output it can predict is more text.</div>
+          </div>
+
+          <div class="harness-expand">↓ expand the prediction space ↓</div>
+
+          <div class="harness-row">
+            <div class="harness-label">
+              <span class="hnum">2</span>
+              <span class="hname">Chat + tools</span>
+            </div>
+            <div class="harness-flow"><strong>You type</strong> → LLM → <strong>predicts text OR a tool call</strong><span class="tools-list">read a file · search the web · call an API · run code</span></div>
+            <div class="harness-note">Same LLM. We just gave it more options for what to predict next.</div>
+          </div>
+
+          <div class="harness-expand">↓ expand further ↓</div>
+
+          <div class="harness-row focus">
+            <div class="harness-label">
+              <span class="hnum">3</span>
+              <span class="hname">Agent</span>
+            </div>
+            <div class="harness-flow"><strong>You give a goal</strong> → LLM → <strong>predicts the next step, in a loop</strong><span class="tools-list">text · tool · observe result · ↻ adjust · ↻ another tool · text · done</span></div>
+            <div class="harness-note">Same prediction engine, just looping with a much bigger output space. That's an agent.</div>
+          </div>
+        </div>
+
+        <div class="footnote">The LLM doesn't change. What changes is the <strong>harness</strong> around it — the menu of choices we let it predict. The next section is about that third row.</div>
+      </section>
+
+      <section class="section-card solo" id="s2">
+        <div class="section-title-row">
+          <div class="section-num">02</div>
+          <h2 class="section-title">What even is an "agent"?</h2>
+        </div>
+        <div class="section-subtitle">working definitions · the parts · examples in the wild</div>
+        <p class="lede">The word "agent" is overloaded. Three definitions that overlap and capture the 2026 consensus:</p>
+
+        <div class="defs">
+          <div class="def">
+            <div class="def-label">Plain</div>
+            <div class="def-text">"An LLM using tools, in a loop."</div>
+          </div>
+          <div class="def">
+            <div class="def-label">Anthropic</div>
+            <div class="def-text">"A system where the model dynamically directs its own process and tool use." <em>Vs. a workflow, which follows a predefined sequence.</em></div>
+          </div>
+          <div class="def">
+            <div class="def-label">Practical</div>
+            <div class="def-text">"Software that takes a high-level goal, breaks it into steps, and gets the work done without step-by-step supervision."</div>
+          </div>
+        </div>
+
+        <div class="agent-diagram" aria-label="An agent's relationship to user, LLM, tools, and the world">
+          <div class="actor">
+            <div class="role">User</div>
+            <div class="name">You</div>
+            <div class="desc">Give it a goal. <em>"Draft my newsletter." "Find the bug." "Book a flight."</em></div>
+          </div>
+          <div class="arrows">
+            <div class="out">→ goal</div>
+            <div class="back">← results</div>
+          </div>
+          <div class="actor center">
+            <div class="role">Agent</div>
+            <div class="name">The orchestrator</div>
+            <div class="agent-internals">
+              <div class="part"><span class="label">LLM</span>brain — reasons,<br>plans, decides</div>
+              <div class="loop">↻</div>
+              <div class="part"><span class="label">Tools</span>hands — read,<br>write, call APIs</div>
+            </div>
+            <div class="desc" style="text-align:center;font-style:italic;">plan → act → observe → adjust</div>
+          </div>
+          <div class="arrows">
+            <div class="out">→ actions</div>
+            <div class="back">← state</div>
+          </div>
+          <div class="actor">
+            <div class="role">System</div>
+            <div class="name">The world</div>
+            <div class="desc">Files, APIs, your inbox, a browser, a database, Salesforce, Slack — whatever the agent needs to touch.</div>
+          </div>
+        </div>
+
+        <div class="examples-head">Where you'll see agents in the wild</div>
+        <div class="agent-examples" role="list">
+          <div class="category" role="listitem">
+            <div class="cat-head">
+              <span class="cat-name">Workflow &amp; business</span>
+              <span class="cat-tag">embedded in your tools</span>
+            </div>
+            <div class="cat-desc">Agents that live inside a SaaS or workflow tool, running multi-step tasks for non-technical users.</div>
+            <div class="examples-list"><strong>Microsoft 365 Copilot</strong>, <strong>Salesforce Agentforce</strong>, <strong>Zapier Agents</strong>, n8n with AI nodes</div>
+          </div>
+          <div class="category" role="listitem">
+            <div class="cat-head">
+              <span class="cat-name">Personal assistant</span>
+              <span class="cat-tag">general-purpose chat</span>
+            </div>
+            <div class="cat-desc">A chat interface with built-in tools (browsing, code, file analysis, connectors) that can do real work for you.</div>
+            <div class="examples-list"><strong>ChatGPT</strong> (with tools/GPTs), <strong>Claude.ai</strong> (with MCP connectors), <strong>Gemini in Workspace</strong>, Perplexity</div>
+          </div>
+          <div class="category focus" role="listitem">
+            <div class="cat-head">
+              <span class="cat-name">Coding</span>
+              <span class="cat-tag">★ today's focus</span>
+            </div>
+            <div class="cat-desc">Agents that read, write, and run code on your behalf. The category we're learning today.</div>
+            <div class="examples-list"><strong>Claude Code</strong>, <strong>Cursor</strong>, <strong>GitHub Copilot</strong>, OpenAI Codex, Aider</div>
+          </div>
+          <div class="category" role="listitem">
+            <div class="cat-head">
+              <span class="cat-name">Browser &amp; OS</span>
+              <span class="cat-tag">autonomous</span>
+            </div>
+            <div class="cat-desc">Agents that drive a browser or operating system — clicking buttons, filling forms, navigating apps for you.</div>
+            <div class="examples-list"><strong>ChatGPT Operator</strong>, <strong>Anthropic Computer Use</strong>, <strong>OpenClaw 🦞</strong> (open source, lives in chat platforms)</div>
+          </div>
+        </div>
+
+        <div class="footnote" style="margin-top:18px;">Today we focus on the <strong>coding</strong> category, specifically <strong>Claude Code</strong>. The rest of this page is about <em>customizing</em> a coding agent with files in your project.</div>
+      </section>
+
+      <section class="section-card solo" id="s3">
+        <div class="section-title-row">
+          <div class="section-num">03</div>
+          <h2 class="section-title">Claude Code is itself an agent</h2>
+        </div>
+        <div class="section-subtitle">a runtime that reads files in your folder</div>
+        <p class="lede"><strong>The lesson in one sentence:</strong> customizing Claude Code means creating files in specific places. Same engine and same files whether you reach it via terminal or the Desktop App.</p>
+
+        <div class="runtime-diagram" aria-label="Claude Code runtime diagram">
+          <div class="surface">Your<br>terminal</div>
+          <div class="surface">Desktop<br>App</div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="engine">Claude Code<br><span style="font-size:11px;font-weight:400;opacity:0.85;">(the engine)</span></div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="target">Claude model</div>
+          <div class="target">Files in your folder</div>
+          <div class="target">Tools</div>
+        </div>
+
+        <div class="footnote" style="margin-top:18px;">The bit you control: <strong>"Files in your folder."</strong> The next sections are all about <em>which</em> files, <em>where</em> they go, and what each one does.</div>
+      </section>
+
+      <section class="section-card solo" id="s4">
+        <div class="section-title-row">
+          <div class="section-num">04</div>
+          <h2 class="section-title">The lay of the land</h2>
+        </div>
+        <div class="section-subtitle">four file homes · same in terminal and Desktop App</div>
+        <p class="lede">Four file homes do nearly all the customization. Each one is triggered differently — that's the key distinction:</p>
+
+        <div class="file-tree" aria-label="The four file homes of Claude Code customization">
+          <div class="row"><span>lesson-sandbox/</span></div>
+          <div class="row" style="padding-left:18px;"><span>├── CLAUDE.md</span><span class="badge badge-always">always on</span><span style="opacity:0.7;font-size:12px;">project memory, loaded every session</span></div>
+          <div class="row" style="padding-left:18px;"><span>└── .claude/</span></div>
+          <div class="row" style="padding-left:36px;"><span>├── commands/</span></div>
+          <div class="row" style="padding-left:54px;"><span>│   └── greet.md</span><span class="badge badge-user">you type /greet</span></div>
+          <div class="row" style="padding-left:36px;"><span>├── skills/</span></div>
+          <div class="row" style="padding-left:54px;"><span>│   └── rhyme-it/</span></div>
+          <div class="row" style="padding-left:72px;"><span>│       └── SKILL.md</span><span class="badge badge-claude">Claude auto-invokes</span></div>
+          <div class="row" style="padding-left:36px;"><span>└── agents/</span></div>
+          <div class="row" style="padding-left:54px;"><span>&nbsp;&nbsp;&nbsp;&nbsp;└── explainer.md</span><span class="badge badge-dispatched">dispatched as subagent</span></div>
+        </div>
+
+        <div class="heads-up" style="margin-top:18px;">
+          <strong>2026 clarification:</strong> commands and skills are now the same mechanism. <code>.claude/commands/deploy.md</code> and <code>.claude/skills/deploy/SKILL.md</code> both create <code>/deploy</code>. Legacy commands still work — we'll teach them first because they're simpler — and then show how skills supersede them.
+        </div>
+      </section>
+
+      <section class="section-card" id="s5">
+        <div class="card-grid">
+          <div class="card-left">
+            <div class="section-num">05</div>
+            <h2 class="section-title">CLAUDE.md</h2>
+            <div class="section-subtitle">project memory · loaded every session</div>
+            <p class="lede">A plain markdown file Claude reads when you start a session. It's <strong>just a text file</strong> sitting in a folder. There are two places Claude looks — your home folder, and the project folder you opened Claude Code in:</p>
+
+            <div class="fs-view" aria-label="Where Claude reads CLAUDE.md from">
+              <div class="fs-zone">
+                <div class="zone-label">Your home folder</div>
+                <div class="fs-row" style="margin-top:6px;">~/</div>
+                <div class="fs-row" style="padding-left:16px;">└── .claude/</div>
+                <div class="fs-row" style="padding-left:32px;">└── CLAUDE.md<span class="badge personal">personal · all projects</span></div>
+              </div>
+              <div class="arrow-merge">+ both get loaded when you open a project ↓</div>
+              <div class="fs-zone">
+                <div class="zone-label">A project folder</div>
+                <div class="fs-row" style="margin-top:6px;">~/Desktop/lesson-sandbox/</div>
+                <div class="fs-row" style="padding-left:16px;">├── CLAUDE.md<span class="badge project">project · team-shared</span></div>
+                <div class="fs-row" style="padding-left:16px;">└── CLAUDE.local.md<span class="badge local">local · gitignored</span></div>
+              </div>
+            </div>
+
+            <div class="footnote">Both files combine. If they conflict, the project file wins. Repeat the same correction every session? It belongs here.</div>
+          </div>
+
+          <div class="card-right">
+            <h3>Try it · make Claude obey you</h3>
+            <div class="mock-file" aria-label="Example CLAUDE.md contents">
+              <div class="file-bar"><span class="dots"><span></span><span></span><span></span></span><span>CLAUDE.md</span></div>
+              <div class="file-body"><span class="comment"># My project rules</span>
+
+Always end every response
+with a one-line haiku.</div>
+            </div>
+
+            <div class="step-flow">
+              <div class="step">
+                <div class="num">1</div>
+                <div class="body">Tell Claude: <em>"Create a CLAUDE.md in this project with the rule above."</em></div>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <div class="body">Approve the file write.</div>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <div class="body">Ask Claude: <em>"What's 2+2?"</em></div>
+              </div>
+            </div>
+
+            <div class="share-prompt"><strong>Share:</strong> did you get a haiku?</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card" id="s6">
+        <div class="card-grid">
+          <div class="card-left">
+            <div class="section-num">06</div>
+            <h2 class="section-title">Commands</h2>
+            <div class="section-subtitle">your shortcuts · you trigger them</div>
+            <p class="lede">A markdown file at <code>.claude/commands/&lt;name&gt;.md</code>. You type <code>/name</code> and the file's contents become the prompt. <code>$ARGUMENTS</code> stands in for whatever you typed after.</p>
+
+            <div class="cmd-flow" aria-label="How a slash command runs">
+              <div class="box"><span class="label">You type</span><code>/greet matt</code></div>
+              <div class="arrow">→</div>
+              <div class="box"><span class="label">File body becomes prompt</span><code>Greet matt in pirate-speak…</code></div>
+            </div>
+
+            <div class="footnote">Commands bottle up "the prompt I keep retyping." Checked into the folder — your teammates get them for free.</div>
+          </div>
+
+          <div class="card-right">
+            <h3>Try it · build /greet</h3>
+            <div class="mock-file" aria-label="Example greet command file">
+              <div class="file-bar"><span class="dots"><span></span><span></span><span></span></span><span>.claude/commands/greet.md</span></div>
+              <div class="file-body"><span class="comment">---
+description: Greet someone in pirate-speak
+---</span>
+
+Greet $ARGUMENTS in the most
+piratical voice you can muster.
+Use no more than three sentences.</div>
+            </div>
+
+            <div class="step-flow">
+              <div class="step">
+                <div class="num">1</div>
+                <div class="body">Tell Claude: <em>"Create <code>.claude/commands/greet.md</code> with the content above."</em></div>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <div class="body">Approve the file write.</div>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <div class="body">Type <code>/greet your-name</code></div>
+              </div>
+            </div>
+
+            <div class="share-prompt"><strong>Share:</strong> drop your pirate greeting in chat.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card" id="s7">
+        <div class="card-grid">
+          <div class="card-left">
+            <div class="section-num">07</div>
+            <h2 class="section-title">Skills</h2>
+            <div class="section-subtitle">the modern unified primitive · Claude triggers them</div>
+            <p class="lede">A directory at <code>.claude/skills/&lt;name&gt;/SKILL.md</code>. The <strong>description</strong> field is the matchmaker — Claude scans descriptions to decide which skill to run when you ask something. You never name the skill.</p>
+
+            <div class="skill-match" aria-label="How Claude finds a matching skill">
+              <div class="request">"make this rhyme: I love coffee in the morning"</div>
+              <div class="skills-row">
+                <div class="skill-tile"><span class="name">tldr</span><span class="desc">Summarizes long text into bullets.</span></div>
+                <div class="skill-tile match"><span class="name">rhyme-it</span><span class="desc">Rewrites a sentence to rhyme.</span></div>
+                <div class="skill-tile"><span class="name">translate</span><span class="desc">Translates between languages.</span></div>
+              </div>
+              <div class="match-caption">Claude scans descriptions → finds the match → runs that skill.</div>
+            </div>
+
+            <div class="footnote">Three frontmatter flavors: default (both invoke) · <code>disable-model-invocation: true</code> (you only — what "commands" used to be) · <code>user-invocable: false</code> (Claude only). Follows the <a href="https://agentskills.io">Agent Skills open standard</a>.</div>
+          </div>
+
+          <div class="card-right">
+            <h3>Try it · build rhyme-it</h3>
+            <div class="mock-file" aria-label="Example rhyme-it skill file">
+              <div class="file-bar"><span class="dots"><span></span><span></span><span></span></span><span>.claude/skills/rhyme-it/SKILL.md</span></div>
+              <div class="file-body"><span class="comment">---
+description: Rewrites a sentence to
+rhyme. Use when the user asks to
+make something rhyme.
+---</span>
+
+Rewrite so it rhymes. Keep the
+meaning. Reshape the last words.
+Return only the rewritten version.</div>
+            </div>
+
+            <div class="step-flow">
+              <div class="step">
+                <div class="num">1</div>
+                <div class="body">Tell Claude: <em>"Create <code>.claude/skills/rhyme-it/SKILL.md</code> with the content above."</em></div>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <div class="body">Approve.</div>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <div class="body"><strong>Don't name the skill.</strong> Just ask: <em>"make this rhyme: I love coffee in the morning."</em></div>
+              </div>
+            </div>
+
+            <div class="share-prompt"><strong>Share:</strong> post the rhymed version.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card" id="s8">
+        <div class="card-grid">
+          <div class="card-left">
+            <div class="section-num">08</div>
+            <h2 class="section-title">Subagents</h2>
+            <div class="section-subtitle">fresh context · focused job · dispatched</div>
+            <p class="lede">A file at <code>.claude/agents/&lt;name&gt;.md</code>. The main Claude dispatches the work to a <strong>fresh context window</strong>; the subagent does the job and returns only the result. Your main thread stays clean.</p>
+
+            <div class="dispatch" aria-label="How a subagent gets dispatched">
+              <div class="window">
+                <div class="titlebar">Main conversation</div>
+                <div class="body">"Use the explainer agent to explain APIs."</div>
+              </div>
+              <div class="arrow">→</div>
+              <div class="window">
+                <div class="titlebar">Subagent · fresh context</div>
+                <div class="body">Explainer works in isolation, returns a 200-word answer.</div>
+              </div>
+              <div class="return-caption">↑ only the answer comes back to your main thread ↑</div>
+            </div>
+
+            <div class="footnote">Built-in types: <code>Explore</code>, <code>Plan</code>, <code>general-purpose</code>, <code>Bash</code>. Custom ones live in <code>.claude/agents/</code>.</div>
+          </div>
+
+          <div class="card-right">
+            <h3>Try it · build explainer</h3>
+            <div class="mock-file" aria-label="Example explainer agent file">
+              <div class="file-bar"><span class="dots"><span></span><span></span><span></span></span><span>.claude/agents/explainer.md</span></div>
+              <div class="file-body"><span class="comment">---
+name: explainer
+description: Explains a topic in
+beginner-friendly language.
+---</span>
+
+You are a patient teacher. Given
+a topic, explain in ≤200 words
+using plain language + one good
+analogy. Define any jargon.</div>
+            </div>
+
+            <div class="step-flow">
+              <div class="step">
+                <div class="num">1</div>
+                <div class="body">Tell Claude: <em>"Create <code>.claude/agents/explainer.md</code> with the content above."</em></div>
+              </div>
+              <div class="step">
+                <div class="num">2</div>
+                <div class="body">Approve.</div>
+              </div>
+              <div class="step">
+                <div class="num">3</div>
+                <div class="body">Ask: <em>"Use the explainer agent to explain something you've been wondering about."</em></div>
+              </div>
+            </div>
+
+            <div class="share-prompt"><strong>Share:</strong> what did you ask, and what came back?</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-card solo" id="s9">
+        <div class="section-title-row">
+          <div class="section-num">09</div>
+          <h2 class="section-title">Subagents working together</h2>
+        </div>
+        <div class="section-subtitle">a real workflow · main Claude orchestrating three subagents</div>
+
+        <div class="contrast-panel">
+          <div class="col">
+            <div class="ctitle">A skill is…</div>
+            <div class="cdesc">A playbook Claude <strong>loads into its own context</strong> when something matches. Guidance Claude follows while staying in your conversation.</div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="col">
+            <div class="ctitle">A subagent is…</div>
+            <div class="cdesc">A worker Claude <strong>dispatches to a separate fresh context</strong>. It does the job alone and returns only the result. Defined by an <code>agent.md</code> file.</div>
+          </div>
+        </div>
+
+        <div class="view-toggle" role="tablist" aria-label="Toggle workflow view">
+          <button type="button" class="view-btn active" data-view="detail" role="tab" aria-selected="true">Detail</button>
+          <button type="button" class="view-btn" data-view="simple" role="tab" aria-selected="false">Diagram</button>
+        </div>
+
+        <div class="workflow-view workflow-detail-view active" role="tabpanel">
+        <p class="lede">One subagent is useful. <strong>Several subagents working in concert</strong> is where decomposition pays off. You give a goal; main Claude breaks it into pieces and dispatches each piece to a fresh-context worker. Your main conversation only ever sees the summaries.</p>
+
+        <div class="workflow-flow" aria-label="A multi-subagent workflow example">
+          <div class="flow-row">
+            <div class="flow-actor you">YOU</div>
+            <div class="flow-bubble quote">"Write me a blog post on prompt engineering for beginners."</div>
+          </div>
+          <div class="flow-arrow"><span class="glyph">↓</span>goal</div>
+
+          <div class="flow-row">
+            <div class="flow-actor main">MAIN CLAUDE</div>
+            <div class="flow-bubble">Decomposes: research → draft → critique. Dispatches three subagents via the Task tool, each with their own brief.</div>
+          </div>
+          <div class="flow-arrow"><span class="glyph">↓ ↓ ↓</span>dispatch via Task tool</div>
+
+          <div class="flow-subagents">
+            <div class="subagent-lane">
+              <div class="sub-label">Researcher</div>
+              <div class="sub-file">.claude/agents/researcher.md</div>
+              <div class="sub-action">Reads 10+ sources on prompt engineering, ranks the best 5, summarizes each.</div>
+              <div class="sub-returns">↳ <strong>Returns:</strong> 5-bullet summary. The 10+ raw articles stay in its own context.</div>
+            </div>
+            <div class="subagent-lane">
+              <div class="sub-label">Writer</div>
+              <div class="sub-file">.claude/agents/writer.md</div>
+              <div class="sub-action">Drafts a 600-word post in a friendly, beginner-aimed voice from the researcher's summary.</div>
+              <div class="sub-returns">↳ <strong>Returns:</strong> a clean draft. Drafting iterations stay in its own context.</div>
+            </div>
+            <div class="subagent-lane">
+              <div class="sub-label">Critic</div>
+              <div class="sub-file">.claude/agents/critic.md</div>
+              <div class="sub-action">Reviews the draft for accuracy, jargon, and beginner-friendliness.</div>
+              <div class="sub-returns">↳ <strong>Returns:</strong> revision notes. The line-by-line scan stays in its own context.</div>
+            </div>
+          </div>
+
+          <div class="flow-arrow"><span class="glyph">↑ ↑ ↑</span>only summaries return</div>
+
+          <div class="flow-row">
+            <div class="flow-actor main">MAIN CLAUDE</div>
+            <div class="flow-bubble">Has: a 5-bullet research summary, a draft, and revision notes. Applies the notes to the draft. Produces the final post.</div>
+          </div>
+          <div class="flow-arrow"><span class="glyph">↓</span>polished post</div>
+
+          <div class="flow-row">
+            <div class="flow-actor you">YOU</div>
+            <div class="flow-bubble">Receive only the finished post. The 10+ sources, the rough draft, the back-and-forth — none of it cluttered your thread.</div>
+          </div>
+        </div>
+
+        <div class="footnote"><strong>What's happening:</strong> three <code>agent.md</code> files in <code>.claude/agents/</code> defined three workers. Main Claude (acting on your behalf) decomposed the goal and dispatched each worker via the Task tool. Each ran in its own fresh context, did its job, returned a summary. Your main thread stayed clean. This is the pattern that makes complex workflows tractable.</div>
+        </div>
+
+        <div class="workflow-view workflow-simple-view" role="tabpanel">
+          <p class="lede">The same workflow at altitude — <strong>the abstract shape any subagent workflow follows</strong>. The labels change; the shape doesn't.</p>
+
+          <div class="simple-flow-layout">
+            <aside class="sf-tree" aria-label="Project files used by the workflow">
+              <div class="tree-header">.claude/ directory</div>
+              <div class="tree-row">.claude/</div>
+              <div class="tree-row" style="padding-left:18px;">├── agents/</div>
+              <div class="tree-row callable" data-tree-id="agent-a" style="padding-left:32px;">│   ├── agent-a.md</div>
+              <div class="tree-row callable" data-tree-id="agent-b" style="padding-left:32px;">│   ├── agent-b.md</div>
+              <div class="tree-row callable" data-tree-id="agent-c" style="padding-left:32px;">│   └── agent-c.md</div>
+              <div class="tree-row" style="padding-left:18px;">└── skills/</div>
+              <div class="tree-row callable" data-tree-id="skill-a" style="padding-left:32px;">&nbsp;&nbsp;&nbsp;&nbsp;├── skill-a/SKILL.md</div>
+              <div class="tree-row callable" data-tree-id="skill-b" style="padding-left:32px;">&nbsp;&nbsp;&nbsp;&nbsp;└── skill-b/SKILL.md</div>
+            </aside>
+            <div class="simple-flow" aria-label="Abstract subagent workflow">
+              <div class="sf-node sf-user">USER · sends a request</div>
+              <div class="sf-arrow">↓</div>
+
+              <div class="sf-node sf-claude">MAIN CLAUDE · interprets</div>
+              <div class="sf-arrow">↓</div>
+
+              <div class="sf-node sf-process">reads <code>.claude/agents/*.md</code></div>
+              <div class="sf-arrow many"><span class="g">↓ ↓ ↓</span><span class="lbl">spawns subagents in parallel</span></div>
+
+              <div class="sf-parallel">
+                <div class="sf-lane">
+                  <div class="sf-node sf-agent" data-source="agent-a">Agent A</div>
+                  <div class="sf-arrow short">↓</div>
+                  <div class="sf-node sf-skill" data-source="skill-a">+ skill</div>
+                  <div class="sf-arrow short">↓</div>
+                  <div class="sf-node sf-output">output</div>
+                </div>
+                <div class="sf-lane">
+                  <div class="sf-node sf-agent" data-source="agent-b">Agent B</div>
+                  <div class="sf-arrow short">↓</div>
+                  <div class="sf-node sf-skill" data-source="skill-b">+ skill</div>
+                  <div class="sf-arrow short">↓</div>
+                  <div class="sf-node sf-output">output</div>
+                </div>
+                <div class="sf-lane">
+                  <div class="sf-node sf-agent" data-source="agent-c">Agent C</div>
+                  <div class="sf-arrow short">↓</div>
+                  <div class="sf-node sf-skill none">(no skill)</div>
+                  <div class="sf-arrow short">↓</div>
+                  <div class="sf-node sf-output">output</div>
+                </div>
+              </div>
+
+              <div class="sf-arrow many"><span class="g">↑ ↑ ↑</span><span class="lbl">outputs return to orchestrator</span></div>
+
+              <div class="sf-node sf-claude">MAIN CLAUDE · evaluates &amp; assembles</div>
+              <div class="sf-arrow">↓</div>
+
+              <div class="sf-node sf-user">USER · receives the report</div>
+            </div>
+          </div>
+
+          <div style="text-align:center;">
+            <button type="button" class="replay-anim" data-replay="simple-flow">↻ Replay</button>
+          </div>
+
+          <div class="footnote">Seven stages. The shape stays the same whether you're writing a blog post, running a newsletter pipeline, or auditing a codebase. The agents call skills as needed; the orchestrator only ever sees the outputs.</div>
+        </div>
+      </section>
+
+      <section class="section-card solo" id="s10">
+        <div class="section-title-row">
+          <div class="section-num">★</div>
+          <h2 class="section-title">Recap — which one do I reach for?</h2>
+        </div>
+        <div class="section-subtitle">a decision tree you'll actually use</div>
+        <p class="lede">You've built one of each pillar. When you're back at your own work and asking "which file belongs here?" — walk this tree:</p>
+
+        <div class="decision-tree" aria-label="Decision tree for picking the right Claude Code file type">
+          <div class="branch">
+            <div class="q">Is it always relevant in this project?</div>
+            <div class="arrow" aria-hidden="true">→</div>
+            <div class="a">CLAUDE.md</div>
+          </div>
+          <div class="branch">
+            <div class="q">Do I want to invoke it by typing a slash?</div>
+            <div class="arrow" aria-hidden="true">→</div>
+            <div class="a">.claude/commands/&lt;name&gt;.md</div>
+          </div>
+          <div class="branch">
+            <div class="q">Do I want Claude to invoke it when something matches?</div>
+            <div class="arrow" aria-hidden="true">→</div>
+            <div class="a">.claude/skills/&lt;name&gt;/SKILL.md</div>
+          </div>
+          <div class="branch">
+            <div class="q">Does the work need a fresh context window?</div>
+            <div class="arrow" aria-hidden="true">→</div>
+            <div class="a">.claude/agents/&lt;name&gt;.md</div>
+          </div>
+        </div>
+
+        <div class="footnote" style="margin-top:18px;">The shape mirrors the file tree from §4. Anything in <code>CLAUDE.md</code> is always there. Anything in <code>.claude/</code> only runs when something triggers it — you, Claude, or a dispatch.</div>
+      </section>
+
+      <section class="section-card solo" id="s11">
+        <div class="section-title-row">
+          <div class="section-num">→</div>
+          <h2 class="section-title">Where to go next</h2>
+        </div>
+        <div class="section-subtitle">live examples + docs to explore on your own</div>
+
+        <div class="link-grid">
+          <div class="lk-card"><span class="lk-title">A CLAUDE.md in production</span><span class="lk-desc">Live multi-page project memory shaping a real working repo.</span></div>
+          <div class="lk-card"><span class="lk-title">A real <code>/newsletter</code> command</span><span class="lk-desc">A checked-in command that runs an actual weekly workflow.</span></div>
+          <div class="lk-card"><span class="lk-title">Desktop App quickstart</span><span class="lk-desc">Official getting-started for Mac/Windows.</span></div>
+          <div class="lk-card"><span class="lk-title">Skills docs</span><span class="lk-desc">Frontmatter, dynamic injection, supporting files.</span></div>
+          <div class="lk-card"><span class="lk-title">Subagent docs</span><span class="lk-desc">Tools, context isolation, dispatch patterns.</span></div>
+          <div class="lk-card"><span class="lk-title">Memory docs</span><span class="lk-desc">The full CLAUDE.md hierarchy + auto-memory.</span></div>
+          <div class="lk-card"><span class="lk-title">Agent Skills open standard</span><span class="lk-desc">The format skills follow — works in other tools too.</span></div>
+          <div class="lk-card"><span class="lk-title">superpowers plugin</span><span class="lk-desc">A curated stack of skills working together as a real-world example.</span></div>
+        </div>
+      </section>
+
+      <div class="footer">
+        <p>Verified against Claude Code documentation as of 2026-05-25. Design spec at <code>docs/superpowers/specs/2026-05-25-claude-code-agents-lesson-design.md</code>.</p>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll('pre').forEach((pre) => {
+      if (!pre.querySelector('code')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code').innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 1500);
+        } catch (e) {
+          btn.textContent = 'Press Ctrl+C';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+
+    // Staggered reveal for the abstract subagent flow.
+    // Direct children of .simple-flow are revealed in sequence;
+    // .sf-parallel is expanded so the 3 lanes reveal their items in lockstep.
+    function buildSimpleFlowSequence(flow) {
+      const sequence = [];
+      Array.from(flow.children).forEach((el) => {
+        if (el.classList.contains('sf-parallel')) {
+          const lanes = el.querySelectorAll('.sf-lane');
+          if (lanes.length === 0) return;
+          const numItems = lanes[0].children.length;
+          for (let i = 0; i < numItems; i++) {
+            sequence.push(Array.from(lanes).map(l => l.children[i]));
+          }
+        } else {
+          sequence.push([el]);
+        }
+      });
+      return sequence;
+    }
+
+    function prepareSimpleFlow(flow) {
+      const sequence = buildSimpleFlowSequence(flow);
+      sequence.flat().forEach(el => el.classList.add('anim-step'));
+      return sequence;
+    }
+
+    function resetTreeState(layout) {
+      if (!layout) return;
+      layout.querySelectorAll('.tree-row.consumed, .tree-row.pulsing').forEach(r => {
+        r.classList.remove('consumed', 'pulsing');
+      });
+    }
+
+    function flyFromTree(target) {
+      const sourceId = target.dataset.source;
+      if (!sourceId) return false;
+      const layout = target.closest('.simple-flow-layout');
+      if (!layout) return false;
+      const treeRow = layout.querySelector('.tree-row[data-tree-id="' + sourceId + '"]');
+      if (!treeRow) return false;
+
+      const srcRect = treeRow.getBoundingClientRect();
+      const tgtRect = target.getBoundingClientRect();
+
+      // Create the flying ghost
+      const ghost = document.createElement('div');
+      ghost.className = 'fly-ghost';
+      ghost.textContent = treeRow.textContent.trim().replace(/^[│├└─\s]+/, '');
+      ghost.style.left = srcRect.left + 'px';
+      ghost.style.top = srcRect.top + 'px';
+      document.body.appendChild(ghost);
+
+      // Pulse the source row
+      treeRow.classList.add('pulsing');
+
+      // Compute translation from source position to target center
+      const ghostRect = ghost.getBoundingClientRect();
+      const dx = (tgtRect.left + tgtRect.width / 2) - (ghostRect.left + ghostRect.width / 2);
+      const dy = (tgtRect.top + tgtRect.height / 2) - (ghostRect.top + ghostRect.height / 2);
+
+      // Next frame: enable transition + translate
+      requestAnimationFrame(() => {
+        ghost.classList.add('flying');
+        ghost.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+      });
+
+      // When the ghost arrives, reveal the target and mark source as consumed.
+      setTimeout(() => {
+        target.classList.add('in');
+        treeRow.classList.remove('pulsing');
+        treeRow.classList.add('consumed');
+        ghost.style.opacity = '0';
+      }, 820);
+
+      // Clean up
+      setTimeout(() => ghost.remove(), 1150);
+      return true;
+    }
+
+    function animateSimpleFlow(flow) {
+      const sequence = buildSimpleFlowSequence(flow);
+      const allItems = sequence.flat();
+      const layout = flow.closest('.simple-flow-layout');
+      // Clear any in-flight ghosts and reset tree highlights
+      document.querySelectorAll('.fly-ghost').forEach(g => g.remove());
+      resetTreeState(layout);
+      // Snap back to hidden without transition so replay feels instant.
+      allItems.forEach(el => { el.style.transition = 'none'; el.classList.remove('in'); });
+      void flow.offsetWidth;
+      // Re-enable transitions next frame, then stagger the reveal.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          allItems.forEach(el => { el.style.transition = ''; });
+          sequence.forEach((group, i) => {
+            setTimeout(() => {
+              group.forEach(el => {
+                // Elements with a data-source attribute fly from their source file in the tree.
+                // Everything else just fades in.
+                if (!flyFromTree(el)) {
+                  el.classList.add('in');
+                }
+              });
+            }, i * 160);
+          });
+        });
+      });
+    }
+
+    // Prime hidden states on page load so the initial click doesn't flash content.
+    document.querySelectorAll('.simple-flow').forEach(prepareSimpleFlow);
+
+    // Toggle between Detail and Diagram views inside a section card.
+    document.querySelectorAll('.view-toggle').forEach((toggle) => {
+      const buttons = toggle.querySelectorAll('.view-btn');
+      const card = toggle.closest('.section-card');
+      if (!card) return;
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.view;
+          buttons.forEach((b) => {
+            const active = b.dataset.view === target;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-selected', String(active));
+          });
+          card.querySelectorAll('.workflow-view').forEach((view) => {
+            const isActive = view.classList.contains('workflow-' + target + '-view');
+            view.classList.remove('active');
+            if (isActive) {
+              void view.offsetWidth;
+              view.classList.add('active');
+              // Auto-play the staggered reveal when the diagram becomes visible.
+              const flow = view.querySelector('.simple-flow');
+              if (flow) animateSimpleFlow(flow);
+            }
+          });
+        });
+      });
+    });
+
+    // Replay buttons inside any animatable diagram.
+    document.querySelectorAll('.replay-anim').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const flow = btn.closest('.workflow-view, .section-card')?.querySelector('.simple-flow');
+        if (flow) animateSimpleFlow(flow);
+      });
+    });
+  </script>
+</body>
+</html>
