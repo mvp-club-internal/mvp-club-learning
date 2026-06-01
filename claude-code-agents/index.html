@@ -241,7 +241,9 @@
       font-size: 13px;
       line-height: 1.8;
       margin: 16px 0;
+      overflow-x: auto;
     }
+    .file-tree .row { white-space: nowrap; }
     .file-tree .row { display: flex; align-items: center; gap: 8px; }
     .file-tree .badge {
       font-size: 10px;
@@ -336,6 +338,7 @@
       gap: 56px;
       align-items: start;
     }
+    .section-card .card-grid > * { min-width: 0; }
     .section-card .section-num {
       font-family: 'Zilla Slab', Georgia, serif;
       font-size: 64px;
@@ -1354,12 +1357,705 @@
       font-style: italic;
       margin-top: 4px;
     }
+
+    /* ===== Part tabs (Part 1 / Part 2 switcher) ===== */
+    .part-tabs {
+      display: flex;
+      gap: 12px;
+      margin: 0 0 12px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: var(--warm-stone);
+      padding: 14px 0 12px;
+    }
+    .part-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px 20px;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Inter', sans-serif;
+      color: var(--navy);
+      transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;
+      opacity: 0.7;
+    }
+    .part-tab:hover { border-color: var(--amber); opacity: 1; }
+    .part-tab.active {
+      border-color: var(--amber);
+      opacity: 1;
+      box-shadow: 0 0 0 3px rgba(217,119,6,0.15), 0 8px 24px rgba(8,31,63,0.06);
+    }
+    .part-tab .pt-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+    }
+    .part-tab .pt-title {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+    .part-tab .pt-desc { font-size: 12px; opacity: 0.72; margin-top: 2px; }
+    .part-panel[hidden], .toc-list[hidden] { display: none; }
+    @media (max-width: 820px) {
+      .part-tabs { flex-direction: column; position: static; }
+    }
+
+    /* ===== File-handoff pipeline diagram (Part 2) ===== */
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin: 20px 0 8px;
+    }
+    .pipe-head, .pipe-tail {
+      align-self: center;
+      padding: 11px 22px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .pipe-head { background: var(--navy); color: var(--warm-stone); font-family: 'JetBrains Mono', monospace; }
+    .pipe-tail { background: var(--golden-soft); border: 1px solid var(--golden); color: var(--navy); }
+    .pipe-row {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      align-items: center;
+      gap: 10px;
+      margin: 2px 0;
+    }
+    .pipe-node {
+      border-radius: 10px;
+      padding: 13px 16px;
+    }
+    .pipe-node.agent {
+      background: var(--golden-soft);
+      border: 1px solid var(--golden);
+    }
+    .pipe-node.agent .pn-step {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+    }
+    .pipe-node.agent .pn-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      margin: 2px 0 4px;
+    }
+    .pipe-node.agent .pn-job { font-size: 12px; line-height: 1.4; opacity: 0.82; }
+    .pipe-node.file {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--navy);
+      text-align: center;
+    }
+    .pipe-node.file .pf-label {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .pipe-arrow {
+      text-align: center;
+      color: var(--amber);
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .pipe-arrow .lbl {
+      display: block;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .pipe-reads {
+      grid-column: 1 / -1;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-style: italic;
+      color: var(--amber);
+      opacity: 0.9;
+      margin: -2px 0 2px;
+    }
+    .pipe-down {
+      align-self: center;
+      color: var(--amber);
+      font-size: 18px;
+      line-height: 1;
+      margin: 2px 0;
+    }
+
+    /* Workflow → tasks → agents mapping (Part 2 §1) */
+    .map-cols {
+      display: grid;
+      grid-template-columns: 1fr 26px 1fr 26px 1fr;
+      gap: 8px;
+      align-items: stretch;
+      margin: 18px 0 8px;
+    }
+    .map-col {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .map-col.focus { border-color: var(--amber); background: var(--golden-soft); }
+    .map-col .mc-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .map-col ul { margin: 0; padding-left: 16px; font-size: 13px; line-height: 1.7; }
+    .map-col.code-ish li { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    .map-arrow {
+      align-self: center;
+      text-align: center;
+      color: var(--amber);
+      font-size: 18px;
+      font-weight: 600;
+    }
+    @media (max-width: 980px) {
+      .map-cols { grid-template-columns: 1fr; }
+      .map-arrow { transform: rotate(90deg); }
+      .pipe-row { grid-template-columns: 1fr 40px 1fr; }
+    }
+
+    /* Agentic-loop interlude (Part 2) */
+    .agent-loop {
+      display: grid;
+      grid-template-columns: 1fr 36px 1fr 36px 1fr;
+      align-items: stretch;
+      gap: 8px;
+      margin: 20px 0 4px;
+    }
+    .loop-stage {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .loop-stage .ls-step {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .loop-stage .ls-name {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.1;
+      margin-bottom: 5px;
+    }
+    .loop-stage .ls-desc { font-size: 12px; line-height: 1.45; opacity: 0.82; }
+    .loop-arrow { align-self: center; text-align: center; color: var(--amber); font-size: 20px; font-weight: 600; }
+    .loop-repeat {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin: 10px 0 0;
+    }
+    .loop-repeat .glyph { font-size: 15px; margin-right: 6px; }
+    @media (max-width: 980px) {
+      .agent-loop { grid-template-columns: 1fr; }
+      .loop-arrow { transform: rotate(90deg); }
+    }
+
+    /* Three-forces legend + annotated run-trace (Part 2 interlude) */
+    .forces {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0 20px;
+    }
+    .force {
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--border-subtle);
+    }
+    .force .f-tag {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 10px;
+      margin-bottom: 7px;
+    }
+    .force .f-desc { font-size: 12px; line-height: 1.45; opacity: 0.85; }
+    /* category colors, shared by legend + trace */
+    .cat-conv { background: var(--golden-soft); color: var(--amber); border: 1px solid var(--golden); }
+    .cat-mech { background: var(--navy); color: var(--warm-stone); }
+    .cat-judge { background: var(--amber); color: var(--warm-stone); }
+    .force.is-conv { background: rgba(251,191,36,0.10); }
+    .force.is-mech { background: var(--navy-soft); }
+    .force.is-judge { background: rgba(217,119,6,0.08); }
+
+    .trace {
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 8px 0;
+      background: var(--card-bg);
+    }
+    .trace-bar {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 8px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .trace-bar .dots { display: flex; gap: 4px; }
+    .trace-bar .dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(250,245,240,0.3); }
+    .trace-body { padding: 8px 18px 14px; }
+    .trace-step {
+      display: grid;
+      grid-template-columns: 130px 1fr auto;
+      gap: 6px 16px;
+      align-items: baseline;
+      padding: 13px 0 13px 16px;
+      border-left: 3px solid var(--border-subtle);
+      position: relative;
+    }
+    .trace-step.s-conv { border-left-color: var(--golden); }
+    .trace-step.s-mech { border-left-color: var(--navy); }
+    .trace-step.s-judge { border-left-color: var(--amber); }
+    .trace-step.s-you { border-left-color: var(--border-subtle); }
+    .trace-step + .trace-step { border-top: 1px dashed var(--border-subtle); }
+    .ts-actor {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+    .ts-actor .who-sub {
+      display: block;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      margin-top: 1px;
+    }
+    .ts-body { font-size: 13px; line-height: 1.5; }
+    .ts-body code { font-size: 12px; }
+    .ts-cat {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9px;
+      white-space: nowrap;
+      align-self: center;
+    }
+    .ts-cat.s-you { background: var(--navy-soft); color: var(--navy); }
+    .trace-loop {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      padding: 12px 0 2px;
+    }
+    .trace-loop .glyph { font-size: 14px; margin-right: 5px; }
+    @media (max-width: 980px) {
+      .forces { grid-template-columns: 1fr; }
+      .trace-step { grid-template-columns: 1fr auto; }
+      .ts-actor { grid-column: 1 / -1; }
+    }
+
+    /* Animated run-player (Part 2 interlude beat 3) */
+    .runplayer {
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 10px 0 8px;
+      background: var(--card-bg);
+    }
+    .rp-bar {
+      background: var(--navy);
+      color: var(--warm-stone);
+      padding: 8px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .rp-bar .dots { display: flex; gap: 4px; }
+    .rp-bar .dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(250,245,240,0.3); }
+    .rp-bar .rp-title { flex: 1; }
+    .rp-btn {
+      background: var(--amber);
+      color: var(--warm-stone);
+      border: none;
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .rp-btn:hover { background: var(--golden); color: var(--navy); }
+    .rp-stage {
+      display: grid;
+      grid-template-columns: 248px 1fr;
+      align-items: stretch;
+    }
+    .rp-tree {
+      background: var(--warm-stone);
+      border-right: 1px solid var(--border-subtle);
+      padding: 16px 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.85;
+    }
+    .rp-tree .rp-tree-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .ot-row {
+      display: block;
+      border-radius: 5px;
+      padding: 1px 7px;
+      margin-left: -7px;
+      white-space: nowrap;
+      transition: background 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .ot-row.ghost { opacity: 0.4; font-style: italic; }
+    .ot-row.read {
+      background: var(--navy-soft);
+      color: var(--navy);
+      transform: translateX(3px);
+    }
+    .ot-row.pulse {
+      background: var(--golden-soft);
+      color: var(--amber);
+      transform: translateX(4px);
+      box-shadow: 0 0 0 2px rgba(217,119,6,0.18);
+    }
+    .ot-row.written {
+      background: var(--golden-soft);
+      color: var(--amber);
+      opacity: 1;
+      font-style: normal;
+    }
+    .rp-steps {
+      padding: 10px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+    .rp-step {
+      display: grid;
+      grid-template-columns: 122px 1fr auto;
+      gap: 4px 14px;
+      align-items: baseline;
+      padding: 9px 0 9px 14px;
+      border-left: 3px solid transparent;
+    }
+    .rp-step + .rp-step { border-top: 1px dashed var(--border-subtle); }
+    .rp-step.s-you { border-left-color: var(--border-subtle); }
+    .rp-step.s-conv { border-left-color: var(--golden); }
+    .rp-step.s-mech { border-left-color: var(--navy); }
+    .rp-step.s-judge { border-left-color: var(--amber); }
+    .rp-actor {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+    .rp-actor .who-sub {
+      display: block;
+      font-weight: 500;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.55;
+      margin-top: 1px;
+    }
+    .rp-text { font-size: 13px; line-height: 1.5; }
+    .rp-text code { font-size: 12px; }
+    .rp-cat {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9px;
+      white-space: nowrap;
+      align-self: center;
+    }
+    .rp-cat.s-you { background: var(--navy-soft); color: var(--navy); }
+    /* animation states (added by JS) */
+    .runplayer.anim-ready .rp-step {
+      opacity: 0.18;
+      transform: translateY(6px);
+      transition: opacity 0.45s ease-out, transform 0.45s ease-out, box-shadow 0.25s;
+    }
+    .runplayer.anim-ready .rp-step.in { opacity: 1; transform: none; }
+    .runplayer.anim-ready .rp-step.current {
+      box-shadow: -3px 0 0 0 currentColor;
+    }
+    .runplayer.anim-ready .rp-step.s-conv.current { color: var(--golden); }
+    .runplayer.anim-ready .rp-step.s-mech.current { color: var(--navy); }
+    .runplayer.anim-ready .rp-step.s-judge.current { color: var(--amber); }
+    @media (max-width: 980px) {
+      .rp-stage { grid-template-columns: 1fr; }
+      .rp-tree { border-right: none; border-bottom: 1px solid var(--border-subtle); overflow-x: auto; }
+      .rp-step { grid-template-columns: 1fr auto; }
+      .rp-actor { grid-column: 1 / -1; }
+    }
+
+    /* ===== Containers-of-action stage (Part 2 interlude beat 3) ===== */
+    .scene {
+      position: relative;
+      border: 2px solid var(--navy);
+      border-radius: 14px;
+      background: var(--navy-soft);
+      padding: 34px 18px 18px;
+      margin: 12px 0 8px;
+    }
+    .scene-label {
+      position: absolute;
+      top: -13px;
+      left: 18px;
+      background: var(--navy);
+      color: var(--warm-stone);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 8px;
+    }
+    .scene-label .sub { opacity: 0.7; font-weight: 500; text-transform: none; letter-spacing: 0; margin-left: 6px; }
+    .scene-grid {
+      display: grid;
+      grid-template-columns: 232px 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    /* Directory panel */
+    .scene-dir {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .scene-dir .dir-head {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .scene-dir .d-row {
+      display: block;
+      border-radius: 5px;
+      padding: 1px 7px;
+      margin-left: -7px;
+      white-space: nowrap;
+      transition: background 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+    }
+    .scene-dir .d-row.dim { opacity: 0.4; font-style: italic; }
+    .scene-dir .d-row.reading {
+      background: var(--navy-soft); color: var(--navy);
+      transform: translateX(3px); box-shadow: 0 0 0 2px rgba(8,31,63,0.18);
+    }
+    .scene-dir .d-row.read { background: var(--navy-soft); color: var(--navy); }
+    .scene-dir .d-row.writing {
+      background: var(--golden-soft); color: var(--amber);
+      transform: translateX(4px); box-shadow: 0 0 0 2px rgba(217,119,6,0.22);
+    }
+    .scene-dir .d-row.written { background: var(--golden-soft); color: var(--amber); opacity: 1; font-style: normal; }
+    /* Stage (right) — context windows live here */
+    .scene-stage { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .cw {
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border-subtle);
+      background: var(--card-bg);
+      transition: border-color 0.3s, box-shadow 0.3s, opacity 0.35s, transform 0.35s;
+      position: relative;
+    }
+    .cw .cw-head {
+      display: flex; align-items: baseline; gap: 8px;
+      font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .cw .cw-head .cw-role {
+      font-weight: 500; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; opacity: 0.55;
+    }
+    .cw .cw-head .cw-badge {
+      margin-left: auto; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase;
+      font-weight: 700; padding: 2px 8px; border-radius: 9px; background: var(--navy-soft); color: var(--navy);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .cw.active .cw-badge { opacity: 1; }
+    .cw .cw-body { font-size: 12px; line-height: 1.5; min-height: 20px; color: var(--navy); opacity: 0.85; }
+    .cw .cw-files { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; min-height: 4px; }
+    .cw .ctx-file {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      background: var(--navy-soft); color: var(--navy);
+      border-radius: 6px; padding: 2px 8px;
+      animation: ctxPop 0.3s ease-out;
+    }
+    @keyframes ctxPop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    /* Main Claude window */
+    .cw-main.active { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(217,119,6,0.14); }
+    .cw-main.active .cw-badge { background: var(--amber); color: var(--warm-stone); }
+    /* Subagent window — spawns and despawns */
+    .cw-sub {
+      border-style: dashed; border-color: var(--golden);
+      background: rgba(251,191,36,0.06);
+    }
+    .cw-sub.empty {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 64px; border-color: var(--border-subtle); background: var(--card-bg);
+    }
+    .cw-sub.empty .cw-head, .cw-sub.empty .cw-files, .cw-sub.empty .cw-fresh { display: none; }
+    .cw-empty-label {
+      display: none; color: var(--navy); opacity: 0.4; font-style: italic; font-size: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+    .cw-sub.empty .cw-empty-label { display: block; }
+    .cw-sub.spawning { animation: cwSpawn 0.4s ease-out; }
+    .cw-sub.active { border-color: var(--golden); box-shadow: 0 0 0 3px rgba(251,191,36,0.18); background: var(--golden-soft); }
+    .cw-sub.active .cw-badge { background: var(--golden); color: var(--navy); }
+    .cw-sub.closing { animation: cwClose 0.45s ease-in forwards; }
+    @keyframes cwSpawn { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: none; } }
+    @keyframes cwClose { to { opacity: 0; transform: translateY(8px) scale(0.96); } }
+    .cw-sub .cw-fresh {
+      position: absolute; top: 10px; right: 12px;
+      font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.05em; text-transform: uppercase;
+      font-weight: 700; color: var(--amber); opacity: 0.7;
+    }
+    /* the connective arrow / pill lane between main and sub */
+    .cw-link {
+      text-align: center; font-family: 'Inter', sans-serif; font-size: 10px;
+      letter-spacing: 0.06em; text-transform: uppercase; font-weight: 700; color: var(--amber);
+      opacity: 0; transition: opacity 0.3s; min-height: 14px;
+    }
+    .cw-link.show { opacity: 1; }
+    /* narration bar */
+    .scene-narrate {
+      display: grid; grid-template-columns: 150px 1fr auto; gap: 14px; align-items: center;
+      background: var(--card-bg); border: 1px solid var(--border-subtle); border-radius: 10px;
+      padding: 12px 16px; margin-top: 14px; border-left: 4px solid var(--border-subtle);
+      transition: border-left-color 0.3s;
+    }
+    .scene-narrate.s-you { border-left-color: var(--navy); }
+    .scene-narrate.s-mech { border-left-color: var(--navy); }
+    .scene-narrate.s-judge { border-left-color: var(--amber); }
+    .scene-narrate.s-conv { border-left-color: var(--golden); }
+    .scene-narrate .sn-actor { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 13px; color: var(--navy); }
+    .scene-narrate .sn-actor .sn-sub { display: block; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.55; margin-top: 1px; }
+    .scene-narrate .sn-text { font-size: 13px; line-height: 1.45; }
+    .scene-narrate .sn-text code { font-size: 12px; }
+    .scene-narrate .sn-cat {
+      font-family: 'Inter', sans-serif; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-weight: 700; padding: 2px 9px; border-radius: 9px; white-space: nowrap;
+    }
+    .sn-cat.s-you { background: var(--navy-soft); color: var(--navy); }
+    /* controls */
+    .scene-controls { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+    .scene-controls .sc-btn {
+      background: var(--amber); color: var(--warm-stone); border: none; border-radius: 999px;
+      padding: 7px 18px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 700;
+      letter-spacing: 0.04em; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .scene-controls .sc-btn:hover { background: var(--golden); color: var(--navy); }
+    .scene-controls .sc-progress { display: flex; gap: 5px; }
+    .scene-controls .sc-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--border-subtle);
+      transition: background 0.3s, transform 0.3s;
+    }
+    .scene-controls .sc-dot.on { background: var(--amber); transform: scale(1.25); }
+    /* flying file/pill ghost */
+    .fly-file {
+      position: fixed; z-index: 1200; pointer-events: none; white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      padding: 3px 9px; border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(8,31,63,0.22); will-change: transform, opacity;
+    }
+    .fly-file.read { background: var(--navy); color: var(--warm-stone); }
+    .fly-file.write { background: var(--golden); color: var(--navy); }
+    .fly-file.pill { background: var(--amber); color: var(--warm-stone); font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.04em; }
+    .fly-file.moving { transition: transform 0.7s cubic-bezier(0.34,0.7,0.3,1), opacity 0.25s ease-out; }
+    @media (max-width: 980px) {
+      .scene-grid { grid-template-columns: 1fr; }
+      .scene-dir { overflow-x: auto; }
+      .scene-narrate { grid-template-columns: 1fr auto; }
+      .scene-narrate .sn-actor { grid-column: 1 / -1; }
+    }
   </style>
 </head>
 <body>
   <div class="layout">
     <nav class="toc" aria-label="Table of contents">
-      <ol>
+      <ol class="toc-list" data-part="1">
         <li><a href="#hero" data-label="Top">▲</a></li>
         <li><a href="#setup" data-label="Setup">·</a></li>
         <li><a href="#s1" data-label="What is an LLM?">1</a></li>
@@ -1374,8 +2070,35 @@
         <li><a href="#s10" data-label="Recap">★</a></li>
         <li><a href="#s11" data-label="Where to next">→</a></li>
       </ol>
+      <ol class="toc-list" data-part="2" hidden>
+        <li><a href="#p-hero" data-label="Top">▲</a></li>
+        <li><a href="#p0" data-label="Where we're going">0</a></li>
+        <li><a href="#p1" data-label="Decompose the workflow">1</a></li>
+        <li><a href="#p2" data-label="The handoff contract">2</a></li>
+        <li><a href="#p-loop" data-label="How one agent runs a crew">⚙</a></li>
+        <li><a href="#p3" data-label="Build the researcher">3</a></li>
+        <li><a href="#p4" data-label="Build the writer">4</a></li>
+        <li><a href="#p5" data-label="Build the editor">5</a></li>
+        <li><a href="#p6" data-label="Wire the crew">6</a></li>
+        <li><a href="#p7" data-label="Break it on purpose">7</a></li>
+        <li><a href="#p8" data-label="Make it yours">→</a></li>
+      </ol>
     </nav>
     <main class="content">
+      <div class="part-tabs" role="tablist" aria-label="Lesson parts">
+        <button type="button" class="part-tab active" data-part="1" role="tab" aria-selected="true">
+          <span class="pt-eyebrow">Part 1</span>
+          <span class="pt-title">The Building Blocks</span>
+          <span class="pt-desc">CLAUDE.md · commands · skills · subagents</span>
+        </button>
+        <button type="button" class="part-tab" data-part="2" role="tab" aria-selected="false">
+          <span class="pt-eyebrow">Part 2</span>
+          <span class="pt-title">Build a Crew</span>
+          <span class="pt-desc">compose them into a working multi-agent workflow</span>
+        </button>
+      </div>
+
+      <div class="part-panel" data-part="1">
       <section class="section-card solo hero" id="hero">
         <div class="kicker">A live lesson · 2026-05-25</div>
         <h1 style="font-size:54px;margin:8px 0 4px;line-height:1.05;">Claude Code Agents</h1>
@@ -2050,6 +2773,436 @@ analogy. Define any jargon.</div>
       <div class="footer">
         <p>Verified against Claude Code documentation as of 2026-05-25. Design spec at <code>docs/superpowers/specs/2026-05-25-claude-code-agents-lesson-design.md</code>.</p>
       </div>
+      </div><!-- /part-panel data-part=1 -->
+
+      <div class="part-panel" data-part="2" hidden>
+        <section class="section-card solo hero" id="p-hero">
+          <div class="kicker">A live build · Part 2</div>
+          <h1 style="font-size:54px;margin:8px 0 4px;line-height:1.05;">Build a Crew</h1>
+          <div class="byline">Matt · MVP Club</div>
+          <p class="outcome" style="margin-top:18px;">In Part 1 you built one of each of the four pillars. Today we <strong>compose them into a working multi-agent system</strong>: a content pipeline where one command kicks off three specialist subagents — a <strong>researcher</strong>, a <strong>writer</strong>, and an <strong>editor</strong> — that hand work down a line and produce a finished LinkedIn post.</p>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0 8px;align-items:center;">
+            <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:16px;">/draft-post</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">you run</div></div>
+            <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:16px;">researcher</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">→ brief</div></div>
+            <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:16px;">writer</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">→ draft</div></div>
+            <div style="background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:10px;padding:14px;text-align:center;"><div style="font-family:'Zilla Slab',serif;font-size:16px;">editor</div><div style="font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;margin-top:4px;">→ final post</div></div>
+          </div>
+          <div class="prereq" style="margin-top:24px;">
+            <strong>Before we start:</strong> have Claude Code open in a sandbox folder (same as Part 1). New here? You only need to know the four file types from Part 1 — flip to that tab for a 5-minute refresher. We build <em>everything</em> live; follow along on your own machine.
+          </div>
+        </section>
+
+        <section class="section-card solo" id="p0">
+          <div class="section-title-row">
+            <div class="section-num">00</div>
+            <h2 class="section-title">Where we're going</h2>
+          </div>
+          <div class="section-subtitle">one command, three agents, a finished post</div>
+          <p class="lede">By the end of this session you'll type one command and watch a crew of agents do the work. Here's the destination — we'll build every piece to get here:</p>
+
+          <pre><code>/draft-post "AI agents in the workplace — real vs. hype" "non-technical business pros"</code></pre>
+
+          <div class="file-tree" aria-label="What the pipeline produces" style="margin-top:14px;">
+            <div class="row"><span>lesson-sandbox/</span></div>
+            <div class="row" style="padding-left:18px;"><span>├── .claude/</span></div>
+            <div class="row" style="padding-left:36px;"><span>│   ├── agents/</span></div>
+            <div class="row" style="padding-left:54px;"><span>│   │   ├── post-researcher.md</span><span class="badge badge-dispatched">subagent</span></div>
+            <div class="row" style="padding-left:54px;"><span>│   │   ├── post-writer.md</span><span class="badge badge-dispatched">subagent</span></div>
+            <div class="row" style="padding-left:54px;"><span>│   │   └── post-editor.md</span><span class="badge badge-dispatched">subagent</span></div>
+            <div class="row" style="padding-left:36px;"><span>│   └── skills/</span></div>
+            <div class="row" style="padding-left:54px;"><span>│       └── draft-post/SKILL.md</span><span class="badge badge-user">you type /draft-post</span></div>
+            <div class="row" style="padding-left:18px;"><span>└── pipeline/</span></div>
+            <div class="row" style="padding-left:36px;"><span>├── research_brief.md</span><span class="badge badge-claude">researcher wrote it</span></div>
+            <div class="row" style="padding-left:36px;"><span>├── draft.md</span><span class="badge badge-claude">writer wrote it</span></div>
+            <div class="row" style="padding-left:36px;"><span>└── final_post.md</span><span class="badge badge-claude">editor wrote it</span></div>
+          </div>
+
+          <div class="footnote" style="margin-top:18px;">Four files you'll author (three agents + one skill) produce three files the agents author. Everything runs locally. We build the workers first, then the command that runs them.</div>
+        </section>
+
+        <section class="section-card solo" id="p1">
+          <div class="section-title-row">
+            <div class="section-num">01</div>
+            <h2 class="section-title">Decompose the workflow</h2>
+          </div>
+          <div class="section-subtitle">a workflow → a list of tasks → a team of agents</div>
+          <p class="lede">Before any building, the real skill: <strong>breaking a workflow into agents.</strong> Start with the job as a human would describe it, split it into tasks where the work genuinely changes, then map each task to one agent.</p>
+
+          <div class="map-cols" aria-label="Mapping a workflow to tasks to agents">
+            <div class="map-col">
+              <div class="mc-head">The workflow</div>
+              <p style="font-size:13px;margin:0;line-height:1.5;">Take a <strong>topic</strong> + <strong>audience</strong> and produce a polished, ready-to-post LinkedIn post.</p>
+            </div>
+            <div class="map-arrow" aria-hidden="true">→</div>
+            <div class="map-col">
+              <div class="mc-head">The tasks</div>
+              <ul>
+                <li>Research the topic</li>
+                <li>Write a draft</li>
+                <li>Edit &amp; refine</li>
+              </ul>
+            </div>
+            <div class="map-arrow" aria-hidden="true">→</div>
+            <div class="map-col focus code-ish">
+              <div class="mc-head">The agents</div>
+              <ul>
+                <li>post-researcher</li>
+                <li>post-writer</li>
+                <li>post-editor</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="why-it-matters" style="margin-top:18px;"><strong>The boundary rule:</strong> split into a new agent where <em>both</em> the job changes <em>and</em> the context it needs changes. Research needs the open web; writing needs a voice; editing needs quality criteria. Three different jobs, three different heads → three agents. Don't over-split (one agent per sentence) or under-split (one agent doing everything).</div>
+
+          <div class="footnote">This is exactly what Anthropic means by "each consideration handled by a separate call." One job per agent keeps each one focused — and keeps your main thread clean.</div>
+        </section>
+
+        <section class="section-card solo" id="p2">
+          <div class="section-title-row">
+            <div class="section-num">02</div>
+            <h2 class="section-title">The handoff contract</h2>
+          </div>
+          <div class="section-subtitle">the most important design decision in the whole system</div>
+          <p class="lede">Agents don't share a brain. Each runs in its <strong>own fresh context</strong> and only sees what it's handed. So how does the writer know what the researcher found? <strong>A file.</strong> Each agent writes a file the next one reads. The output format of one agent <em>is</em> the input spec for the next — that's the contract.</p>
+
+          <div class="pipeline" aria-label="File-based handoffs between the three agents">
+            <div class="pipe-head">/draft-post "topic" "audience"</div>
+            <div class="pipe-down" aria-hidden="true">↓ dispatches in order</div>
+
+            <div class="pipe-row">
+              <div class="pipe-node agent"><div class="pn-step">Step 1</div><div class="pn-name">post-researcher</div><div class="pn-job">researches the topic for the audience</div></div>
+              <div class="pipe-arrow" aria-hidden="true">→<span class="lbl">writes</span></div>
+              <div class="pipe-node file"><span class="pf-label">the contract</span>research_brief.md</div>
+            </div>
+            <div class="pipe-reads">↓ post-writer reads research_brief.md ↓</div>
+
+            <div class="pipe-row">
+              <div class="pipe-node agent"><div class="pn-step">Step 2</div><div class="pn-name">post-writer</div><div class="pn-job">turns the brief into a draft post</div></div>
+              <div class="pipe-arrow" aria-hidden="true">→<span class="lbl">writes</span></div>
+              <div class="pipe-node file"><span class="pf-label">the contract</span>draft.md</div>
+            </div>
+            <div class="pipe-reads">↓ post-editor reads draft.md ↓</div>
+
+            <div class="pipe-row">
+              <div class="pipe-node agent"><div class="pn-step">Step 3</div><div class="pn-name">post-editor</div><div class="pn-job">polishes against quality criteria</div></div>
+              <div class="pipe-arrow" aria-hidden="true">→<span class="lbl">writes</span></div>
+              <div class="pipe-node file"><span class="pf-label">the result</span>final_post.md</div>
+            </div>
+            <div class="pipe-down" aria-hidden="true">↓</div>
+            <div class="pipe-tail">a finished LinkedIn post you can actually post</div>
+          </div>
+
+          <div class="footnote" style="margin-top:18px;">Why files and not just "passing it along"? Because you can <strong>open every handoff and see it.</strong> If the post is bad, you open the three files and find <em>exactly</em> which agent dropped the ball. We'll prove that in §7 by breaking one on purpose.</div>
+        </section>
+
+        <section class="section-card solo" id="p-loop">
+          <div class="section-title-row">
+            <div class="section-num">⚙</div>
+            <h2 class="section-title">How one agent runs a crew</h2>
+          </div>
+          <div class="section-subtitle">the mechanism · before we build, a look under the hood</div>
+          <p class="lede">We keep saying "the command dispatches three agents." Mechanically, what <em>is</em> that? No magic — it's the same loop you met in Part 1, and dispatching an agent is <strong>just a tool call.</strong></p>
+
+          <p style="margin:0 0 6px;font-weight:600;">1 · The agent loop (Part 1, recap)</p>
+          <p style="margin:0 0 4px;">Claude Code runs what the docs call <strong>the agentic loop</strong>. The model predicts the next step — text <em>or</em> a tool call — the tool runs, its result feeds back into the model's context, and the loop repeats until the job is done.</p>
+
+          <div class="agent-loop" aria-label="The agentic loop">
+            <div class="loop-stage"><div class="ls-step">Predict</div><div class="ls-name">Decide next step</div><div class="ls-desc">The model predicts text or a tool call.</div></div>
+            <div class="loop-arrow" aria-hidden="true">→</div>
+            <div class="loop-stage"><div class="ls-step">Act</div><div class="ls-name">Run the tool</div><div class="ls-desc">Read a file, search, run a command — or dispatch an agent.</div></div>
+            <div class="loop-arrow" aria-hidden="true">→</div>
+            <div class="loop-stage"><div class="ls-step">Observe</div><div class="ls-name">Feed result back</div><div class="ls-desc">The tool's result re-enters the model's context.</div></div>
+          </div>
+          <div class="loop-repeat"><span class="glyph" aria-hidden="true">↻</span> repeat until the task is done</div>
+
+          <p style="margin:24px 0 6px;font-weight:600;">2 · Three forces are doing the work</p>
+          <p style="margin:0 0 4px;">Here's the part worth slowing down for. When you run <code>/draft-post</code>, three different kinds of thing combine — and only one of them is actual machinery. Keep these colors in mind:</p>
+
+          <div class="forces" aria-label="The three forces in a Claude Code workflow">
+            <div class="force is-conv">
+              <span class="f-tag cat-conv">Convention</span>
+              <div class="f-desc">Names and folders <em>you</em> made up. <code>post-researcher</code>, the <code>pipeline/</code> folder, the section headings in the brief. Claude Code attaches no special meaning to these — they're your choices, written in plain English.</div>
+            </div>
+            <div class="force is-mech">
+              <span class="f-tag cat-mech">Mechanism</span>
+              <div class="f-desc">The few things the <em>program</em> does automatically: load files from <code>.claude/</code>, turn <code>/draft-post</code> into a prompt, and give each subagent a <strong>fresh context</strong> when the <code>Agent</code> tool is called.</div>
+            </div>
+            <div class="force is-judge">
+              <span class="f-tag cat-judge">Claude decides</span>
+              <div class="f-desc">The <em>model</em> reading your instructions and choosing what to do — including <strong>when to call the <code>Agent</code> tool</strong> and what to put in each handoff file. This is judgment, not a rule.</div>
+            </div>
+          </div>
+
+          <p style="margin:0 0 8px;font-weight:600;">3 · Watch the containers of action</p>
+          <p style="margin:0 0 4px;">Here's what's really happening when you see "<em>post-researcher</em>" pop up in your chat. Everything lives <strong>inside Claude Code, the program</strong> (the big frame). It hands files to a <strong>context window</strong> — a bounded space where one mind works. Watch files fly out of your directory into whichever window is live, and new files get written back. When a subagent is dispatched, a <strong>fresh context window opens</strong>, does its job, and <strong>closes — its memory gone</strong>.</p>
+
+          <div class="scene" id="scene" aria-label="Animated containers-of-action model of one pipeline run">
+            <div class="scene-label">Claude Code <span class="sub">the program — the environment everything runs in</span></div>
+
+            <div class="scene-grid">
+              <aside class="scene-dir" aria-hidden="true">
+                <div class="dir-head">your directory</div>
+                <div class="d-row">lesson-sandbox/</div>
+                <div class="d-row" style="padding-left:12px;">.claude/</div>
+                <div class="d-row" data-id="skill" style="padding-left:24px;">skills/draft-post/</div>
+                <div class="d-row" data-id="a-researcher" style="padding-left:24px;">agents/post-researcher.md</div>
+                <div class="d-row" data-id="a-writer" style="padding-left:24px;">agents/post-writer.md</div>
+                <div class="d-row" data-id="a-editor" style="padding-left:24px;">agents/post-editor.md</div>
+                <div class="d-row" style="padding-left:12px;">pipeline/</div>
+                <div class="d-row dim" data-id="f-brief" style="padding-left:24px;">research_brief.md</div>
+                <div class="d-row dim" data-id="f-draft" style="padding-left:24px;">draft.md</div>
+                <div class="d-row dim" data-id="f-final" style="padding-left:24px;">final_post.md</div>
+              </aside>
+
+              <div class="scene-stage">
+                <div class="cw cw-main" id="cw-main">
+                  <div class="cw-head"><span>Main Claude</span><span class="cw-role">the model · your session</span><span class="cw-badge">working</span></div>
+                  <div class="cw-body" id="cw-main-body">Idle — waiting for your command.</div>
+                  <div class="cw-files" id="cw-main-files" aria-hidden="true"></div>
+                </div>
+
+                <div class="cw-link" id="cw-link"></div>
+
+                <div class="cw cw-sub empty" id="cw-sub">
+                  <span class="cw-fresh">fresh context</span>
+                  <div class="cw-head"><span id="cw-sub-name">subagent</span><span class="cw-role">a separate mind</span><span class="cw-badge">working</span></div>
+                  <div class="cw-body" id="cw-sub-body"></div>
+                  <div class="cw-files" id="cw-sub-files" aria-hidden="true"></div>
+                  <span class="cw-empty-label">no subagent running</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="scene-narrate s-you" id="scene-narrate">
+              <div class="sn-actor" id="sn-actor">You</div>
+              <div class="sn-text" id="sn-text">Press play to run <code>/draft-post "AI at work" "skeptical execs"</code>.</div>
+              <div class="sn-cat s-you" id="sn-cat">you</div>
+            </div>
+
+            <div class="scene-controls">
+              <button type="button" class="sc-btn" id="scene-play"><span aria-hidden="true">▶</span> Play the run</button>
+              <div class="sc-progress" id="scene-progress" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <div class="why-it-matters" style="margin-top:18px;"><strong>So when a subagent appears in your chat,</strong> this is the moment: Claude Code opened a brand-new context window, loaded <em>only</em> that agent's file plus the task Main Claude wrote, and let it work in isolation. Whatever it does inside never touches your main chat — only its final result comes back.</div>
+
+          <div class="why-it-matters"><strong>Does Main Claude check the subagent's work?</strong> Only if you told it to. Our skill just says "run the next one," so Main Claude passes the baton without grading the handoff. Want a quality gate? Add it to the skill — "if the draft is weak, send it back" — and Main Claude will. <strong>Evaluation is a convention you write, not something the machinery does for you.</strong></div>
+
+          <div class="why-it-matters"><strong>The payoff:</strong> almost none of this is special "orchestration machinery." Claude Code only does two mechanical things — load your files and give each subagent a fresh context window. <strong>Everything else is your plain-English convention plus Claude's judgment in reading it.</strong> That's why you can build a whole crew with nothing but markdown files.</div>
+
+          <div class="why-it-matters"><strong>One hard rule (this part <em>is</em> mechanical):</strong> a subagent can't dispatch its own subagents — the <code>Agent</code> tool isn't available inside one. So the orchestrator must be the <strong>top-level session</strong> (our skill), with the three workers one level below. That's exactly the shape we're about to build.</div>
+
+          <div class="footnote">Mechanically verified against Claude Code docs (2026-05-31). One caveat for the curious: the <code>Agent</code> tool was called <code>Task</code> before v2.1.63 — if you see "Task" in an older project, it's the same thing.</div>
+        </section>
+
+        <section class="section-card" id="p3">
+          <div class="card-grid">
+            <div class="card-left">
+              <div class="section-num">03</div>
+              <h2 class="section-title">Build the researcher</h2>
+              <div class="section-subtitle">first in the chain · clearest job</div>
+              <p class="lede">A subagent is a file at <code>.claude/agents/&lt;name&gt;.md</code>. The <strong>description</strong> says when it runs; the <strong>body</strong> is its job; <strong>tools</strong> limits what it can touch. Note the output section headings — <em>that structure is the contract</em> the writer will rely on.</p>
+              <div class="why-it-matters"><strong>Why <code>tools:</code>?</strong> The researcher needs the web (<code>WebSearch</code>, <code>WebFetch</code>) and the ability to <code>Write</code> its brief. Scoping tools keeps each agent honest about its job.</div>
+              <div class="footnote">Build order is workers-first: get each agent solid on its own before the command that calls them.</div>
+            </div>
+            <div class="card-right">
+              <h3>Do it live · post-researcher</h3>
+              <pre><code>---
+name: post-researcher
+description: Researches a topic for a target audience and writes a brief. Step 1 of the LinkedIn post pipeline.
+tools: WebSearch, WebFetch, Write
+---
+
+You are a B2B content researcher. Given a topic
+and an audience, research it and WRITE A FILE to
+pipeline/research_brief.md with these sections:
+
+## Key Points        (5-7 specific, non-obvious)
+## Audience Insight  (their top pain or motivation)
+## Hook Angle        (one strong opening angle)
+
+Be concise. Create only that file.</code></pre>
+              <div class="step-flow">
+                <div class="step"><div class="num">1</div><div class="body">Tell Claude: <em>"Create <code>.claude/agents/post-researcher.md</code> with the content above."</em></div></div>
+                <div class="step"><div class="num">2</div><div class="body">Approve the write.</div></div>
+                <div class="step"><div class="num">3</div><div class="body">Test it alone: <em>"Use the post-researcher subagent on 'AI agents at work — real vs. hype' for non-technical business pros."</em></div></div>
+              </div>
+              <div class="share-prompt"><strong>You should see:</strong> a new <code>pipeline/research_brief.md</code>. Open it — that's the contract.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="p4">
+          <div class="card-grid">
+            <div class="card-left">
+              <div class="section-num">04</div>
+              <h2 class="section-title">Build the writer</h2>
+              <div class="section-subtitle">reads the brief · produces a draft</div>
+              <p class="lede">The writer never touches the web. Its whole world is the file the researcher left behind. It <code>Read</code>s <code>research_brief.md</code> and <code>Write</code>s <code>draft.md</code> — the second link in the chain.</p>
+              <div class="why-it-matters"><strong>The handoff in action:</strong> the writer trusts the brief's structure. Clear <code>## Key Points</code> in → a specific draft out. Vague brief in → generic draft out. The contract is doing the work.</div>
+              <div class="footnote">Notice how little this agent needs to know. One job, one input file, one output file.</div>
+            </div>
+            <div class="card-right">
+              <h3>Do it live · post-writer</h3>
+              <pre><code>---
+name: post-writer
+description: Writes a LinkedIn post draft from the research brief. Step 2 of the pipeline.
+tools: Read, Write
+---
+
+Read pipeline/research_brief.md. Then WRITE
+pipeline/draft.md — a LinkedIn post that:
+- opens with a scroll-stopping hook line
+- is 150-300 words
+- makes ONE clear point of view
+- closes with a question or call to action
+
+Sound like a real person, not a robot.
+Create only that file.</code></pre>
+              <div class="step-flow">
+                <div class="step"><div class="num">1</div><div class="body">Tell Claude: <em>"Create <code>.claude/agents/post-writer.md</code> with the content above."</em></div></div>
+                <div class="step"><div class="num">2</div><div class="body">Approve.</div></div>
+                <div class="step"><div class="num">3</div><div class="body">Test it alone: <em>"Use the post-writer subagent."</em> (It already knows to read the brief.)</div></div>
+              </div>
+              <div class="share-prompt"><strong>You should see:</strong> a new <code>pipeline/draft.md</code> built from your brief.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="p5">
+          <div class="card-grid">
+            <div class="card-left">
+              <div class="section-num">05</div>
+              <h2 class="section-title">Build the editor</h2>
+              <div class="section-subtitle">the quality gate · judgment, not just text</div>
+              <p class="lede">The editor is the last line of defense. It reads the draft, measures it against explicit criteria, fixes what's weak, and writes the final post. <strong>Spell out "good"</strong> — if the editor's bar is vague, bad posts sail through.</p>
+              <div class="why-it-matters"><strong>Make criteria explicit:</strong> length, hook, one takeaway, no fluff, no generic AI phrasing, an engaging close. The clearer the bar, the better the gate.</div>
+              <div class="footnote">Three workers done. Each one independently tested. Now we wire them together.</div>
+            </div>
+            <div class="card-right">
+              <h3>Do it live · post-editor</h3>
+              <pre><code>---
+name: post-editor
+description: Edits the draft against quality criteria and writes the final post. Step 3 of the pipeline.
+tools: Read, Write
+---
+
+Read pipeline/draft.md. Check it against:
+- length 150-300 words
+- a strong hook
+- one clear takeaway
+- no fluff, no jargon, no generic AI phrasing
+- an engaging close
+
+Fix what's weak, then WRITE the polished result
+to pipeline/final_post.md. Create only that file.</code></pre>
+              <div class="step-flow">
+                <div class="step"><div class="num">1</div><div class="body">Tell Claude: <em>"Create <code>.claude/agents/post-editor.md</code> with the content above."</em></div></div>
+                <div class="step"><div class="num">2</div><div class="body">Approve.</div></div>
+                <div class="step"><div class="num">3</div><div class="body">Test it alone: <em>"Use the post-editor subagent."</em></div></div>
+              </div>
+              <div class="share-prompt"><strong>You should see:</strong> <code>pipeline/final_post.md</code> — your first finished post.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card" id="p6">
+          <div class="card-grid">
+            <div class="card-left">
+              <div class="section-num">06</div>
+              <h2 class="section-title">Wire the crew</h2>
+              <div class="section-subtitle">one skill that runs the whole line</div>
+              <p class="lede">Now the conductor. We make a <strong>skill</strong> — <code>.claude/skills/draft-post/SKILL.md</code> — whose whole job is to run the three agents in order. Typing <code>/draft-post</code> fires the pipeline end to end.</p>
+              <div class="why-it-matters"><strong>The skill is the prompt; Claude is the orchestrator.</strong> The skill doesn't "call" agents itself — its instructions tell Claude to dispatch each subagent in sequence, and Claude does the dispatching. <code>disable-model-invocation</code> means it only fires when <em>you</em> type the command — predictable for a live run.</div>
+              <div class="heads-up"><strong>Heads up:</strong> new <code>.claude/agents/*.md</code> files load at <em>session start</em>. If <code>/draft-post</code> can't find an agent, restart Claude Code so it picks them up. (Skills hot-reload; agents don't.)</div>
+            </div>
+            <div class="card-right">
+              <h3>Do it live · draft-post skill</h3>
+              <pre><code>---
+name: draft-post
+description: Run the full content pipeline — research, write, edit — into a finished LinkedIn post.
+disable-model-invocation: true
+argument-hint: "[topic] [audience]"
+---
+
+# LinkedIn post pipeline
+
+You are the ORCHESTRATOR. Do not research, write,
+or edit yourself — dispatch each subagent in order:
+
+1. Use the post-researcher subagent with the topic
+   and audience. It writes pipeline/research_brief.md.
+2. Use the post-writer subagent. It reads the brief
+   and writes pipeline/draft.md.
+3. Use the post-editor subagent. It reads the draft
+   and writes pipeline/final_post.md.
+
+Then show me pipeline/final_post.md and list where
+each file landed.</code></pre>
+              <div class="step-flow">
+                <div class="step"><div class="num">1</div><div class="body">Tell Claude: <em>"Create <code>.claude/skills/draft-post/SKILL.md</code> with the content above."</em></div></div>
+                <div class="step"><div class="num">2</div><div class="body">Approve, then (if needed) restart Claude Code.</div></div>
+                <div class="step"><div class="num">3</div><div class="body">Run it on a fresh topic: <code>/draft-post "your topic" "your audience"</code></div></div>
+              </div>
+              <div class="share-prompt"><strong>You should see:</strong> three agents fire in order, and a finished post print in your main thread.</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-card solo" id="p7">
+          <div class="section-title-row">
+            <div class="section-num">07</div>
+            <h2 class="section-title">Break it on purpose</h2>
+          </div>
+          <div class="section-subtitle">where the lesson actually lands</div>
+          <p class="lede">A working pipeline is satisfying. <strong>A broken one is where you learn.</strong> Let's sabotage the contract and watch the chain stumble — so you can feel why the handoff format matters.</p>
+
+          <div class="try-it">
+            <h3>Try it · snap the contract</h3>
+            <ol>
+              <li>Open <code>.claude/agents/post-researcher.md</code> and <strong>delete the output section headings</strong> (the <code>## Key Points</code> / <code>## Audience Insight</code> / <code>## Hook Angle</code> block). Leave it as just "research the topic."</li>
+              <li>Re-run <code>/draft-post</code> on the same topic.</li>
+              <li>Open <code>pipeline/research_brief.md</code>, then <code>pipeline/draft.md</code>. Watch how a shapeless brief produces a mushier draft.</li>
+            </ol>
+          </div>
+
+          <div class="why-it-matters"><strong>What you just proved:</strong> the agents are only as good as the contracts between them. The researcher's <em>output format</em> is the writer's <em>input spec</em>. Vague handoff → the whole chain degrades. Tighten the brief's structure and the draft sharpens right back up.</div>
+
+          <div class="footnote">This is the one idea to carry out the door: when a multi-agent system misbehaves, <strong>check the handoffs first.</strong> Open the files between the agents — the break is almost always there.</div>
+        </section>
+
+        <section class="section-card solo" id="p8">
+          <div class="section-title-row">
+            <div class="section-num">→</div>
+            <h2 class="section-title">Make it yours</h2>
+          </div>
+          <div class="section-subtitle">the pattern transfers to almost any workflow</div>
+          <p class="lede">The marketing post was just the vehicle. The real skill is the pattern: <strong>decompose → define the contracts → build the workers → wire them with a skill → debug the handoffs.</strong> It fits a huge range of everyday work.</p>
+
+          <div class="link-grid">
+            <div class="lk-card"><span class="lk-title">Research → summarize → draft email</span><span class="lk-desc">Inbox triage, outreach, follow-ups.</span></div>
+            <div class="lk-card"><span class="lk-title">Analyze data → find insights → write report</span><span class="lk-desc">Weekly metrics, board updates.</span></div>
+            <div class="lk-card"><span class="lk-title">Read doc → flag issues → suggest edits</span><span class="lk-desc">Contracts, proposals, policies.</span></div>
+            <div class="lk-card"><span class="lk-title">Intake → categorize → route</span><span class="lk-desc">Support tickets, leads, applications.</span></div>
+          </div>
+
+          <p style="margin-top:24px;font-family:'Zilla Slab',serif;font-size:20px;line-height:1.3;">What workflow in <em>your</em> work is really a research&nbsp;→&nbsp;write&nbsp;→&nbsp;edit in disguise?</p>
+
+          <div class="examples-head" style="margin-top:24px;">Go deeper on your own</div>
+          <div class="link-grid">
+            <div class="lk-card"><a class="lk-title" href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a><span class="lk-desc">Anthropic's patterns: prompt chaining, orchestrator-workers, and when to use each.</span></div>
+            <div class="lk-card"><a class="lk-title" href="https://docs.claude.com/en/docs/claude-code/sub-agents">Subagent docs</a><span class="lk-desc">Full frontmatter: tools, model, context isolation.</span></div>
+            <div class="lk-card"><a class="lk-title" href="https://code.claude.com/docs/en/skills">Skills docs</a><span class="lk-desc">Skills as the modern command, plus supporting files.</span></div>
+            <div class="lk-card"><a class="lk-title" href="#" data-goto-part="1">← Part 1: The Building Blocks</a><span class="lk-desc">Need a refresher on the four file types? Start there.</span></div>
+          </div>
+        </section>
+
+        <div class="footer">
+          <p>Verified against Claude Code documentation as of 2026-05-31. Design notes at <code>learning/mvpclubsummercampcurriculum/part2-streamlined-build-plan.md</code>.</p>
+        </div>
+      </div><!-- /part-panel data-part=2 -->
     </main>
   </div>
   <script>
@@ -2224,6 +3377,322 @@ analogy. Define any jargon.</div>
         if (flow) animateSimpleFlow(flow);
       });
     });
+
+    // ===== Containers-of-action scene (Part 2 interlude beat 3) =====
+    (function setupScene() {
+      const scene = document.getElementById('scene');
+      if (!scene) return;
+      const dir = scene.querySelector('.scene-dir');
+      const rowById = (id) => dir.querySelector('.d-row[data-id="' + id + '"]');
+      const cwMain = document.getElementById('cw-main');
+      const cwMainBody = document.getElementById('cw-main-body');
+      const cwMainFiles = document.getElementById('cw-main-files');
+      const cwSub = document.getElementById('cw-sub');
+      const cwSubName = document.getElementById('cw-sub-name');
+      const cwSubBody = document.getElementById('cw-sub-body');
+      const cwSubFiles = document.getElementById('cw-sub-files');
+      const cwLink = document.getElementById('cw-link');
+      const narrate = document.getElementById('scene-narrate');
+      const snActor = document.getElementById('sn-actor');
+      const snText = document.getElementById('sn-text');
+      const snCat = document.getElementById('sn-cat');
+      const playBtn = document.getElementById('scene-play');
+      const progress = document.getElementById('scene-progress');
+
+      const fileLabel = { skill: 'SKILL.md', 'a-researcher': 'post-researcher.md', 'a-writer': 'post-writer.md',
+        'a-editor': 'post-editor.md', 'f-brief': 'research_brief.md', 'f-draft': 'draft.md', 'f-final': 'final_post.md' };
+
+      let timers = [];
+      let playing = false;
+      const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+      const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+
+      // Fly a file ghost between a directory row and a context window (or back).
+      // dir2win = read (navy); win2dir = write (golden).
+      function fly(rowId, winEl, dir2win, kind) {
+        const row = rowById(rowId);
+        if (!row || !winEl) return;
+        const rRect = row.getBoundingClientRect();
+        const wRect = winEl.getBoundingClientRect();
+        const ghost = document.createElement('div');
+        ghost.className = 'fly-file ' + (kind || (dir2win ? 'read' : 'write'));
+        ghost.textContent = fileLabel[rowId] || rowId;
+        const from = dir2win ? rRect : wRect;
+        const to = dir2win ? wRect : rRect;
+        ghost.style.left = from.left + 'px';
+        ghost.style.top = (from.top + from.height / 2 - 11) + 'px';
+        document.body.appendChild(ghost);
+        const gRect = ghost.getBoundingClientRect();
+        const dx = (to.left + to.width / 2) - (gRect.left + gRect.width / 2);
+        const dy = (to.top + Math.min(to.height / 2, 40)) - (gRect.top + gRect.height / 2);
+        requestAnimationFrame(() => {
+          ghost.classList.add('moving');
+          ghost.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+        });
+        at(620, () => { ghost.style.opacity = '0'; });
+        at(820, () => ghost.remove());
+      }
+
+      // Fly a small pill (task / result) between the two windows.
+      function flyPill(fromEl, toEl, label) {
+        if (!fromEl || !toEl) return;
+        const fRect = fromEl.getBoundingClientRect();
+        const tRect = toEl.getBoundingClientRect();
+        const ghost = document.createElement('div');
+        ghost.className = 'fly-file pill';
+        ghost.textContent = label;
+        ghost.style.left = (fRect.left + fRect.width / 2 - 40) + 'px';
+        ghost.style.top = (fRect.bottom - 18) + 'px';
+        document.body.appendChild(ghost);
+        const gRect = ghost.getBoundingClientRect();
+        const dx = (tRect.left + tRect.width / 2) - (gRect.left + gRect.width / 2);
+        const dy = (tRect.top + 18) - (gRect.top + gRect.height / 2);
+        requestAnimationFrame(() => {
+          ghost.classList.add('moving');
+          ghost.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+        });
+        at(620, () => { ghost.style.opacity = '0'; });
+        at(820, () => ghost.remove());
+      }
+
+      function ctxChip(container, rowId, kind) {
+        const chip = document.createElement('span');
+        chip.className = 'ctx-file';
+        if (kind === 'write') { chip.style.background = 'var(--golden-soft)'; chip.style.color = 'var(--amber)'; }
+        chip.textContent = fileLabel[rowId] || rowId;
+        container.appendChild(chip);
+      }
+
+      function setNarrate(actor, sub, text, cat, catLabel) {
+        narrate.className = 'scene-narrate ' + cat;
+        snActor.innerHTML = actor + (sub ? '<span class="sn-sub">' + sub + '</span>' : '');
+        snText.innerHTML = text;
+        snCat.className = 'sn-cat ' + cat;
+        snCat.textContent = catLabel;
+      }
+
+      function activate(winEl) {
+        [cwMain, cwSub].forEach((w) => w.classList.remove('active'));
+        if (winEl) winEl.classList.add('active');
+      }
+
+      function emptySub() {
+        cwSub.className = 'cw cw-sub empty';
+        cwSubFiles.innerHTML = '';
+        cwSubBody.textContent = '';
+        cwLink.classList.remove('show');
+        cwLink.textContent = '';
+      }
+
+      function reset() {
+        clearTimers();
+        dir.querySelectorAll('.d-row').forEach((r) => {
+          r.classList.remove('reading', 'read', 'writing', 'written');
+          if (['f-brief', 'f-draft', 'f-final'].includes(r.dataset.id)) r.classList.add('dim');
+        });
+        cwMain.classList.remove('active');
+        cwMainFiles.innerHTML = '';
+        cwMainBody.textContent = 'Idle — waiting for your command.';
+        emptySub();
+        setNarrate('You', '', 'Press play to run <code>/draft-post "AI at work" "skeptical execs"</code>.', 's-you', 'you');
+        if (progress) progress.querySelectorAll('.sc-dot').forEach((d) => d.classList.remove('on'));
+      }
+
+      // Mark a directory row as being read (navy pulse → settle).
+      function readRow(id) {
+        const row = rowById(id);
+        if (!row) return;
+        row.classList.remove('dim');
+        row.classList.add('reading');
+        at(700, () => { row.classList.remove('reading'); row.classList.add('read'); });
+      }
+      function writeRow(id) {
+        const row = rowById(id);
+        if (!row) return;
+        row.classList.remove('dim', 'read');
+        row.classList.add('writing');
+        at(700, () => { row.classList.remove('writing'); row.classList.add('written'); });
+      }
+
+      // One subagent's life: spawn → read input → write output → close.
+      // Returns the duration consumed so the conductor can schedule the next.
+      function runSubagent(base, name, readId, writeId, body) {
+        at(base, () => {
+          cwSub.className = 'cw cw-sub spawning';
+          cwSubName.textContent = name;
+          cwSubBody.textContent = 'Fresh context — only its own file + the task.';
+          cwSubFiles.innerHTML = '';
+          cwLink.classList.add('show');
+          cwLink.textContent = '↓ Agent tool: task in';
+          flyPill(cwMain, cwSub, 'task →');
+          readRow('a-' + name.split('-')[1]); // light the agent .md
+          fly('a-' + name.split('-')[1], cwSub, true, 'read');
+        });
+        at(base + 420, () => { cwSub.classList.remove('spawning'); cwSub.classList.add('active'); activate(cwSub); });
+        // read its input handoff file (if any)
+        if (readId) {
+          at(base + 700, () => {
+            cwSubBody.textContent = body.reading;
+            readRow(readId);
+            fly(readId, cwSub, true, 'read');
+            ctxChip(cwSubFiles, readId, 'read');
+          });
+        }
+        // write its output
+        at(base + 1500, () => {
+          cwSubBody.textContent = body.writing;
+          fly(writeId, cwSub, false, 'write');
+          writeRow(writeId);
+          ctxChip(cwSubFiles, writeId, 'write');
+        });
+        // return + close
+        at(base + 2350, () => {
+          cwLink.textContent = '↑ returns one result';
+          flyPill(cwSub, cwMain, '✓ done');
+          cwSub.classList.remove('active');
+          cwSub.classList.add('closing');
+          activate(cwMain);
+        });
+        at(base + 2800, () => { emptySub(); });
+        return 2900;
+      }
+
+      function play() {
+        if (playing) { clearTimers(); }
+        reset();
+        playing = true;
+        playBtn.innerHTML = '<span aria-hidden="true">●</span> Running…';
+        const dots = progress ? progress.querySelectorAll('.sc-dot') : [];
+        const tick = (i) => { if (dots[i]) dots[i].classList.add('on'); };
+
+        // Scene 1 — you type the command
+        at(200, () => {
+          tick(0);
+          activate(cwMain);
+          cwMainBody.textContent = 'Received your command.';
+          setNarrate('You', 'in the chat', 'You type <code>/draft-post …</code>. It goes to <strong>Claude Code, the program</strong>.', 's-you', 'you');
+        });
+
+        // Scene 2 — Claude Code reads the skill, loads it into Main Claude
+        at(1300, () => {
+          tick(1);
+          setNarrate('Claude Code', 'the program', 'Finds the skill, <strong>reads <code>SKILL.md</code></strong>, and loads its text into Main Claude’s context window.', 's-mech', 'mechanism');
+          readRow('skill');
+          fly('skill', cwMain, true, 'read');
+          ctxChip(cwMainFiles, 'skill', 'read');
+          cwMainBody.textContent = 'Context now holds the skill’s instructions.';
+        });
+
+        // Scene 3 — Main Claude reads the plan and decides
+        at(2600, () => {
+          tick(2);
+          setNarrate('Main Claude', 'the model', '<strong>Reads the plan</strong> and decides: dispatch <code>post-researcher</code>. Calls the <code>Agent</code> tool.', 's-judge', 'decides');
+          cwMainBody.textContent = 'Plan: researcher → writer → editor. Dispatching #1…';
+        });
+
+        // Scene 4-6 — the three subagents, each spawning/closing
+        let cursor = 3900;
+        at(cursor, () => { tick(3);
+          setNarrate('post-researcher', 'a subagent', 'A <strong>fresh context window opens</strong>. It searches, then <strong>writes <code>research_brief.md</code></strong>, and closes.', 's-conv', 'convention'); });
+        cursor += runSubagent(cursor, 'post-researcher', null, 'f-brief',
+          { reading: 'Researching the topic…', writing: 'Writing research_brief.md…' });
+
+        at(cursor, () => { tick(4);
+          setNarrate('Main Claude', 'the model', 'Result back: "done." Same loop — dispatches <code>post-writer</code>.', 's-judge', 'decides');
+          cwMainBody.textContent = 'Step 1 done. Dispatching #2…'; });
+        cursor += 700;
+        at(cursor, () => {
+          setNarrate('post-writer', 'a subagent', 'New fresh window. <strong>Reads <code>research_brief.md</code></strong>, <strong>writes <code>draft.md</code></strong>. The handoff is a file.', 's-conv', 'convention'); });
+        cursor += runSubagent(cursor, 'post-writer', 'f-brief', 'f-draft',
+          { reading: 'Reading research_brief.md…', writing: 'Writing draft.md…' });
+
+        at(cursor, () => { tick(5);
+          setNarrate('Main Claude', 'the model', 'Result back. Dispatches the last one — <code>post-editor</code>.', 's-judge', 'decides');
+          cwMainBody.textContent = 'Step 2 done. Dispatching #3…'; });
+        cursor += 700;
+        at(cursor, () => {
+          setNarrate('post-editor', 'a subagent', 'Fresh window. <strong>Reads <code>draft.md</code></strong>, polishes, <strong>writes <code>final_post.md</code></strong>.', 's-conv', 'convention'); });
+        cursor += runSubagent(cursor, 'post-editor', 'f-draft', 'f-final',
+          { reading: 'Reading draft.md…', writing: 'Writing final_post.md…' });
+
+        // Final scene — Main Claude shows the result
+        at(cursor, () => { tick(6);
+          activate(cwMain);
+          setNarrate('Main Claude', 'the model', 'All three done. Shows you <code>final_post.md</code> and where each file landed.', 's-judge', 'decides');
+          cwMainBody.textContent = 'Pipeline complete → final_post.md ready.';
+          fly('f-final', cwMain, true, 'read');
+          ctxChip(cwMainFiles, 'f-final', 'read');
+        });
+        at(cursor + 1200, () => {
+          playing = false;
+          playBtn.innerHTML = '<span aria-hidden="true">↻</span> Replay the run';
+        });
+      }
+
+      // build progress dots (7 scenes)
+      if (progress) {
+        for (let i = 0; i < 7; i++) {
+          const d = document.createElement('span'); d.className = 'sc-dot'; progress.appendChild(d);
+        }
+      }
+      reset();
+      playBtn.addEventListener('click', play);
+
+      let hasAutoPlayed = false;
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting && !hasAutoPlayed && !playing) { hasAutoPlayed = true; play(); }
+          });
+        }, { threshold: 0.3 });
+        io.observe(scene);
+      }
+    })();
+
+    // ===== Part tabs (Part 1 / Part 2) =====
+    const partTabs = document.querySelectorAll('.part-tab');
+    const partPanels = document.querySelectorAll('.part-panel');
+    const tocLists = document.querySelectorAll('.toc-list');
+
+    function setActivePart(part, scrollTop) {
+      const p = String(part);
+      partTabs.forEach((t) => {
+        const active = t.dataset.part === p;
+        t.classList.toggle('active', active);
+        t.setAttribute('aria-selected', String(active));
+      });
+      partPanels.forEach((panel) => { panel.hidden = panel.dataset.part !== p; });
+      tocLists.forEach((list) => { list.hidden = list.dataset.part !== p; });
+      if (scrollTop) window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    partTabs.forEach((tab) => {
+      tab.addEventListener('click', () => setActivePart(tab.dataset.part, true));
+    });
+
+    // In-page links that jump to the other part (e.g. "← Part 1").
+    document.querySelectorAll('[data-goto-part]').forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActivePart(link.dataset.gotoPart, true);
+      });
+    });
+
+    // Deep-link support: if the URL hash points to a section inside Part 2,
+    // open that tab on load (and re-scroll to the anchor).
+    function activatePartFromHash() {
+      const id = location.hash.slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      const panel = el.closest('.part-panel');
+      if (!panel) return;
+      setActivePart(panel.dataset.part, false);
+      // Re-trigger the anchor scroll now that the panel is visible.
+      requestAnimationFrame(() => el.scrollIntoView());
+    }
+    window.addEventListener('hashchange', activatePartFromHash);
+    activatePartFromHash();
   </script>
 </body>
 </html>
