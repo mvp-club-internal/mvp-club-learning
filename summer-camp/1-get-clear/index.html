@@ -136,8 +136,149 @@
         <p>Each layer in that stack is a way to add relevant context: the <strong>prompt</strong> you write, the <strong>context</strong> you share around it, and the <strong>directory</strong> of files Claude can read. Giving the model the right context, deliberately and through back-and-forth dialogue, has a name. It's called <strong>context engineering</strong>, and effective prompting through dialogue is exactly that. The rest of this session is your first real practice of it.</p>
       </section>
 
-      <!-- §3–§9 are appended by later tasks. The TOC dots above point at
-           anchors (#s3 … #s9) that don't exist yet; that's expected. -->
+      <!-- ===== §3 · Step 1 · Create a place to work ===== -->
+      <section class="section-card" id="s3">
+        <div class="section-title-row">
+          <div class="section-num">3</div>
+          <h2 class="section-title">Step 1 · Create a place to work</h2>
+        </div>
+        <div class="section-subtitle">files and folders, all the way down</div>
+
+        <p class="lede">Here is a fact that takes the mystery out of building software: everything on your computer is files and folders. You already work this way every day. A document, a spreadsheet, a slide deck: each is a file, and you keep them in folders so you can find them again.</p>
+
+        <p>Software is no different. A website is just files sitting in folders on a server, telling your browser what to show. An app, an agent, a workflow: same story underneath. The only thing that changes when you work with Claude is that you operate over a wider range of files than you're used to (HTML, CSS, and JavaScript for a web page; Python for a script; whatever the job needs). The good news is that you don't have to author any of them. You describe what you want, and Claude translates that intent into the right files.</p>
+
+        <p>So your job isn't to write code. Your job is to keep a sensible structure over the files and folders, and to manage Claude as it works inside that structure: control what it reads so it understands your inputs, look at what it produces, feed corrections back, and go again. That loop is the same whether you're building an app, an agent, or a workflow.</p>
+
+        <!-- files-and-folders visual: a simple project folder with a docs/ folder -->
+        <div class="fs-view" aria-label="A simple project folder on your Desktop containing a docs folder">
+          <div class="fs-zone">
+            <div class="zone-label">A project folder on your Desktop</div>
+            <div class="fs-row" style="margin-top:6px;">~/Desktop/wardrobe-app/<span class="badge project">your workspace</span></div>
+            <div class="fs-row" style="padding-left:16px;">└── docs/</div>
+            <div class="fs-row" style="padding-left:32px;">└── (your intent &amp; success criteria land here next)</div>
+          </div>
+        </div>
+        <p class="footnote">One folder, named for your project, with room for a <code>docs/</code> folder inside it. That's the whole structure to start. You'll write your first document into <code>docs/</code> later in this session.</p>
+
+        <div class="try-it">
+          <h3>Try it · make your workspace and connect Claude to it</h3>
+          <p style="margin:0 0 6px;">Pick the path that matches what you have open. Either way, the goal is the same: a folder on your Desktop, with Claude Code pointed at it.</p>
+          <div class="setup-paths">
+            <div class="path">
+              <h3>Terminal path</h3>
+              <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code CLI in VS Code, Terminal, or PowerShell.</p>
+              <ol>
+                <li>Create a folder on your Desktop named <code>wardrobe-app</code> (right-click → New Folder).</li>
+                <li><strong>Mac:</strong> right-click the folder → <em>"New Terminal at Folder."</em> · <strong>Windows:</strong> right-click inside it in Explorer → <em>"Open in Terminal."</em></li>
+                <li>Type <code>claude</code> and press Enter.</li>
+              </ol>
+            </div>
+            <div class="path">
+              <h3>Desktop App path</h3>
+              <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code Desktop App on Mac or Windows.</p>
+              <ol>
+                <li>Create a folder on your Desktop named <code>wardrobe-app</code>.</li>
+                <li>Open the Desktop App → click the <strong>Code</strong> tab.</li>
+                <li>Select <strong>Local</strong> → <strong>Select folder</strong> → pick <code>wardrobe-app</code>.</li>
+                <li>Pick a model (Sonnet is fine).</li>
+              </ol>
+            </div>
+          </div>
+          <p style="font-size:13px;opacity:0.8;margin:10px 0 0;">The full install steps live on the <a href="../">camp home page</a> if you don't have Claude Code open yet.</p>
+        </div>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">Choosing a folder and pointing Claude at it is your <strong>first act of context engineering</strong>. You've drawn a boundary around the work: this is the place where shared context will collect, and the only files Claude can see are the ones you put here. A clean workspace is the start of a clean conversation.</p>
+        </div>
+      </section>
+
+      <!-- ===== §4 · Step 2 · Have the conversation ===== -->
+      <section class="section-card" id="s4">
+        <div class="section-title-row">
+          <div class="section-num">4</div>
+          <h2 class="section-title">Step 2 · Have the conversation</h2>
+        </div>
+        <div class="section-subtitle">get Claude to interview you</div>
+
+        <p class="lede">Now the part that feels backwards at first: don't ask Claude to build anything yet. The opening move is "Here's my idea, let's talk." You point Claude at your idea and have it ask <em>you</em> the questions, the way a good product manager would, until your intent and your idea of success are out in the open where you can both see them.</p>
+
+        <p>Most ideas start fuzzy, and that's fine. The conversation is how the fog clears. Watch how it goes with a real example: someone who wants help with their clothes.</p>
+
+        <h3>How the conversation unfolds</h3>
+        <p>It usually opens vague, gets interrogated, and ends sharp:</p>
+
+        <div class="fs-view" aria-label="A short example conversation arc from a vague opening to a sharp idea">
+          <div class="fs-zone" style="font-family:'Inter',sans-serif;font-size:14px;line-height:1.55;">
+            <div class="zone-label">A worked example</div>
+            <p style="margin:8px 0 10px;"><strong style="color:var(--amber);">You:</strong> "I want help with my clothes. Something about my style, I guess. I never know what to buy."</p>
+            <p style="margin:0 0 10px;"><strong style="color:var(--navy);">Claude:</strong> "Before we build anything, a few questions. When you say 'style,' is the goal to look like a specific person or vibe you admire? And what's gone wrong before: buying the wrong things, or buying good things that wear out fast?"</p>
+            <p style="margin:0 0 10px;"><strong style="color:var(--amber);">You:</strong> "Both, honestly. I see people who dress well and want that, but the stuff I buy either doesn't match or falls apart. And I can't spend a fortune."</p>
+            <p style="margin:0 0 10px;"><strong style="color:var(--navy);">Claude:</strong> "So success isn't 'more clothes.' It sounds like: figure out a look you admire, find a version that fits you, and buy pieces that last without overspending. Should durability outweigh price when they conflict?"</p>
+            <p style="margin:0;"><strong style="color:var(--amber);">You:</strong> "Yes. I'd rather pay a bit more for something that lasts, as long as it still looks right."</p>
+          </div>
+        </div>
+
+        <p>Notice what happened. You didn't arrive with a clear spec; the questions pulled it out of you. By the end you can state the idea in a single paragraph:</p>
+
+        <div class="why-it-matters">
+          <p style="margin:0;"><strong>The sharpened idea:</strong> analyze the wardrobes of people whose style I admire, find a comparable style that works for me, then search for items on a price-to-quality matrix. Weight it toward durability, because I want clothes that last, but stay price-sensitive, and it has to look good.</p>
+        </div>
+
+        <p>That paragraph is the destination of Step 2. It names your <strong>intent</strong> (a durable, affordable wardrobe modeled on people you admire) and <strong>what success looks like</strong> (the price-to-quality tradeoff, weighted toward durability). Those success criteria are how you'll later judge whether Claude's work is any good.</p>
+
+        <div class="try-it">
+          <h3>Try it · drive the interview with your own idea</h3>
+          <p style="margin:0 0 6px;">Tell Claude your idea in whatever rough shape it's in, then use these moves one at a time. Don't paste them all at once: send one, read the questions, answer honestly, then reach for the next.</p>
+<pre><code>Interview me like a product manager about this idea before we build anything. Ask me one question at a time.</code></pre>
+<pre><code>What's ambiguous or underspecified about what I just told you? List the gaps.</code></pre>
+<pre><code>Reflect back my intent and what success looks like in one paragraph, and flag everywhere you're still guessing.</code></pre>
+        </div>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">Every question Claude asks and you answer is <strong>context</strong> added to the conversation. You're narrowing the guess on purpose, the same move as the bell curve in section 2, except here you do it through dialogue instead of one long prompt.</p>
+        </div>
+      </section>
+
+      <!-- ===== §5 · Step 3 · Use Claude to push your thinking ===== -->
+      <section class="section-card" id="s5">
+        <div class="section-title-row">
+          <div class="section-num">5</div>
+          <h2 class="section-title">Step 3 · Use Claude to push your thinking</h2>
+        </div>
+        <div class="section-subtitle">pressure-test the idea before you commit to it</div>
+
+        <p class="lede">Once the idea is sharp, you can use Claude to make it stronger. Left to its own defaults, Claude tends to agree with you. The most likely continuation of "here's my plan" is "great plan, with a few minor considerations." You get a better partner by assigning it a role and asking it to be critical on purpose.</p>
+
+        <p>Here's a menu of moves. You don't need all of them. Pick the lens that fits where your idea feels shaky, run it, and feed what you learn back into your one-paragraph statement.</p>
+
+        <h3>Move 1 · The market-research lens</h3>
+        <p>Have Claude research the space: who else solves this, and whether there's real demand. This grounds your idea in what already exists instead of in your assumptions.</p>
+<pre><code>Research the space around my idea. Who already solves this, what do they do well or badly, and is there real demand? Cite what you base each point on.</code></pre>
+
+        <h3>Move 2 · The workflow-optimization lens</h3>
+        <p>Ask for the highest-leverage path to the goal, not the first one that comes to mind. You're looking for the shortest route to something useful.</p>
+<pre><code>Given my goal and success criteria, what's the highest-leverage path to a useful first version? What's the smallest thing worth building first, and what can wait?</code></pre>
+
+        <h3>Move 3 · The "senior engineer" lens</h3>
+        <p>Give Claude a specific role, specific criteria, and a specific output format. Vague critique gets vague answers; a defined review gets a real one.</p>
+<pre><code>Review my plan as a senior engineer would before a real build. Evaluate the approach for hidden complexity, things that will break as it grows, and dependencies I'd regret. List each concern with how serious it is and what you'd do instead.</code></pre>
+
+        <h3>Move 4 · The pre-mortem lens</h3>
+        <p>Imagine the project already failed, then work backward to why. This surfaces the assumptions you're leaning on without noticing.</p>
+<pre><code>Imagine it's three months from now and this project quietly failed. Write the story of why. What assumptions did I make that turned out wrong, and what would have warned me early?</code></pre>
+
+        <div class="heads-up">
+          <strong>Say you're not technical.</strong> Tell Claude plainly: "I'm not technical. For every decision, explain the consequences in plain language so I can weigh the tradeoffs." This isn't a disclaimer, it's a thinking-pusher in its own right. It forces the tradeoffs out into the open, in words a beginner can actually judge, which is exactly the ambiguity-reduction move this whole session is about.
+        </div>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">Pushing your thinking is still <strong>context engineering</strong>. Each lens hands Claude a different vantage point, and each round of critique sharpens the shared picture of what you're building and why. By the end you'll have an idea that has survived a few good arguments, which is a much better thing to write down than a hunch.</p>
+        </div>
+      </section>
+
+      <!-- §6–§9 are appended by later tasks. The TOC dots above point at
+           anchors (#s6 … #s9) that don't exist yet; that's expected. -->
 
       <!-- ===== Footer ===== -->
       <footer class="footer">
