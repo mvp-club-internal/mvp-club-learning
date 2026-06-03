@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Summer Camp — MVP Club</title>
+  <meta name="description" content="AI Summer Camp is a four-Friday beginner cohort from MVP Club. Hands-on, project-based, screen-shared live with Claude Code — leave having built and demoed something real. Become the AI person on your team.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="camp.css">
+</head>
+<body>
+  <div class="layout">
+    <nav class="toc" aria-label="Table of contents">
+      <ol>
+        <li><a href="#hero" data-label="Top">▲</a></li>
+        <li><a href="#about" data-label="What this is">·</a></li>
+        <li><a href="#map" data-label="The four Fridays">≣</a></li>
+        <li><a href="#1-get-clear" data-label="1 · Get Clear">1</a></li>
+        <li><a href="#2-document" data-label="2 · Document → Build">2</a></li>
+        <li><a href="#3-build" data-label="3 · Build">3</a></li>
+        <li><a href="#4-demo" data-label="4 · Demo + Graduate">4</a></li>
+        <li><a href="#behind" data-label="Feeling behind">✦</a></li>
+        <li><a href="#setup" data-label="Setup">⌨</a></li>
+      </ol>
+    </nav>
+
+    <main class="content">
+      <!-- ===== Hero ===== -->
+      <section class="section-card solo hero" id="hero">
+        <div class="kicker">MVP Club · AI Summer Camp</div>
+        <h1 style="font-size:54px;margin:8px 0 4px;line-height:1.05;">Become the AI person on your team</h1>
+        <p class="outcome" style="margin-top:18px;">Four Fridays, 2–3pm ET. Live, screen-shared, side-by-side: this lesson on the left, Claude Code on the right — building real things together. <strong>Cohort 1 starts June 5, 2026.</strong></p>
+      </section>
+
+      <!-- ===== What this is ===== -->
+      <section class="section-card solo" id="about">
+        <div class="section-title-row">
+          <div class="section-num">·</div>
+          <h2 class="section-title">What this is</h2>
+        </div>
+        <div class="section-subtitle">a hands-on cohort, not a webinar</div>
+
+        <p class="lede">MVP Club is a community for people learning to <strong>build</strong> with AI — professionals who want to make something real, not just talk about the tools. AI Summer Camp is our four-Friday beginner cohort ($99): project-based, hands-on, and worked through together. You don't leave with notes. You leave having built something and shown it to the group.</p>
+
+        <p>Each session runs live on a shared screen — this website on the left as the lesson, Claude Code on the right as the workspace. We move through real workplace scenarios as a cohort, one Friday at a time, from a fuzzy idea to a finished demo.</p>
+      </section>
+
+      <!-- ===== The four-session map ===== -->
+      <section class="section-card solo" id="map">
+        <div class="section-title-row">
+          <div class="section-num">≣</div>
+          <h2 class="section-title">The four Fridays</h2>
+        </div>
+        <div class="section-subtitle">one arc — fuzzy idea → clear goal → plan → build → demo</div>
+
+        <p class="lede">Each Friday builds on the last. Click any session to open it. (Session pages go live as the cohort reaches them.)</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0 4px;">
+          <a href="1-get-clear/" style="text-decoration:none;display:block;background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:12px;padding:22px 24px;transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 28px rgba(8,31,63,0.10)';this.style.borderColor='var(--amber)';" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border-subtle)';">
+            <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+              <span style="font-family:'Zilla Slab',serif;font-size:40px;color:var(--amber);opacity:0.4;line-height:1;">1</span>
+              <span style="font-family:'Zilla Slab',serif;font-size:24px;color:var(--navy);line-height:1.1;">Get Clear</span>
+            </div>
+            <p style="margin:0;font-size:14px;line-height:1.5;color:var(--navy);opacity:0.85;">Have a real thinking conversation that turns a fuzzy idea into a clear goal with success criteria.</p>
+          </a>
+
+          <a href="2-document/" style="text-decoration:none;display:block;background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:12px;padding:22px 24px;transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 28px rgba(8,31,63,0.10)';this.style.borderColor='var(--amber)';" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border-subtle)';">
+            <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+              <span style="font-family:'Zilla Slab',serif;font-size:40px;color:var(--amber);opacity:0.4;line-height:1;">2</span>
+              <span style="font-family:'Zilla Slab',serif;font-size:24px;color:var(--navy);line-height:1.1;">Document → Scope → Build</span>
+            </div>
+            <p style="margin:0;font-size:14px;line-height:1.5;color:var(--navy);opacity:0.85;">Turn the goal into a PRD, scope it technically, set up a systematic build, and start building.</p>
+          </a>
+
+          <a href="3-build/" style="text-decoration:none;display:block;background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:12px;padding:22px 24px;transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 28px rgba(8,31,63,0.10)';this.style.borderColor='var(--amber)';" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border-subtle)';">
+            <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+              <span style="font-family:'Zilla Slab',serif;font-size:40px;color:var(--amber);opacity:0.4;line-height:1;">3</span>
+              <span style="font-family:'Zilla Slab',serif;font-size:24px;color:var(--navy);line-height:1.1;">Build</span>
+            </div>
+            <p style="margin:0;font-size:14px;line-height:1.5;color:var(--navy);opacity:0.85;">Build together from your plan toward something demo-ready.</p>
+          </a>
+
+          <a href="4-demo/" style="text-decoration:none;display:block;background:var(--warm-stone);border:1px solid var(--border-subtle);border-radius:12px;padding:22px 24px;transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 10px 28px rgba(8,31,63,0.10)';this.style.borderColor='var(--amber)';" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--border-subtle)';">
+            <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+              <span style="font-family:'Zilla Slab',serif;font-size:40px;color:var(--amber);opacity:0.4;line-height:1;">4</span>
+              <span style="font-family:'Zilla Slab',serif;font-size:24px;color:var(--navy);line-height:1.1;">Demo + Graduate</span>
+            </div>
+            <p style="margin:0;font-size:14px;line-height:1.5;color:var(--navy);opacity:0.85;">Finish, demo what you made, and step into the community.</p>
+          </a>
+        </div>
+
+        <!-- Anchor targets so the TOC session dots land in the right place -->
+        <span id="1-get-clear"></span><span id="2-document"></span><span id="3-build"></span><span id="4-demo"></span>
+      </section>
+
+      <!-- ===== You'll feel behind ===== -->
+      <section class="section-card solo" id="behind">
+        <div class="section-title-row">
+          <div class="section-num">✦</div>
+          <h2 class="section-title">You'll feel behind — and here's what we do about it</h2>
+        </div>
+        <div class="section-subtitle">we hand you the durable skills, not the weekly churn</div>
+
+        <p class="lede">Let's be honest: everyone feels behind right now. This is a technology that changes by the week — a new model, a new tool, a new "you have to try this" every few days. That churn is real, and it's not going away.</p>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">But underneath the churn, something steadier is emerging: a set of <strong>core skills and durable mental models</strong> that hold even as the specific tools change. Knowing how to turn a fuzzy idea into a clear goal. How to scope and document before you build. How to direct an AI instead of being directed by it. These are what orient you in a moment of rapid disruption.</p>
+        </div>
+
+        <p>That's exactly what this camp develops and practices. We're not promising the churn will slow down. We're handing you the skills that outlast it — so the next new tool is something you pick up in an afternoon, not something that leaves you behind.</p>
+      </section>
+
+      <!-- ===== Setup (two paths) ===== -->
+      <section class="section-card solo" id="setup">
+        <div class="section-title-row">
+          <div class="section-num">⌨</div>
+          <h2 class="section-title">Set up Claude Code</h2>
+        </div>
+        <div class="section-subtitle">do this once before Session 1 · pick the path that matches what you have</div>
+
+        <p class="lede">Every session uses Claude Code on the right side of your screen. Get it open and pointed at a folder before we start so we can dive straight into building. Pick whichever path matches your setup.</p>
+
+        <div class="setup-paths">
+          <div class="path">
+            <h3>Path A — Terminal</h3>
+            <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code CLI in VS Code / Terminal / PowerShell.</p>
+            <ol>
+              <li>Create a folder on your Desktop named <code>summer-camp</code> (right-click → New Folder).</li>
+              <li><strong>Mac:</strong> right-click the folder → <em>"New Terminal at Folder."</em> · <strong>Windows:</strong> right-click inside it in Explorer → <em>"Open in Terminal."</em></li>
+              <li>Type <code>claude</code> and press Enter.</li>
+              <li>If it's your first time, follow the prompts to log in. When you see the prompt, you're ready.</li>
+            </ol>
+          </div>
+          <div class="path">
+            <h3>Path B — Desktop App</h3>
+            <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code Desktop App on Mac or Windows.</p>
+            <ol>
+              <li>Create a folder on your Desktop named <code>summer-camp</code>.</li>
+              <li>Open the Desktop App → click the <strong>Code</strong> tab (not Chat or Cowork).</li>
+              <li>Select <strong>Local</strong> → <strong>Select folder</strong> → pick <code>summer-camp</code>.</li>
+              <li>Pick a model (Sonnet is fine to start).</li>
+            </ol>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px;">
+          <div class="heads-up"><strong>Approving file writes:</strong> Terminal → press <code>y</code>. Desktop → click <strong>Accept</strong> on the diff.</div>
+          <div class="heads-up"><strong>Seeing your files:</strong> Terminal → use Finder/Explorer. Desktop → click the file icon in the sidebar.</div>
+        </div>
+
+        <div class="prereq" style="margin-top:20px;">
+          <strong>One more thing:</strong> make sure you're in the AI Summer Camp cohort channel in the MVP Club community — that's where we share the session link, post prompts, and answer questions live each Friday.
+        </div>
+      </section>
+
+      <!-- ===== Footer ===== -->
+      <footer class="footer">
+        <p style="margin:0;">AI Summer Camp · a four-Friday beginner cohort from <a href="https://mvpclub.ai?utm_source=summer-camp&utm_medium=referral&utm_campaign=ai-summer-camp&utm_content=company">MVP Club</a> — the community for people learning to build with AI.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Copy buttons on any code blocks (none on this page yet, but kept for parity
+    // with the lesson pages so the behavior is identical site-wide).
+    document.querySelectorAll('pre').forEach((pre) => {
+      if (!pre.querySelector('code')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code').innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+        } catch (e) {
+          btn.textContent = 'Press Ctrl+C';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+
+    // Active-state sync for the sticky TOC as sections scroll into view.
+    const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+    const byId = id => tocLinks.find(a => a.getAttribute('href') === '#' + id);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(a => a.classList.remove('active'));
+          const link = byId(entry.target.id);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('main.content > section[id]').forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
