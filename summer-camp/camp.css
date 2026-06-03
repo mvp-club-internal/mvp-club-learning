@@ -312,6 +312,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
 
 /* ===== Hero ===== */
 .hero { margin-bottom: 32px; }
+.hero h1 { font-size: 54px; line-height: 1.05; }
 .kicker {
   color: var(--amber);
   font-size: 13px;
@@ -457,6 +458,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
   stroke-width: 3;
   stroke-linejoin: round;
   stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
 
 /* Marker ticks + labels */
@@ -661,6 +663,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
   body { font-size: 15px; }
   .layout { padding: 20px 16px 48px; gap: 16px; }
   h1 { font-size: 32px; }
+  .hero h1 { font-size: 32px; }
   .section-card { padding: 24px 20px; border-radius: 10px; }
   .section-title-row { gap: 10px; }
   .section-num { font-size: 38px; }

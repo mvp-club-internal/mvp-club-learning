@@ -31,7 +31,7 @@
       <!-- ===== Hero ===== -->
       <section class="section-card hero" id="hero">
         <div class="kicker">AI Summer Camp · Session 1 of 4</div>
-        <h1 style="font-size:54px;margin:8px 0 4px;line-height:1.05;">Get Clear on Your Goal</h1>
+        <h1 style="margin:8px 0 4px;">Get Clear on Your Goal</h1>
         <p class="outcome" style="margin-top:18px;">By the end of this hour you'll have a project workspace, a conversation that reduced the ambiguity around a real idea, your first intent and success criteria written into a <code>docs/</code> folder, and a post in the channel.</p>
         <div class="prereq" style="margin-top:22px;">
           <strong>Before we start:</strong> have Claude Code installed and open (the setup steps live on the home page), and make sure you're in the AI Summer Camp cohort channel in the MVP Club community. That's where we share prompts and answer questions live.
@@ -71,7 +71,7 @@
         <p>Step back and notice what this changes. For decades, telling a computer what to do meant climbing down an <strong>abstraction ladder</strong>: English in your head, then Python or JavaScript, then assembly, then machine code, each rung further from how you actually think. An LLM collapses that. It is the translation of human intent into digital systems. <strong>English is the new abstraction layer</strong> for building and running software. The clearer your English, the better the system you get, which is why learning to express intent precisely is now a builder's core skill.</p>
 
         <!-- ===== Signature visual: the bell curve ===== -->
-        <div class="bell" id="bell" aria-label="Animated bell curve: more shared context moves the likely answer from a generic average toward exactly what you meant.">
+        <div class="bell" id="bell">
           <span class="bell-label">Shape the guess</span>
           <div class="bell-stage">
             <div class="bell-plot">
@@ -131,7 +131,7 @@
           </div>
         </div>
 
-        <p class="footnote">Read it left to right: with little to go on, the likely answer is a wide, flat distribution sitting on a generic average. As you stack context — your prompt, the background you share, and the files in your directory the model can read — the distribution narrows and its peak slides over to the answer you actually meant.</p>
+        <p class="footnote">Read it left to right: with little to go on, the likely answer is a wide, flat distribution sitting on a generic average. As you stack context (your prompt, the background you share, and the files in your directory the model can read), the distribution narrows and its peak slides over to the answer you actually meant.</p>
 
         <p>Each layer in that stack is a way to add relevant context: the <strong>prompt</strong> you write, the <strong>context</strong> you share around it, and the <strong>directory</strong> of files Claude can read. Giving the model the right context, deliberately and through back-and-forth dialogue, has a name. It's called <strong>context engineering</strong>, and effective prompting through dialogue is exactly that. The rest of this session is your first real practice of it.</p>
       </section>
@@ -209,6 +209,7 @@
           if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !bellPlayed) {
             bellPlayed = true;
             runBell();
+            bellObserver.disconnect();
           }
         });
       }, { threshold: [0, 0.5, 1] });
