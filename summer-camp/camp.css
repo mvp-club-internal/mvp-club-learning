@@ -390,7 +390,260 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
 }
 
 /* ===== §2 bell-curve animation ===== */
-/* (intentionally empty — a later task will fill this section) */
+/* The signature visual. A wide, flat distribution centered on a "generic
+   average" marker collapses into a tall, narrow peak that slides right to a
+   "what you meant" target, while three context chips (prompt → context →
+   directory) light up in sequence. Reading: more shared context moves the
+   likely guess from "average" to "exactly what I meant."
+
+   Mechanics: the curve is a single fixed SVG <path> drawn wide+flat. The
+   `.curve` group is transformed (scaled narrow on X, taller on Y, translated
+   right) via the `.bell.animate` gate so the morph + slide happen in one
+   coordinated keyframe. Markers and chips are separate layers. */
+
+.bell {
+  background: var(--warm-stone);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 24px 28px 22px;
+  margin: 24px 0 8px;
+  position: relative;
+}
+.bell-label {
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  background: var(--amber);
+  color: var(--warm-stone);
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.bell-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* --- The plot: SVG curve + baseline + two markers --- */
+.bell-plot { position: relative; width: 100%; }
+.bell-svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* baseline axis */
+.bell-svg .axis {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+
+/* The curve group. Origin set so scaling pinches toward the baseline center.
+   Start state = wide & flat (drawn that way in the path); end state applies a
+   narrowing scaleX, a heightening scaleY, and a rightward translate. */
+.bell-svg .curve {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transition: none;
+}
+.bell-svg .curve-fill {
+  fill: var(--golden);
+  opacity: 0.22;
+}
+.bell-svg .curve-line {
+  fill: none;
+  stroke: var(--amber);
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* Marker ticks + labels */
+.bell-marker {
+  position: absolute;
+  top: 4px;
+  bottom: 26px;
+  width: 0;
+  border-left: 2px dashed var(--border-subtle);
+  transition: opacity 0.4s ease;
+}
+.bell-marker .bell-marker-cap {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--navy);
+  opacity: 0.65;
+}
+.bell-marker.avg { left: 50%; }
+.bell-marker.target {
+  left: 76%;
+  border-left-color: var(--amber);
+  opacity: 0.35;
+}
+.bell-marker.target .bell-marker-cap { color: var(--amber); opacity: 1; }
+.bell .bell-marker.target .bell-marker-dot {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 0 0 rgba(217, 118, 6, 0.4);
+}
+
+/* --- The three context chips --- */
+.bell-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.bell-chip {
+  flex: 1 1 0;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 10px 14px;
+  opacity: 0.4;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.bell-chip .bell-chip-num {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--navy-soft);
+  color: var(--navy);
+  transition: background 0.35s ease, color 0.35s ease;
+}
+.bell-chip .bell-chip-text { line-height: 1.25; }
+.bell-chip .bell-chip-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--navy);
+  font-weight: 400;
+}
+.bell-chip .bell-chip-role {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--navy);
+  opacity: 0.6;
+}
+
+/* ---------- Animated state (gated behind .animate) ---------- */
+.bell.animate .bell-svg .curve {
+  animation: bell-sharpen 1.7s cubic-bezier(0.45, 0.05, 0.2, 1) forwards;
+}
+.bell.animate .bell-marker.avg {
+  animation: bell-avg-fade 1.7s ease forwards;
+}
+.bell.animate .bell-marker.target {
+  animation: bell-target-rise 1.7s ease forwards;
+}
+.bell.animate .bell-marker.target .bell-marker-dot {
+  animation: bell-target-pulse 1.4s ease-out 1s 1;
+}
+.bell.animate .bell-chip.lit {
+  opacity: 1;
+  transform: translateY(0);
+  border-color: var(--amber);
+  box-shadow: 0 6px 16px rgba(217, 118, 6, 0.12);
+}
+.bell.animate .bell-chip.lit .bell-chip-num {
+  background: var(--amber);
+  color: var(--warm-stone);
+}
+/* Stagger: chip 1 at 0.55s, chip 2 at 0.95s, chip 3 at 1.35s */
+.bell.animate .bell-chip:nth-child(1) { transition-delay: 0.55s; }
+.bell.animate .bell-chip:nth-child(2) { transition-delay: 0.95s; }
+.bell.animate .bell-chip:nth-child(3) { transition-delay: 1.35s; }
+
+@keyframes bell-sharpen {
+  0%   { transform: translateX(0)    scaleX(1)    scaleY(1); }
+  100% { transform: translateX(26%)  scaleX(0.34) scaleY(2.3); }
+}
+@keyframes bell-avg-fade {
+  0%   { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+@keyframes bell-target-rise {
+  0%   { opacity: 0.35; border-left-style: dashed; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; border-left-style: solid; }
+}
+@keyframes bell-target-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(217, 118, 6, 0.5); }
+  100% { box-shadow: 0 0 0 14px rgba(217, 118, 6, 0); }
+}
+
+/* Replay button */
+.bell-replay {
+  align-self: flex-start;
+  margin-top: 2px;
+  background: transparent;
+  color: var(--amber);
+  border: 1px solid var(--amber);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.bell-replay:hover { background: var(--amber); color: var(--warm-stone); }
+.bell-replay:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+/* On narrow screens the two centered marker captions can collide; pull them
+   apart by anchoring avg to its left edge and target to its right edge. */
+@media (max-width: 560px) {
+  /* avg caption sits to the LEFT of its line; target caption to the RIGHT, so
+     the two never collide even when the markers are close on a narrow plot. */
+  .bell-marker.avg .bell-marker-cap { left: auto; right: 6px; transform: none; }
+  .bell-marker.target .bell-marker-cap { left: 6px; right: auto; transform: none; }
+}
+
+/* Reduced motion: show the END state directly, no animation. The meaning
+   (narrow curve at target, target marker solid, all chips lit) still lands. */
+@media (prefers-reduced-motion: reduce) {
+  .bell.animate .bell-svg .curve,
+  .bell.animate .bell-marker.avg,
+  .bell.animate .bell-marker.target,
+  .bell.animate .bell-marker.target .bell-marker-dot {
+    animation: none;
+  }
+  .bell-svg .curve { transform: translateX(26%) scaleX(0.34) scaleY(2.3); }
+  .bell-marker.avg { opacity: 0.3; }
+  .bell-marker.target { opacity: 1; border-left-style: solid; }
+  .bell-chip {
+    opacity: 1;
+    transform: none;
+    border-color: var(--amber);
+    box-shadow: 0 6px 16px rgba(217, 118, 6, 0.12);
+    transition: none;
+  }
+  .bell-chip .bell-chip-num { background: var(--amber); color: var(--warm-stone); }
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 820px) {

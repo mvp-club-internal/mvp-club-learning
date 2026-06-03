@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session 1 · Get Clear on Your Goal — AI Summer Camp</title>
+  <meta name="description" content="Session 1 of AI Summer Camp: get clear on your goal. Set up a project workspace, have a thinking conversation that reduces the ambiguity around a real idea, write your first intent and success criteria into a docs/ folder, and post in the channel.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../camp.css">
+</head>
+<body>
+  <div class="layout">
+    <nav class="toc" aria-label="Table of contents">
+      <ol>
+        <li><a href="#hero" data-label="Top">▲</a></li>
+        <li><a href="#s1" data-label="1 · Norm">1</a></li>
+        <li><a href="#s2" data-label="2 · Big idea">2</a></li>
+        <li><a href="#s3" data-label="3 · Workspace">3</a></li>
+        <li><a href="#s4" data-label="4 · Conversation">4</a></li>
+        <li><a href="#s5" data-label="5 · Push thinking">5</a></li>
+        <li><a href="#s6" data-label="6 · Document">6</a></li>
+        <li><a href="#s7" data-label="7 · Debrief">7</a></li>
+        <li><a href="#s8" data-label="8 · Post">8</a></li>
+        <li><a href="#s9" data-label="9 · Homework">9</a></li>
+      </ol>
+    </nav>
+
+    <main class="content">
+      <!-- ===== Hero ===== -->
+      <section class="section-card hero" id="hero">
+        <div class="kicker">AI Summer Camp · Session 1 of 4</div>
+        <h1 style="font-size:54px;margin:8px 0 4px;line-height:1.05;">Get Clear on Your Goal</h1>
+        <p class="outcome" style="margin-top:18px;">By the end of this hour you'll have a project workspace, a conversation that reduced the ambiguity around a real idea, your first intent and success criteria written into a <code>docs/</code> folder, and a post in the channel.</p>
+        <div class="prereq" style="margin-top:22px;">
+          <strong>Before we start:</strong> have Claude Code installed and open (the setup steps live on the home page), and make sure you're in the AI Summer Camp cohort channel in the MVP Club community. That's where we share prompts and answer questions live.
+        </div>
+      </section>
+
+      <!-- ===== §1 · The norm ===== -->
+      <section class="section-card" id="s1">
+        <div class="section-title-row">
+          <div class="section-num">1</div>
+          <h2 class="section-title">You'll feel behind — and here's what we do about it</h2>
+        </div>
+        <div class="section-subtitle">we hand you the durable skills, not the weekly churn</div>
+
+        <p class="lede">Let's name it honestly: almost everyone in this cohort feels behind right now. AI is a technology that changes by the week. A new model, a new tool, a new "you have to try this" lands every few days. That pace is real, and it isn't going to ease up.</p>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">But underneath the churn, something steadier is taking shape: a set of <strong>core skills and durable mental models</strong> that hold even as the specific tools change. How to turn a fuzzy idea into a clear goal. How to scope and document before you build. How to direct an AI instead of being directed by it. These are what orient you in a moment of rapid disruption.</p>
+        </div>
+
+        <p>That is exactly what this camp develops and practices. We're not promising the churn will slow down. We're handing you the skills that outlast it, so the next new tool becomes something you pick up in an afternoon instead of something that leaves you behind. Today we start with the most foundational skill of all: getting clear on what you actually want before you ask for it.</p>
+      </section>
+
+      <!-- ===== §2 · The one big idea ===== -->
+      <section class="section-card" id="s2">
+        <div class="section-title-row">
+          <div class="section-num">2</div>
+          <h2 class="section-title">The one big idea: Claude is guessing — your job is to shape the guess</h2>
+        </div>
+        <div class="section-subtitle">more shared context moves the likely answer toward what you actually meant</div>
+
+        <p class="lede">Here is the mental model that everything else this summer rests on. A large language model is a <strong>probabilistic system</strong>. When you give it a prompt, it doesn't look up an answer. It predicts the most likely continuation, a kind of <strong>weighted average</strong> of everything it has seen that fits what you said. Claude is, in a real sense, always guessing. Your job is to shape the guess.</p>
+
+        <p>The way you shape it is by <strong>reducing ambiguity</strong>. A vague prompt leaves the likely answer sitting on a generic average, the response that fits the largest number of possible intentions. The more relevant context you provide, the narrower the range of likely answers becomes, until the most probable output is the specific thing you had in mind. Inputs in, output out. Better inputs, sharper output.</p>
+
+        <h3>English is the new abstraction layer</h3>
+        <p>Step back and notice what this changes. For decades, telling a computer what to do meant climbing down an <strong>abstraction ladder</strong>: English in your head, then Python or JavaScript, then assembly, then machine code, each rung further from how you actually think. An LLM collapses that. It is the translation of human intent into digital systems. <strong>English is the new abstraction layer</strong> for building and running software. The clearer your English, the better the system you get, which is why learning to express intent precisely is now a builder's core skill.</p>
+
+        <!-- ===== Signature visual: the bell curve ===== -->
+        <div class="bell" id="bell" aria-label="Animated bell curve: more shared context moves the likely answer from a generic average toward exactly what you meant.">
+          <span class="bell-label">Shape the guess</span>
+          <div class="bell-stage">
+            <div class="bell-plot">
+              <svg class="bell-svg" viewBox="0 0 600 220" role="img"
+                   aria-label="A wide, flat probability curve centered on a generic-average marker narrows into a tall, sharp peak that slides right to the what-you-meant target as context is added.">
+                <!-- baseline axis -->
+                <line class="axis" x1="20" y1="190" x2="580" y2="190"></line>
+                <!-- curve group: drawn wide & flat, centered at x=300; the .animate
+                     state narrows + heightens + slides it right via transform -->
+                <g class="curve">
+                  <path class="curve-fill"
+                        d="M 20 190
+                           C 150 188, 200 70, 300 70
+                           C 400 70, 450 188, 580 190
+                           L 580 190 L 20 190 Z"></path>
+                  <path class="curve-line"
+                        d="M 20 190
+                           C 150 188, 200 70, 300 70
+                           C 400 70, 450 188, 580 190"></path>
+                </g>
+              </svg>
+              <!-- markers overlaid on the plot -->
+              <div class="bell-marker avg">
+                <span class="bell-marker-cap">generic average</span>
+              </div>
+              <div class="bell-marker target">
+                <span class="bell-marker-dot"></span>
+                <span class="bell-marker-cap">what you meant</span>
+              </div>
+            </div>
+
+            <div class="bell-chips">
+              <div class="bell-chip">
+                <span class="bell-chip-num">1</span>
+                <span class="bell-chip-text">
+                  <span class="bell-chip-name">prompt</span><br>
+                  <span class="bell-chip-role">what you ask for</span>
+                </span>
+              </div>
+              <div class="bell-chip">
+                <span class="bell-chip-num">2</span>
+                <span class="bell-chip-text">
+                  <span class="bell-chip-name">context</span><br>
+                  <span class="bell-chip-role">what you tell it</span>
+                </span>
+              </div>
+              <div class="bell-chip">
+                <span class="bell-chip-num">3</span>
+                <span class="bell-chip-text">
+                  <span class="bell-chip-name">directory</span><br>
+                  <span class="bell-chip-role">what it can read</span>
+                </span>
+              </div>
+            </div>
+
+            <button type="button" class="bell-replay" id="bell-replay" aria-label="Replay the bell-curve animation">▶ replay</button>
+          </div>
+        </div>
+
+        <p class="footnote">Read it left to right: with little to go on, the likely answer is a wide, flat distribution sitting on a generic average. As you stack context — your prompt, the background you share, and the files in your directory the model can read — the distribution narrows and its peak slides over to the answer you actually meant.</p>
+
+        <p>Each layer in that stack is a way to add relevant context: the <strong>prompt</strong> you write, the <strong>context</strong> you share around it, and the <strong>directory</strong> of files Claude can read. Giving the model the right context, deliberately and through back-and-forth dialogue, has a name. It's called <strong>context engineering</strong>, and effective prompting through dialogue is exactly that. The rest of this session is your first real practice of it.</p>
+      </section>
+
+      <!-- §3–§9 are appended by later tasks. The TOC dots above point at
+           anchors (#s3 … #s9) that don't exist yet; that's expected. -->
+
+      <!-- ===== Footer ===== -->
+      <footer class="footer">
+        <p style="margin:0;">AI Summer Camp · Session 1 of a four-Friday beginner cohort from <a href="https://mvpclub.ai?utm_source=summer-camp&utm_medium=referral&utm_campaign=ai-summer-camp&utm_content=company">MVP Club</a> — the community for people learning to build with AI. <a href="../">Back to camp overview</a>.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Copy buttons on any code blocks (kept identical to the index so behavior
+    // is the same site-wide as code blocks land in later sections).
+    document.querySelectorAll('pre').forEach((pre) => {
+      if (!pre.querySelector('code')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code').innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+        } catch (e) {
+          btn.textContent = 'Press Ctrl+C';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+
+    // Active-state sync for the sticky TOC as sections scroll into view.
+    const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+    const byId = id => tocLinks.find(a => a.getAttribute('href') === '#' + id);
+    const tocObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(a => a.classList.remove('active'));
+          const link = byId(entry.target.id);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('main.content > section[id]').forEach(s => tocObserver.observe(s));
+
+    // ===== Bell-curve animation control =====
+    const bell = document.getElementById('bell');
+    const replayBtn = document.getElementById('bell-replay');
+
+    function runBell() {
+      if (!bell) return;
+      bell.classList.remove('animate');
+      // Stagger chip "lit" so the curve has begun morphing before they light.
+      const chips = bell.querySelectorAll('.bell-chip');
+      chips.forEach(c => c.classList.remove('lit'));
+      // Force reflow so removing/re-adding .animate restarts the keyframes.
+      void bell.offsetWidth;
+      bell.classList.add('animate');
+      chips.forEach(c => c.classList.add('lit'));
+    }
+
+    // Trigger once when the bell scrolls into view at >=50% visibility.
+    let bellPlayed = false;
+    if (bell) {
+      const bellObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !bellPlayed) {
+            bellPlayed = true;
+            runBell();
+          }
+        });
+      }, { threshold: [0, 0.5, 1] });
+      bellObserver.observe(bell);
+
+      // Manual replay re-runs from the start every time.
+      if (replayBtn) replayBtn.addEventListener('click', runBell);
+    }
+  </script>
+</body>
+</html>
