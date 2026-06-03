@@ -277,8 +277,132 @@
         </div>
       </section>
 
-      <!-- §6–§9 are appended by later tasks. The TOC dots above point at
-           anchors (#s6 … #s9) that don't exist yet; that's expected. -->
+      <!-- ===== §6 · Step 4 · Document it ===== -->
+      <section class="section-card" id="s6">
+        <div class="section-title-row">
+          <div class="section-num">6</div>
+          <h2 class="section-title">Step 4 · Document it</h2>
+        </div>
+        <div class="section-subtitle">turn the conversation into something durable</div>
+
+        <p class="lede">Right now your sharpened idea lives in a chat. Close the window and it's gone. The last move of this session is to make it permanent: have Claude write your intent and your success criteria into a file, inside a <code>docs/</code> folder in your project. A conversation is fleeting. A file stays, and Claude can read it next week to pick up exactly where you left off.</p>
+
+        <p>This is also the cleanest example yet of the one big idea. When you create a <code>docs/</code> folder and put your goal in it, you've literally added a new input to your workspace. Next time you ask Claude to build, that file is part of what it reads. You are shaping the guess by hand, one file at a time.</p>
+
+        <!-- the project folder now has a written file inside docs/ -->
+        <div class="fs-view" aria-label="The same project folder, now with an intent file written inside the docs folder">
+          <div class="fs-zone">
+            <div class="zone-label">Your workspace, now with a document in it</div>
+            <div class="fs-row" style="margin-top:6px;">~/Desktop/wardrobe-app/<span class="badge project">your workspace</span></div>
+            <div class="fs-row" style="padding-left:16px;">└── docs/</div>
+            <div class="fs-row" style="padding-left:32px;">└── intent.md<span class="badge local">written this session</span></div>
+          </div>
+        </div>
+        <p class="footnote">Same folder as section 3, one file fuller. The <code>docs/</code> folder is no longer a placeholder — your intent and success criteria live in <code>intent.md</code>, and that file is now part of what Claude reads.</p>
+
+        <div class="try-it">
+          <h3>Try it · write your goal into a file</h3>
+          <p style="margin:0 0 6px;">Send these one at a time. The first creates the folder and file; the second is optional, for anyone who wants to start a fuller draft.</p>
+<pre><code>Create a docs/ folder and write a file called intent.md that captures my intent and what success looks like, in plain language. Use what we worked out in this conversation.</code></pre>
+<pre><code>Now start a draft PRD in docs/ — a short product requirements doc that turns intent.md into goals, a first feature, and how we'll know it's working. Keep it rough; we'll refine it before next session.</code></pre>
+        </div>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">This file is your <strong>on-ramp to Week 2</strong>. You'll walk into the next session with a real document instead of a vague memory, and Claude will read it to get its bearings instantly. Writing intent down is the difference between starting over each week and building something that compounds.</p>
+        </div>
+      </section>
+
+      <!-- ===== §7 · Debrief ===== -->
+      <section class="section-card" id="s7">
+        <div class="section-title-row">
+          <div class="section-num">7</div>
+          <h2 class="section-title">Debrief</h2>
+        </div>
+        <div class="section-subtitle">three questions before you close the laptop</div>
+
+        <p class="lede">Take two minutes with these. The point of today wasn't the wardrobe app or whatever idea you brought; it was the conversation that reduced the ambiguity around it. These questions help you notice what that conversation actually did.</p>
+
+        <div class="fs-view" aria-label="Three reflection questions">
+          <div class="fs-zone" style="font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;">
+            <div class="zone-label">Reflect</div>
+            <p style="margin:8px 0 12px;"><strong style="color:var(--amber);">1.</strong> What did Claude ask that you didn't expect?</p>
+            <p style="margin:0 0 12px;"><strong style="color:var(--amber);">2.</strong> Did you end up somewhere different than where you started?</p>
+            <p style="margin:0;"><strong style="color:var(--amber);">3.</strong> What got clearer?</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== §8 · Post in the channel ===== -->
+      <section class="section-card" id="s8">
+        <div class="section-title-row">
+          <div class="section-num">8</div>
+          <h2 class="section-title">Post in the channel</h2>
+        </div>
+        <div class="section-subtitle">make your thinking visible to the cohort</div>
+
+        <p class="lede">One thing before you go: share what you came up with in the cohort channel. Post your success criteria, or a screenshot of the moment your idea got sharp. This is the weekly habit that makes the cohort a cohort — you see what everyone else is working on, and they see you.</p>
+
+        <p>It doesn't need to be polished. Here's the bar:</p>
+
+        <!-- A short example of a good first post -->
+        <div class="fs-view" aria-label="An example of a good first post in the cohort channel">
+          <div class="fs-zone" style="font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;">
+            <div class="zone-label">What a good first post looks like</div>
+            <p style="margin:8px 0 0;">Brought a fuzzy "help me with my clothes" idea and Claude interviewed it out of me. Landed on: analyze wardrobes of people whose style I admire, find a version that fits me, then shop on a price-to-quality matrix weighted toward durability. The pre-mortem caught that I'd probably overspend on trendy stuff that wears out — glad I know that now and not in three months. Wrote it all into <code>docs/intent.md</code>. Onward to next week.</p>
+          </div>
+        </div>
+
+        <!-- TODO(cohort-channel-url): the real Mighty Networks cohort channel URL
+             is not known yet. The placeholder href="#" below MUST be replaced with
+             the live channel link before this page is shared with the cohort.
+             QA will surface this to the founder. -->
+        <div class="heads-up">
+          <strong>Where to post:</strong> head to <a href="#" data-todo="cohort-channel-url">your cohort channel</a> in the MVP Club community and drop your post there. <strong style="color:var(--amber);">⚠ Placeholder link — needs the real cohort-channel URL before this page goes live.</strong>
+        </div>
+      </section>
+
+      <!-- ===== §9 · Before next week ===== -->
+      <section class="section-card" id="s9">
+        <div class="section-title-row">
+          <div class="section-num">9</div>
+          <h2 class="section-title">Before next week</h2>
+        </div>
+        <div class="section-subtitle">deepen your project &amp; add your power-ups</div>
+
+        <p class="lede">Homework, but the good kind: you're not doing a throwaway exercise, you're continuing the exact project you started today. The goal is to walk into Session 2 with a clearer idea and a draft PRD already written. Here's how to get there.</p>
+
+        <h3>1 · Keep the conversation going</h3>
+        <p>Go back to your own project and keep refining. Tighten your intent, sharpen your success criteria, and let Claude research the space and pressure-test your thinking using the lenses from section 5. The more you reduce the ambiguity now, the less you'll wrestle with it when you start building.</p>
+        <p>One built-in worth trying: <strong>Plan Mode</strong>. Instead of having Claude act right away, ask it to plan an approach first. It will lay out the steps it would take and, importantly, the assumptions it's making. Those assumptions are exactly where hidden ambiguity hides — read them, correct the ones that are off, and you've reduced the guess before any work happens.</p>
+<pre><code>Enter Plan Mode and plan an approach for my project based on docs/intent.md. List your assumptions explicitly so I can correct the ones that are wrong before we build.</code></pre>
+
+        <h3>2 · Add a couple of skills — your power-ups</h3>
+        <p style="margin:0 0 10px;">This part is <strong>optional</strong>. If you skip it, you'll still arrive next week with a PRD, which is what matters. But if you have ten extra minutes, two skills make the work easier.</p>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">A <strong>skill</strong> is reusable, packaged context that aligns Claude automatically. Instead of explaining what you want from scratch every time, a skill hands Claude the right background and instructions the moment it's relevant. It's the Day-1 thesis (better inputs, sharper output) leveled up and made reusable. For the fuller explainer, see <a href="../../claude-code-agents/">what is a skill?</a> from the agents lesson on this hub.</p>
+        </div>
+
+        <p style="margin:14px 0 8px;">The easiest way to add skills is the interactive menu. In Claude Code, run:</p>
+<pre><code>/plugin</code></pre>
+        <p style="margin:8px 0 14px;">That opens the plugin marketplace. Browse it, find the two skills below by name, and install them. (Each name has a <code>@claude-plugins-official</code> tag — that's the marketplace they come from, and what you'll look for in the menu.)</p>
+
+        <div class="heads-up" style="margin-bottom:10px;">
+          <strong>playground</strong> &nbsp;·&nbsp; <code>playground@claude-plugins-official</code><br>
+          A quick interactive explorer that lets you see and tweak what "success" looks like, visually, before you commit to it.
+        </div>
+        <div class="heads-up">
+          <strong>superpowers</strong> &nbsp;·&nbsp; <code>superpowers@claude-plugins-official</code><br>
+          Unlocks two moves you'll use a lot: <strong>brainstorming</strong> (turns your idea into a spec or PRD through guided back-and-forth) and <strong>deep-research</strong> (real market and competitor research on your idea).
+        </div>
+
+        <h3>3 · Draft the PRD into <code>docs/</code></h3>
+        <p>However you get there, whether by hand or by running the <code>brainstorming</code> skill (which ends by writing a spec for you), the finish line for this week is a <strong>draft PRD sitting in your <code>docs/</code> folder</strong>. Lock that in and you walk into Session 2 ready to build instead of ready to start thinking.</p>
+
+        <div class="why-it-matters">
+          <p style="margin:0;">Everything this week is the same skill you practiced today: reduce ambiguity, write it down, let the files shape the next guess. Do it on your own project and Session 2 starts from a running start.</p>
+        </div>
+      </section>
 
       <!-- ===== Footer ===== -->
       <footer class="footer">
