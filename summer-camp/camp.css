@@ -1,0 +1,402 @@
+/* =====================================================================
+   AI Summer Camp — shared design system (camp.css)
+   ---------------------------------------------------------------------
+   Ported & generalized from claude-code-agents/index.html. Class names
+   are kept IDENTICAL to that lesson so the visual language matches.
+   Linked by the camp index as href="camp.css" and by session subpages
+   as href="../camp.css".
+
+   Fonts (Zilla Slab + Inter + JetBrains Mono) are loaded via a Google
+   Fonts <link> in each page's <head> — this file only references the
+   font-family names.
+   ===================================================================== */
+
+/* ===== Brand tokens ===== */
+:root {
+  --warm-stone: #faf5f0;
+  --navy: #081f3f;
+  --amber: #d97706;
+  --golden: #fbbf24;
+  --golden-soft: #fef3c7;
+  --navy-soft: rgba(8, 31, 63, 0.06);
+  --card-bg: #ffffff;
+  --border-subtle: rgba(8, 31, 63, 0.12);
+}
+
+/* ===== Base ===== */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--warm-stone);
+  color: var(--navy);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3 {
+  font-family: 'Zilla Slab', Georgia, serif;
+  font-weight: 400;
+  color: var(--navy);
+  line-height: 1.2;
+}
+h1 { font-size: 40px; margin: 0 0 8px; }
+h2 {
+  font-size: 28px;
+  margin: 56px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--amber);
+}
+h3 { font-size: 18px; margin: 24px 0 8px; }
+p { margin: 0 0 16px; }
+strong { font-weight: 600; }
+a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+a:hover { color: var(--navy); }
+
+/* ===== Layout: sticky TOC + content column ===== */
+.layout {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  max-width: 1320px;
+  margin: 0 auto;
+  gap: 24px;
+  padding: 32px 24px 64px;
+}
+.content {
+  min-width: 0;
+  max-width: 880px;
+}
+
+/* ===== Sticky TOC (vertical numbered list with data-label hover) ===== */
+.toc {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  font-size: 12px;
+}
+.toc ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.toc li { margin: 0; }
+.toc a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: var(--navy);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  opacity: 0.6;
+  position: relative;
+  transition: opacity 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
+}
+.toc a:hover {
+  opacity: 1;
+  background: var(--amber);
+  color: var(--warm-stone);
+  border-color: var(--amber);
+}
+.toc a.active {
+  opacity: 1;
+  background: var(--amber);
+  color: var(--warm-stone);
+  border-color: var(--amber);
+}
+/* Hover label that flies out to the right of each TOC dot */
+.toc a::after {
+  content: attr(data-label);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--navy);
+  color: var(--warm-stone);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 5;
+}
+.toc a:hover::after { opacity: 1; }
+
+/* ===== Section card system ===== */
+.section-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 48px 56px;
+  margin: 32px 0;
+  box-shadow: 0 1px 2px rgba(8, 31, 63, 0.04), 0 8px 24px rgba(8, 31, 63, 0.06);
+  scroll-margin-top: 24px;
+}
+.section-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.section-num {
+  font-family: 'Zilla Slab', Georgia, serif;
+  font-size: 48px;
+  color: var(--amber);
+  line-height: 1;
+  opacity: 0.35;
+}
+.section-title {
+  font-family: 'Zilla Slab', Georgia, serif;
+  font-weight: 400;
+  font-size: 44px;
+  line-height: 1.05;
+  margin: 0 0 4px;
+  border: none;
+  padding: 0;
+}
+.section-subtitle {
+  font-style: italic;
+  color: var(--amber);
+  font-size: 16px;
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+.lede {
+  font-size: 18px;
+  line-height: 1.5;
+  margin: 0 0 28px;
+  color: var(--navy);
+  max-width: 760px;
+}
+.footnote {
+  margin-top: 28px;
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.7;
+  border-left: 2px solid var(--amber);
+  padding-left: 12px;
+}
+
+/* ===== Callouts ===== */
+.try-it {
+  background: var(--golden-soft);
+  border-left: 4px solid var(--golden);
+  padding: 18px 22px;
+  margin: 20px 0;
+  border-radius: 0 6px 6px 0;
+}
+.try-it h3 { margin-top: 0; color: var(--navy); }
+.try-it ol { padding-left: 22px; margin: 8px 0 0; }
+.try-it ol li { margin: 6px 0; }
+
+.why-it-matters {
+  font-size: 14px;
+  color: var(--navy);
+  opacity: 0.88;
+  border-left: 3px solid var(--amber);
+  padding: 10px 18px;
+  margin: 16px 0;
+}
+.why-it-matters strong { color: var(--amber); }
+
+.heads-up {
+  background: var(--navy-soft);
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 12px 0;
+}
+.heads-up strong { color: var(--amber); }
+
+.prereq {
+  background: var(--navy);
+  color: var(--warm-stone);
+  padding: 14px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 20px 0 8px;
+}
+.prereq strong { color: var(--golden); }
+
+/* ===== Code + copy ===== */
+code, pre, .mono {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 14px;
+}
+code {
+  background: var(--navy-soft);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+pre {
+  background: var(--navy);
+  color: var(--warm-stone);
+  padding: 16px 20px;
+  border-radius: 6px;
+  overflow-x: auto;
+  position: relative;
+  margin: 12px 0;
+}
+pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--amber);
+  color: var(--warm-stone);
+  border: none;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+}
+.copy-btn:hover { background: var(--golden); color: var(--navy); }
+.copy-btn.copied { background: var(--golden); color: var(--navy); }
+
+/* ===== Setup paths ===== */
+.setup-paths {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+.setup-paths .path,
+.path {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 16px 18px;
+}
+.setup-paths .path h3,
+.path h3 { margin-top: 0; color: var(--amber); font-size: 16px; }
+.setup-paths .path ol,
+.path ol { padding-left: 18px; margin: 0; font-size: 14px; line-height: 1.5; }
+.setup-paths .path ol li,
+.path ol li { margin: 6px 0; }
+
+/* ===== Hero ===== */
+.hero { margin-bottom: 32px; }
+.hero .kicker,
+.kicker {
+  color: var(--amber);
+  font-size: 13px;
+  margin-bottom: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.hero .byline,
+.byline { font-size: 14px; opacity: 0.7; margin: 8px 0 16px; }
+.hero .outcome,
+.outcome { font-size: 18px; color: var(--navy); opacity: 0.88; }
+
+/* ===== Footer ===== */
+.footer {
+  margin-top: 72px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+/* ===== Filesystem mental-model visual (files-and-folders, §3) ===== */
+.fs-view {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 0 0 14px;
+}
+.fs-zone {
+  background: var(--warm-stone);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  position: relative;
+}
+.fs-zone .zone-label {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  background: var(--amber);
+  color: var(--warm-stone);
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.fs-zone .fs-row { display: flex; align-items: center; gap: 10px; }
+.fs-zone .fs-row .badge {
+  font-size: 9px;
+  padding: 1px 7px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.fs-zone .fs-row .badge.personal { background: var(--navy); color: var(--warm-stone); }
+.fs-zone .fs-row .badge.project { background: var(--amber); color: var(--warm-stone); }
+.fs-zone .fs-row .badge.local { background: var(--golden-soft); color: var(--navy); border: 1px solid var(--golden); }
+.fs-zone .fs-row.dim { opacity: 0.4; }
+.fs-zone .arrow-merge {
+  color: var(--amber);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  text-align: center;
+  margin: 6px 0;
+}
+
+/* ===== §2 bell-curve animation ===== */
+/* (intentionally empty — a later task will fill this section) */
+
+/* ===== Responsive ===== */
+@media (max-width: 820px) {
+  .layout { grid-template-columns: 1fr; }
+  .toc { position: static; }
+  /* TOC dots flow horizontally and surface their labels inline on small screens */
+  .toc ol { flex-direction: row; flex-wrap: wrap; }
+  .section-card { padding: 32px 28px; }
+  .section-title { font-size: 34px; }
+  .setup-paths { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 15px; }
+  .layout { padding: 20px 16px 48px; gap: 16px; }
+  h1 { font-size: 32px; }
+  .section-card { padding: 24px 20px; border-radius: 10px; }
+  .section-title-row { gap: 10px; }
+  .section-num { font-size: 38px; }
+  .section-title { font-size: 28px; }
+  .lede { font-size: 16px; }
+  pre { padding: 14px 16px; }
+}
