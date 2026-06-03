@@ -196,6 +196,14 @@ a:hover { color: var(--navy); }
   padding-left: 12px;
 }
 
+/* ===== Session-map grid (four Friday cards on the camp index) ===== */
+.session-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0 4px;
+}
+
 /* ===== Session card (the four clickable Friday cards in the map) ===== */
 .session-card {
   text-decoration: none;
@@ -670,4 +678,5 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
   .section-title { font-size: 28px; }
   .lede { font-size: 16px; }
   pre { padding: 14px 16px; }
+  .session-grid { grid-template-columns: 1fr; }
 }
