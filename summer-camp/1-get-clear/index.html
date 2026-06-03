@@ -32,7 +32,34 @@
       <section class="section-card hero" id="hero">
         <div class="kicker">AI Summer Camp · Session 1 of 4</div>
         <h1 style="margin:8px 0 4px;">Get Clear on Your Goal</h1>
-        <p class="outcome" style="margin-top:18px;">By the end of this hour you'll have a project workspace, a conversation that reduced the ambiguity around a real idea, your first intent and success criteria written into a <code>docs/</code> folder, and a post in the channel.</p>
+        <p class="outcome" style="margin:18px 0 4px;">By the end of this hour, you'll walk away with four things:</p>
+        <!-- outcome rendered as four tiny icon checkpoints -->
+        <div class="checkpoints">
+          <div class="checkpoint">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="14" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line>
+            </svg>
+            <span>a project workspace</span>
+          </div>
+          <div class="checkpoint">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path>
+            </svg>
+            <span>a conversation that cut the ambiguity</span>
+          </div>
+          <div class="checkpoint">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><polyline points="14 3 14 8 19 8"></polyline>
+            </svg>
+            <span>intent in a <code>docs/</code> file</span>
+          </div>
+          <div class="checkpoint">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 2 11 13"></path><path d="M22 2 15 22l-4-9-9-4z"></path>
+            </svg>
+            <span>a post in the channel</span>
+          </div>
+        </div>
         <div class="prereq" style="margin-top:22px;">
           <strong>Before we start:</strong> have Claude Code installed and open (the setup steps live on the home page), and make sure you're in the AI Summer Camp cohort channel in the MVP Club community. That's where we share prompts and answer questions live.
         </div>
@@ -40,115 +67,226 @@
 
       <!-- ===== §1 · The norm ===== -->
       <section class="section-card" id="s1">
-        <div class="section-title-row">
-          <div class="section-num">1</div>
-          <h2 class="section-title">You'll feel behind — and here's what we do about it</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">1</div>
+            <h2 class="section-title">You'll feel behind</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">find the durable core</span>
+            </span>
+            <div class="guess-meter" title="The guess starts wide and flat">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 13 23, 17 7, 26 7 C 35 7, 39 23, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">we hand you the durable skills, not the weekly churn</div>
 
-        <p class="lede">Let's name it honestly: almost everyone in this cohort feels behind right now. AI is a technology that changes by the week. A new model, a new tool, a new "you have to try this" lands every few days. That pace is real, and it isn't going to ease up.</p>
+        <p class="lede">Almost everyone here feels behind, because AI changes by the week. That pace is real and it isn't easing up. So we don't chase it. We hand you the part underneath that holds steady.</p>
 
-        <div class="why-it-matters">
-          <p style="margin:0;">But underneath the churn, something steadier is taking shape: a set of <strong>core skills and durable mental models</strong> that hold even as the specific tools change. How to turn a fuzzy idea into a clear goal. How to scope and document before you build. How to direct an AI instead of being directed by it. These are what orient you in a moment of rapid disruption.</p>
+        <!-- churn vs. durable-core diagram -->
+        <div class="core-diagram" aria-label="A blurred outer ring of fast-moving tool phrases around a stable center box, The Durable Core, listing the three foundational skills.">
+          <div class="core-ring" aria-hidden="true">
+            <span class="churn-chip">new model</span>
+            <span class="churn-chip">new tool</span>
+            <span class="churn-chip">you have to try this</span>
+            <span class="churn-chip">new framework</span>
+            <span class="churn-chip">another launch</span>
+            <span class="churn-chip">have you seen…</span>
+          </div>
+          <div class="core-box">
+            <p class="core-title">The durable core</p>
+            <ul class="core-list">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                clarify a goal
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                scope &amp; document
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                direct the AI
+              </li>
+            </ul>
+          </div>
         </div>
 
-        <p>That is exactly what this camp develops and practices. We're not promising the churn will slow down. We're handing you the skills that outlast it, so the next new tool becomes something you pick up in an afternoon instead of something that leaves you behind. Today we start with the most foundational skill of all: getting clear on what you actually want before you ask for it.</p>
+        <div class="why-it-matters">
+          <p style="margin:0;">Learn the core and the next new tool becomes something you pick up in an afternoon, not something that leaves you behind. Today we start with the most foundational skill: <strong>getting clear on what you want before you ask for it.</strong></p>
+        </div>
       </section>
 
       <!-- ===== §2 · The one big idea ===== -->
       <section class="section-card" id="s2">
-        <div class="section-title-row">
-          <div class="section-num">2</div>
-          <h2 class="section-title">The one big idea: Claude is guessing — your job is to shape the guess</h2>
-        </div>
-        <div class="section-subtitle">more shared context moves the likely answer toward what you actually meant</div>
-
-        <p class="lede">Here is the mental model that everything else this summer rests on. A large language model is a <strong>probabilistic system</strong>. When you give it a prompt, it doesn't look up an answer. It predicts the most likely continuation, a kind of <strong>weighted average</strong> of everything it has seen that fits what you said. Claude is, in a real sense, always guessing. Your job is to shape the guess.</p>
-
-        <p>The way you shape it is by <strong>reducing ambiguity</strong>. A vague prompt leaves the likely answer sitting on a generic average, the response that fits the largest number of possible intentions. The more relevant context you provide, the narrower the range of likely answers becomes, until the most probable output is the specific thing you had in mind. Inputs in, output out. Better inputs, sharper output.</p>
-
-        <h3>English is the new abstraction layer</h3>
-        <p>Step back and notice what this changes. For decades, telling a computer what to do meant climbing down an <strong>abstraction ladder</strong>: English in your head, then Python or JavaScript, then assembly, then machine code, each rung further from how you actually think. An LLM collapses that. It is the translation of human intent into digital systems. <strong>English is the new abstraction layer</strong> for building and running software. The clearer your English, the better the system you get, which is why learning to express intent precisely is now a builder's core skill.</p>
-
-        <!-- ===== Signature visual: the bell curve ===== -->
-        <div class="bell" id="bell">
-          <span class="bell-label">Shape the guess</span>
-          <div class="bell-stage">
-            <div class="bell-plot">
-              <svg class="bell-svg" viewBox="0 0 600 220" role="img"
-                   aria-label="A wide, flat probability curve centered on a generic-average marker narrows into a tall, sharp peak that slides right to the what-you-meant target as context is added.">
-                <!-- baseline axis -->
-                <line class="axis" x1="20" y1="190" x2="580" y2="190"></line>
-                <!-- curve group: drawn wide & flat, centered at x=300; the .animate
-                     state narrows + heightens + slides it right via transform -->
-                <g class="curve">
-                  <path class="curve-fill"
-                        d="M 20 190
-                           C 150 188, 200 70, 300 70
-                           C 400 70, 450 188, 580 190
-                           L 580 190 L 20 190 Z"></path>
-                  <path class="curve-line"
-                        d="M 20 190
-                           C 150 188, 200 70, 300 70
-                           C 400 70, 450 188, 580 190"></path>
-                </g>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">2</div>
+            <h2 class="section-title">The one big idea</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
               </svg>
-              <!-- markers overlaid on the plot -->
-              <div class="bell-marker avg">
-                <span class="bell-marker-cap">generic average</span>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">shape the guess</span>
+            </span>
+            <div class="guess-meter" title="The guess starts wide and flat">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 14 23, 18 6, 26 6 C 34 6, 38 23, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
+        </div>
+        <div class="section-subtitle">Claude is guessing — your job is to shape the guess</div>
+
+        <p class="lede">Claude doesn't look up answers. It predicts the most likely continuation: a weighted average of everything that fits what you said. It's always guessing. Your job is to shape the guess by reducing ambiguity.</p>
+
+        <div class="idea-grid">
+          <!-- ===== The abstraction ladder ===== -->
+          <div class="ladder" aria-label="The abstraction ladder, from machine code at the bottom to English at the top, with English highlighted as the new layer you work in.">
+            <span class="ladder-label">The ladder</span>
+            <div class="ladder-rungs">
+              <div class="rung r-english">
+                <span class="rung-dot"></span>
+                <span class="rung-name">English</span>
+                <span class="here-tag">the new layer · you are here</span>
               </div>
-              <div class="bell-marker target">
-                <span class="bell-marker-dot"></span>
-                <span class="bell-marker-cap">what you meant</span>
+              <div class="rung r-lang">
+                <span class="rung-dot"></span>
+                <span class="rung-name">Python / JavaScript</span>
+              </div>
+              <div class="rung r-assembly">
+                <span class="rung-dot"></span>
+                <span class="rung-name">assembly</span>
+              </div>
+              <div class="rung r-machine">
+                <span class="rung-dot"></span>
+                <span class="rung-name">machine code</span>
               </div>
             </div>
-
-            <div class="bell-chips">
-              <div class="bell-chip">
-                <span class="bell-chip-num">1</span>
-                <span class="bell-chip-text">
-                  <span class="bell-chip-name">prompt</span><br>
-                  <span class="bell-chip-role">what you ask for</span>
-                </span>
-              </div>
-              <div class="bell-chip">
-                <span class="bell-chip-num">2</span>
-                <span class="bell-chip-text">
-                  <span class="bell-chip-name">context</span><br>
-                  <span class="bell-chip-role">what you tell it</span>
-                </span>
-              </div>
-              <div class="bell-chip">
-                <span class="bell-chip-num">3</span>
-                <span class="bell-chip-text">
-                  <span class="bell-chip-name">directory</span><br>
-                  <span class="bell-chip-role">what it can read</span>
-                </span>
-              </div>
+            <div class="ladder-spine">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="20" x2="12" y2="4"></line><polyline points="6 10 12 4 18 10"></polyline>
+              </svg>
+              <span><strong>English</strong> is the new abstraction layer.</span>
             </div>
+          </div>
 
-            <button type="button" class="bell-replay" id="bell-replay" aria-label="Replay the bell-curve animation">▶ replay</button>
+          <!-- ===== Signature visual: the animated bell curve (markup verbatim) ===== -->
+          <div class="bell" id="bell">
+            <span class="bell-label">Shape the guess</span>
+            <div class="bell-stage">
+              <div class="bell-plot">
+                <svg class="bell-svg" viewBox="0 0 600 220" role="img"
+                     aria-label="A wide, flat probability curve centered on a generic-average marker narrows into a tall, sharp peak that slides right to the what-you-meant target as context is added.">
+                  <!-- baseline axis -->
+                  <line class="axis" x1="20" y1="190" x2="580" y2="190"></line>
+                  <!-- curve group: drawn wide & flat, centered at x=300; the .animate
+                       state narrows + heightens + slides it right via transform -->
+                  <g class="curve">
+                    <path class="curve-fill"
+                          d="M 20 190
+                             C 150 188, 200 70, 300 70
+                             C 400 70, 450 188, 580 190
+                             L 580 190 L 20 190 Z"></path>
+                    <path class="curve-line"
+                          d="M 20 190
+                             C 150 188, 200 70, 300 70
+                             C 400 70, 450 188, 580 190"></path>
+                  </g>
+                </svg>
+                <!-- markers overlaid on the plot -->
+                <div class="bell-marker avg">
+                  <span class="bell-marker-cap">generic average</span>
+                </div>
+                <div class="bell-marker target">
+                  <span class="bell-marker-dot"></span>
+                  <span class="bell-marker-cap">what you meant</span>
+                </div>
+              </div>
+
+              <div class="bell-chips">
+                <div class="bell-chip">
+                  <span class="bell-chip-num">1</span>
+                  <span class="bell-chip-text">
+                    <span class="bell-chip-name">prompt</span><br>
+                    <span class="bell-chip-role">what you ask for</span>
+                  </span>
+                </div>
+                <div class="bell-chip">
+                  <span class="bell-chip-num">2</span>
+                  <span class="bell-chip-text">
+                    <span class="bell-chip-name">context</span><br>
+                    <span class="bell-chip-role">what you tell it</span>
+                  </span>
+                </div>
+                <div class="bell-chip">
+                  <span class="bell-chip-num">3</span>
+                  <span class="bell-chip-text">
+                    <span class="bell-chip-name">directory</span><br>
+                    <span class="bell-chip-role">what it can read</span>
+                  </span>
+                </div>
+              </div>
+
+              <button type="button" class="bell-replay" id="bell-replay" aria-label="Replay the bell-curve animation">▶ replay</button>
+            </div>
           </div>
         </div>
 
-        <p class="footnote">Read it left to right: with little to go on, the likely answer is a wide, flat distribution sitting on a generic average. As you stack context (your prompt, the background you share, and the files in your directory the model can read), the distribution narrows and its peak slides over to the answer you actually meant.</p>
+        <p class="bell-caption">More context narrows the guess from the generic average to what you actually meant: your prompt, the background you share, and the files Claude can read.</p>
 
-        <p>Each layer in that stack is a way to add relevant context: the <strong>prompt</strong> you write, the <strong>context</strong> you share around it, and the <strong>directory</strong> of files Claude can read. Giving the model the right context, deliberately and through back-and-forth dialogue, has a name. It's called <strong>context engineering</strong>, and effective prompting through dialogue is exactly that. The rest of this session is your first real practice of it.</p>
+        <div class="takeaway">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3l1.9 5.6L19.5 9l-4.5 3.3L16.7 18 12 14.6 7.3 18l1.7-5.7L4.5 9l5.6-.4z"></path>
+          </svg>
+          <span>Giving the model the right context, deliberately, through dialogue has a name: <strong>context engineering</strong>. The rest of today is your first practice of it.</span>
+        </div>
       </section>
 
       <!-- ===== §3 · Step 1 · Create a place to work ===== -->
       <section class="section-card" id="s3">
-        <div class="section-title-row">
-          <div class="section-num">3</div>
-          <h2 class="section-title">Step 1 · Create a place to work</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">3</div>
+            <h2 class="section-title">Step 1 · Create a place to work</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">set the boundary</span>
+            </span>
+            <div class="guess-meter" title="The guess is narrowing">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 16 24, 20 5, 26 5 C 32 5, 36 24, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">files and folders, all the way down</div>
 
-        <p class="lede">Here is a fact that takes the mystery out of building software: everything on your computer is files and folders. You already work this way every day. A document, a spreadsheet, a slide deck: each is a file, and you keep them in folders so you can find them again.</p>
+        <!-- step-rail: this is Step 1 of 4 -->
+        <div class="step-rail" aria-label="Step 1 of 4: create a workspace">
+          <div class="sr-step current"><span class="sr-num">1</span><span class="sr-label">Workspace</span></div>
+          <div class="sr-step"><span class="sr-num">2</span><span class="sr-label">Conversation</span></div>
+          <div class="sr-step"><span class="sr-num">3</span><span class="sr-label">Push</span></div>
+          <div class="sr-step"><span class="sr-num">4</span><span class="sr-label">Document</span></div>
+        </div>
 
-        <p>Software is no different. A website is just files sitting in folders on a server, telling your browser what to show. An app, an agent, a workflow: same story underneath. The only thing that changes when you work with Claude is that you operate over a wider range of files than you're used to (HTML, CSS, and JavaScript for a web page; Python for a script; whatever the job needs). The good news is that you don't have to author any of them. You describe what you want, and Claude translates that intent into the right files.</p>
-
-        <p>So your job isn't to write code. Your job is to keep a sensible structure over the files and folders, and to manage Claude as it works inside that structure: control what it reads so it understands your inputs, look at what it produces, feed corrections back, and go again. That loop is the same whether you're building an app, an agent, or a workflow.</p>
+        <p class="lede">Everything on your computer is files and folders. Software is no different: you describe what you want, and Claude translates that intent into the right files. Your job is to keep a sensible structure and direct Claude as it works inside it.</p>
 
         <!-- files-and-folders visual: a simple project folder with a docs/ folder -->
         <div class="fs-view" aria-label="A simple project folder on your Desktop containing a docs folder">
@@ -159,11 +297,11 @@
             <div class="fs-row" style="padding-left:32px;">└── (your intent &amp; success criteria land here next)</div>
           </div>
         </div>
-        <p class="footnote">One folder, named for your project, with room for a <code>docs/</code> folder inside it. That's the whole structure to start. You'll write your first document into <code>docs/</code> later in this session.</p>
+        <p class="footnote">One folder named for your project, with room for a <code>docs/</code> folder inside it. You'll write your first document into <code>docs/</code> later this session.</p>
 
         <div class="try-it">
           <h3>Try it · make your workspace and connect Claude to it</h3>
-          <p style="margin:0 0 6px;">Pick the path that matches what you have open. Either way, the goal is the same: a folder on your Desktop, with Claude Code pointed at it.</p>
+          <p style="margin:0 0 6px;">Pick the path that matches what you have open. Either way the goal is the same: a folder on your Desktop, with Claude Code pointed at it.</p>
           <div class="setup-paths">
             <div class="path">
               <h3>Terminal path</h3>
@@ -189,43 +327,74 @@
         </div>
 
         <div class="why-it-matters">
-          <p style="margin:0;">Choosing a folder and pointing Claude at it is your <strong>first act of context engineering</strong>. You've drawn a boundary around the work: this is the place where shared context will collect, and the only files Claude can see are the ones you put here. A clean workspace is the start of a clean conversation.</p>
+          <p style="margin:0;">Choosing a folder and pointing Claude at it is your <strong>first act of context engineering</strong>. You've drawn a boundary around the work: the only files Claude can see are the ones you put here. A clean workspace is the start of a clean conversation.</p>
         </div>
       </section>
 
       <!-- ===== §4 · Step 2 · Have the conversation ===== -->
       <section class="section-card" id="s4">
-        <div class="section-title-row">
-          <div class="section-num">4</div>
-          <h2 class="section-title">Step 2 · Have the conversation</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">4</div>
+            <h2 class="section-title">Step 2 · Have the conversation</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">reduce ambiguity</span>
+            </span>
+            <div class="guess-meter" title="The guess is narrowing">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 17 24, 21 5, 26 5 C 31 5, 35 24, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">get Claude to interview you</div>
 
-        <p class="lede">Now the part that feels backwards at first: don't ask Claude to build anything yet. The opening move is "Here's my idea, let's talk." You point Claude at your idea and have it ask <em>you</em> the questions, the way a good product manager would, until your intent and your idea of success are out in the open where you can both see them.</p>
+        <!-- step-rail: Step 2 of 4 -->
+        <div class="step-rail" aria-label="Step 2 of 4: have the conversation">
+          <div class="sr-step done"><span class="sr-num">1</span><span class="sr-label">Workspace</span></div>
+          <div class="sr-step current"><span class="sr-num">2</span><span class="sr-label">Conversation</span></div>
+          <div class="sr-step"><span class="sr-num">3</span><span class="sr-label">Push</span></div>
+          <div class="sr-step"><span class="sr-num">4</span><span class="sr-label">Document</span></div>
+        </div>
 
-        <p>Most ideas start fuzzy, and that's fine. The conversation is how the fog clears. Watch how it goes with a real example: someone who wants help with their clothes.</p>
+        <p class="lede">Don't ask Claude to build anything yet. The opening move is "Here's my idea, let's talk." Point Claude at your idea and have it interview <em>you</em>, the way a good product manager would, until your intent and your idea of success are out in the open.</p>
 
-        <h3>How the conversation unfolds</h3>
-        <p>It usually opens vague, gets interrogated, and ends sharp:</p>
-
-        <div class="fs-view" aria-label="A short example conversation arc from a vague opening to a sharp idea">
-          <div class="fs-zone" style="font-family:'Inter',sans-serif;font-size:14px;line-height:1.55;">
-            <div class="zone-label">A worked example</div>
-            <p style="margin:8px 0 10px;"><strong style="color:var(--amber);">You:</strong> "I want help with my clothes. Something about my style, I guess. I never know what to buy."</p>
-            <p style="margin:0 0 10px;"><strong style="color:var(--navy);">Claude:</strong> "Before we build anything, a few questions. When you say 'style,' is the goal to look like a specific person or vibe you admire? And what's gone wrong before: buying the wrong things, or buying good things that wear out fast?"</p>
-            <p style="margin:0 0 10px;"><strong style="color:var(--amber);">You:</strong> "Both, honestly. I see people who dress well and want that, but the stuff I buy either doesn't match or falls apart. And I can't spend a fortune."</p>
-            <p style="margin:0 0 10px;"><strong style="color:var(--navy);">Claude:</strong> "So success isn't 'more clothes.' It sounds like: figure out a look you admire, find a version that fits you, and buy pieces that last without overspending. Should durability outweigh price when they conflict?"</p>
-            <p style="margin:0;"><strong style="color:var(--amber);">You:</strong> "Yes. I'd rather pay a bit more for something that lasts, as long as it still looks right."</p>
+        <!-- before → after panel -->
+        <div class="before-after" aria-label="A fuzzy starting idea on the left transforms into a sharp one-paragraph spec on the right.">
+          <div class="ba-panel fuzzy">
+            <span class="ba-tag">Before · fuzzy</span>
+            <p class="ba-text">"I want help with my clothes. Something about my style, I guess. I never know what to buy."</p>
+          </div>
+          <div class="ba-arrow" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="12" x2="20" y2="12"></line><polyline points="14 6 20 12 14 18"></polyline>
+            </svg>
+          </div>
+          <div class="ba-panel sharp">
+            <span class="ba-tag">After · sharp</span>
+            <p class="ba-text">Analyze the wardrobes of people whose style I admire, find a comparable style that works for me, then shop on a price-to-quality matrix weighted toward durability, while staying price-sensitive and looking good.</p>
           </div>
         </div>
 
-        <p>Notice what happened. You didn't arrive with a clear spec; the questions pulled it out of you. By the end you can state the idea in a single paragraph:</p>
+        <!-- the full transcript, collapsed -->
+        <details class="transcript">
+          <summary>▸ see the conversation</summary>
+          <div class="transcript-body">
+            <p style="margin-top:0;"><strong style="color:var(--amber);">You:</strong> "I want help with my clothes. Something about my style, I guess. I never know what to buy."</p>
+            <p><strong style="color:var(--navy);">Claude:</strong> "Before we build anything, a few questions. When you say 'style,' is the goal to look like a specific person or vibe you admire? And what's gone wrong before: buying the wrong things, or buying good things that wear out fast?"</p>
+            <p><strong style="color:var(--amber);">You:</strong> "Both, honestly. I see people who dress well and want that, but the stuff I buy either doesn't match or falls apart. And I can't spend a fortune."</p>
+            <p><strong style="color:var(--navy);">Claude:</strong> "So success isn't 'more clothes.' It sounds like: figure out a look you admire, find a version that fits you, and buy pieces that last without overspending. Should durability outweigh price when they conflict?"</p>
+            <p style="margin-bottom:0;"><strong style="color:var(--amber);">You:</strong> "Yes. I'd rather pay a bit more for something that lasts, as long as it still looks right."</p>
+          </div>
+        </details>
 
-        <div class="why-it-matters">
-          <p style="margin:0;"><strong>The sharpened idea:</strong> analyze the wardrobes of people whose style I admire, find a comparable style that works for me, then search for items on a price-to-quality matrix. Weight it toward durability, because I want clothes that last, but stay price-sensitive, and it has to look good.</p>
-        </div>
-
-        <p>That paragraph is the destination of Step 2. It names your <strong>intent</strong> (a durable, affordable wardrobe modeled on people you admire) and <strong>what success looks like</strong> (the price-to-quality tradeoff, weighted toward durability). Those success criteria are how you'll later judge whether Claude's work is any good.</p>
+        <p>You didn't arrive with a spec; the questions pulled it out of you. That sharp paragraph names your <strong>intent</strong> and <strong>what success looks like</strong> (the price-to-quality tradeoff, weighted toward durability). Those criteria are how you'll later judge Claude's work.</p>
 
         <div class="try-it">
           <h3>Try it · drive the interview with your own idea</h3>
@@ -242,52 +411,139 @@
 
       <!-- ===== §5 · Step 3 · Use Claude to push your thinking ===== -->
       <section class="section-card" id="s5">
-        <div class="section-title-row">
-          <div class="section-num">5</div>
-          <h2 class="section-title">Step 3 · Use Claude to push your thinking</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">5</div>
+            <h2 class="section-title">Step 3 · Push your thinking</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">pressure-test</span>
+            </span>
+            <div class="guess-meter" title="The guess is sharper now">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 20 24, 23 3, 26 3 C 29 3, 32 24, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">pressure-test the idea before you commit to it</div>
 
-        <p class="lede">Once the idea is sharp, you can use Claude to make it stronger. Left to its own defaults, Claude tends to agree with you. The most likely continuation of "here's my plan" is "great plan, with a few minor considerations." You get a better partner by assigning it a role and asking it to be critical on purpose.</p>
+        <!-- step-rail: Step 3 of 4 -->
+        <div class="step-rail" aria-label="Step 3 of 4: push your thinking">
+          <div class="sr-step done"><span class="sr-num">1</span><span class="sr-label">Workspace</span></div>
+          <div class="sr-step done"><span class="sr-num">2</span><span class="sr-label">Conversation</span></div>
+          <div class="sr-step current"><span class="sr-num">3</span><span class="sr-label">Push</span></div>
+          <div class="sr-step"><span class="sr-num">4</span><span class="sr-label">Document</span></div>
+        </div>
 
-        <p>Here's a menu of moves. You don't need all of them. Pick the lens that fits where your idea feels shaky, run it, and feed what you learn back into your one-paragraph statement.</p>
+        <p class="lede">Claude agrees by default. Assign it a role and ask it to be critical on purpose. Pick the lens that fits where your idea feels shaky, run it, and feed what you learn back into your one-paragraph statement.</p>
 
-        <h3>Move 1 · The market-research lens</h3>
-        <p>Have Claude research the space: who else solves this, and whether there's real demand. This grounds your idea in what already exists instead of in your assumptions.</p>
+        <div class="move-grid">
+          <!-- Move 1 · Market -->
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="20" y1="20" x2="15.2" y2="15.2"></line>
+                </svg>
+              </span>
+              <span class="move-name">Market</span>
+            </div>
+            <p class="move-does">Who already solves this? Real demand?</p>
 <pre><code>Research the space around my idea. Who already solves this, what do they do well or badly, and is there real demand? Cite what you base each point on.</code></pre>
+          </div>
 
-        <h3>Move 2 · The workflow-optimization lens</h3>
-        <p>Ask for the highest-leverage path to the goal, not the first one that comes to mind. You're looking for the shortest route to something useful.</p>
+          <!-- Move 2 · Leverage -->
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="13 2 4 14 11 14 10 22 19 9 12 9 13 2"></polygon>
+                </svg>
+              </span>
+              <span class="move-name">Leverage</span>
+            </div>
+            <p class="move-does">The highest-leverage first version.</p>
 <pre><code>Given my goal and success criteria, what's the highest-leverage path to a useful first version? What's the smallest thing worth building first, and what can wait?</code></pre>
+          </div>
 
-        <h3>Move 3 · The "senior engineer" lens</h3>
-        <p>Give Claude a specific role, specific criteria, and a specific output format. Vague critique gets vague answers; a defined review gets a real one.</p>
+          <!-- Move 3 · Senior engineer -->
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="3.2"></circle>
+                  <path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3"></path>
+                </svg>
+              </span>
+              <span class="move-name">Senior engineer</span>
+            </div>
+            <p class="move-does">Critique like an experienced engineer.</p>
 <pre><code>Review my plan as a senior engineer would before a real build. Evaluate the approach for hidden complexity, things that will break as it grows, and dependencies I'd regret. List each concern with how serious it is and what you'd do instead.</code></pre>
+          </div>
 
-        <h3>Move 4 · The pre-mortem lens</h3>
-        <p>Imagine the project already failed, then work backward to why. This surfaces the assumptions you're leaning on without noticing.</p>
+          <!-- Move 4 · Pre-mortem -->
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3.5 21 19H3z"></path><line x1="12" y1="9.5" x2="12" y2="14"></line><line x1="12" y1="16.5" x2="12" y2="16.6"></line>
+                </svg>
+              </span>
+              <span class="move-name">Pre-mortem</span>
+            </div>
+            <p class="move-does">It already failed — why?</p>
 <pre><code>Imagine it's three months from now and this project quietly failed. Write the story of why. What assumptions did I make that turned out wrong, and what would have warned me early?</code></pre>
+          </div>
+        </div>
 
         <div class="heads-up">
-          <strong>Say you're not technical.</strong> Tell Claude plainly: "I'm not technical. For every decision, explain the consequences in plain language so I can weigh the tradeoffs." This isn't a disclaimer, it's a thinking-pusher in its own right. It forces the tradeoffs out into the open, in words a beginner can actually judge, which is exactly the ambiguity-reduction move this whole session is about.
+          <strong>Not technical?</strong> Add to any move: "Explain the consequences in plain language so I can weigh the tradeoffs." That's a thinking-pusher in its own right, the same ambiguity-reduction move this whole session is about.
         </div>
 
         <div class="why-it-matters">
-          <p style="margin:0;">Pushing your thinking is still <strong>context engineering</strong>. Each lens hands Claude a different vantage point, and each round of critique sharpens the shared picture of what you're building and why. By the end you'll have an idea that has survived a few good arguments, which is a much better thing to write down than a hunch.</p>
+          <p style="margin:0;">Pushing your thinking is still <strong>context engineering</strong>. Each lens hands Claude a different vantage point, and each round sharpens the shared picture. By the end you'll have an idea that has survived a few good arguments.</p>
         </div>
       </section>
 
       <!-- ===== §6 · Step 4 · Document it ===== -->
       <section class="section-card" id="s6">
-        <div class="section-title-row">
-          <div class="section-num">6</div>
-          <h2 class="section-title">Step 4 · Document it</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">6</div>
+            <h2 class="section-title">Step 4 · Document it</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">make it durable</span>
+            </span>
+            <div class="guess-meter" title="The guess is sharp">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 21 24, 24 3, 26 3 C 28 3, 31 24, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">turn the conversation into something durable</div>
 
-        <p class="lede">Right now your sharpened idea lives in a chat. Close the window and it's gone. The last move of this session is to make it permanent: have Claude write your intent and your success criteria into a file, inside a <code>docs/</code> folder in your project. A conversation is fleeting. A file stays, and Claude can read it next week to pick up exactly where you left off.</p>
+        <!-- step-rail: Step 4 of 4 -->
+        <div class="step-rail" aria-label="Step 4 of 4: document it">
+          <div class="sr-step done"><span class="sr-num">1</span><span class="sr-label">Workspace</span></div>
+          <div class="sr-step done"><span class="sr-num">2</span><span class="sr-label">Conversation</span></div>
+          <div class="sr-step done"><span class="sr-num">3</span><span class="sr-label">Push</span></div>
+          <div class="sr-step current"><span class="sr-num">4</span><span class="sr-label">Document</span></div>
+        </div>
 
-        <p>This is also the cleanest example yet of the one big idea. When you create a <code>docs/</code> folder and put your goal in it, you've literally added a new input to your workspace. Next time you ask Claude to build, that file is part of what it reads. You are shaping the guess by hand, one file at a time.</p>
+        <p class="lede">Right now your sharpened idea lives in a chat. Close the window and it's gone. Make it permanent: have Claude write your intent and success criteria into a file inside <code>docs/</code>. A file stays, and Claude can read it next week to pick up exactly where you left off.</p>
 
         <!-- the project folder now has a written file inside docs/ -->
         <div class="fs-view" aria-label="The same project folder, now with an intent file written inside the docs folder">
@@ -298,13 +554,36 @@
             <div class="fs-row" style="padding-left:32px;">└── intent.md<span class="badge local">written this session</span></div>
           </div>
         </div>
-        <p class="footnote">Same folder as section 3, one file fuller. The <code>docs/</code> folder is no longer a placeholder — your intent and success criteria live in <code>intent.md</code>, and that file is now part of what Claude reads.</p>
+        <p class="footnote">Same folder as section 3, one file fuller. Your intent and success criteria now live in <code>intent.md</code>, and that file is part of what Claude reads. You're shaping the guess by hand, one file at a time.</p>
 
-        <div class="try-it">
-          <h3>Try it · write your goal into a file</h3>
-          <p style="margin:0 0 6px;">Send these one at a time. The first creates the folder and file; the second is optional, for anyone who wants to start a fuller draft.</p>
+        <div class="move-grid">
+          <!-- Doc move 1 -->
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><polyline points="14 3 14 8 19 8"></polyline>
+                </svg>
+              </span>
+              <span class="move-name">Create intent.md</span>
+            </div>
+            <p class="move-does">Capture intent &amp; success in plain language.</p>
 <pre><code>Create a docs/ folder and write a file called intent.md that captures my intent and what success looks like, in plain language. Use what we worked out in this conversation.</code></pre>
+          </div>
+
+          <!-- Doc move 2 -->
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path>
+                </svg>
+              </span>
+              <span class="move-name">Start a draft PRD</span>
+            </div>
+            <p class="move-does">Optional · turn intent into a rough plan.</p>
 <pre><code>Now start a draft PRD in docs/ — a short product requirements doc that turns intent.md into goals, a first feature, and how we'll know it's working. Keep it rough; we'll refine it before next session.</code></pre>
+          </div>
         </div>
 
         <div class="why-it-matters">
@@ -314,41 +593,80 @@
 
       <!-- ===== §7 · Debrief ===== -->
       <section class="section-card" id="s7">
-        <div class="section-title-row">
-          <div class="section-num">7</div>
-          <h2 class="section-title">Debrief</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">7</div>
+            <h2 class="section-title">Debrief</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">reflect</span>
+            </span>
+            <div class="guess-meter" title="The guess is sharp">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 21.5 24, 24.5 3, 26 3 C 27.5 3, 30.5 24, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">three questions before you close the laptop</div>
 
-        <p class="lede">Take two minutes with these. The point of today wasn't the wardrobe app or whatever idea you brought; it was the conversation that reduced the ambiguity around it. These questions help you notice what that conversation actually did.</p>
+        <p class="lede">Take two minutes. The point of today wasn't the wardrobe app or whatever idea you brought; it was the conversation that reduced the ambiguity around it.</p>
 
-        <div class="fs-view" aria-label="Three reflection questions">
-          <div class="fs-zone" style="font-family:'Inter',sans-serif;font-size:15px;line-height:1.55;">
-            <div class="zone-label">Reflect</div>
-            <p style="margin:8px 0 12px;"><strong style="color:var(--amber);">1.</strong> What did Claude ask that you didn't expect?</p>
-            <p style="margin:0 0 12px;"><strong style="color:var(--amber);">2.</strong> Did you end up somewhere different than where you started?</p>
-            <p style="margin:0;"><strong style="color:var(--amber);">3.</strong> What got clearer?</p>
+        <div class="q-grid">
+          <div class="q-card">
+            <span class="q-num">1</span>
+            <p class="q-text">What did Claude ask that you didn't expect?</p>
+          </div>
+          <div class="q-card">
+            <span class="q-num">2</span>
+            <p class="q-text">Did you end up somewhere different than where you started?</p>
+          </div>
+          <div class="q-card">
+            <span class="q-num">3</span>
+            <p class="q-text">What got clearer?</p>
           </div>
         </div>
       </section>
 
       <!-- ===== §8 · Post in the channel ===== -->
       <section class="section-card" id="s8">
-        <div class="section-title-row">
-          <div class="section-num">8</div>
-          <h2 class="section-title">Post in the channel</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">8</div>
+            <h2 class="section-title">Post in the channel</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">make it visible</span>
+            </span>
+            <div class="guess-meter" title="The guess is sharp">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 22 24, 25 3, 26 3 C 27 3, 30 24, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">make your thinking visible to the cohort</div>
 
-        <p class="lede">One thing before you go: share what you came up with in the cohort channel. Post your success criteria, or a screenshot of the moment your idea got sharp. This is the weekly habit that makes the cohort a cohort — you see what everyone else is working on, and they see you.</p>
+        <p class="lede">Share what you came up with in the cohort channel: your success criteria, or a screenshot of the moment your idea got sharp. This is the weekly habit that makes the cohort a cohort. It doesn't need to be polished. Here's the bar:</p>
 
-        <p>It doesn't need to be polished. Here's the bar:</p>
-
-        <!-- A short example of a good first post -->
-        <div class="fs-view" aria-label="An example of a good first post in the cohort channel">
-          <div class="fs-zone" style="font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;">
-            <div class="zone-label">What a good first post looks like</div>
-            <p style="margin:8px 0 0;">Brought a fuzzy "help me with my clothes" idea and Claude interviewed it out of me. Landed on: analyze wardrobes of people whose style I admire, find a version that fits me, then shop on a price-to-quality matrix weighted toward durability. The pre-mortem caught that I'd probably overspend on trendy stuff that wears out — glad I know that now and not in three months. Wrote it all into <code>docs/intent.md</code>. Onward to next week.</p>
+        <!-- example post styled as a chat-bubble mock -->
+        <div class="chat-mock" aria-label="An example of a good first post in the cohort channel">
+          <div class="chat-head">
+            <span class="chat-avatar" aria-hidden="true">Y</span>
+            <span class="chat-meta">You · #ai-summer-camp · just now</span>
+          </div>
+          <div class="chat-bubble">
+            Brought a fuzzy "help me with my clothes" idea and Claude interviewed it out of me. Landed on: analyze wardrobes of people whose style I admire, find a version that fits me, then shop on a price-to-quality matrix weighted toward durability. The pre-mortem caught that I'd probably overspend on trendy stuff that wears out, glad I know that now and not in three months. Wrote it all into <code>docs/intent.md</code>. Onward to next week.
           </div>
         </div>
 
@@ -357,56 +675,115 @@
              the live channel link before this page is shared with the cohort.
              QA will surface this to the founder. -->
         <div class="heads-up">
-          <strong>Where to post:</strong> head to <a href="#" data-todo="cohort-channel-url">your cohort channel</a> in the MVP Club community and drop your post there. <strong style="color:var(--amber);">⚠ Placeholder link — needs the real cohort-channel URL before this page goes live.</strong>
+          <strong>Where to post:</strong> head to your cohort channel in the MVP Club community and drop your post there. <strong style="color:var(--amber);">⚠ Placeholder link — needs the real cohort-channel URL before this page goes live.</strong>
+          <div style="margin-top:10px;">
+            <a class="channel-btn" href="#" data-todo="cohort-channel-url">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#faf5f0" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 21l1.9-5.7A8.5 8.5 0 1 1 21 11.5z"></path>
+              </svg>
+              Open your cohort channel
+            </a>
+          </div>
         </div>
       </section>
 
       <!-- ===== §9 · Before next week ===== -->
       <section class="section-card" id="s9">
-        <div class="section-title-row">
-          <div class="section-num">9</div>
-          <h2 class="section-title">Before next week</h2>
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">9</div>
+            <h2 class="section-title">Before next week</h2>
+          </div>
+          <div class="head-aside">
+            <span class="move-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+              </svg>
+              The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">compound it</span>
+            </span>
+            <div class="guess-meter" title="The guess is sharpest">
+              <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+                <path d="M2 24 C 23 24, 25.4 2, 26 2 C 26.6 2, 29 24, 50 24" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+              </svg>
+              <span class="gm-label">the guess</span>
+            </div>
+          </div>
         </div>
         <div class="section-subtitle">deepen your project &amp; add your power-ups</div>
 
-        <p class="lede">Homework, but the good kind: you're not doing a throwaway exercise, you're continuing the exact project you started today. The goal is to walk into Session 2 with a clearer idea and a draft PRD already written. Here's how to get there.</p>
+        <p class="lede">Homework, but the good kind: you're continuing the exact project you started today. The goal is to walk into Session 2 with a clearer idea and a draft PRD already written.</p>
 
-        <h3>1 · Keep the conversation going</h3>
-        <p>Go back to your own project and keep refining. Tighten your intent, sharpen your success criteria, and let Claude research the space and pressure-test your thinking using the lenses from section 5. The more you reduce the ambiguity now, the less you'll wrestle with it when you start building.</p>
-        <p>One built-in worth trying: <strong>Plan Mode</strong>. Instead of having Claude act right away, ask it to plan an approach first. It will lay out the steps it would take and, importantly, the assumptions it's making. Those assumptions are exactly where hidden ambiguity hides — read them, correct the ones that are off, and you've reduced the guess before any work happens.</p>
+        <!-- 3-step checklist rail -->
+        <div class="checklist">
+          <div class="check-step">
+            <span class="cs-num">1</span>
+            <div class="cs-body">
+              <h3 class="cs-title">Keep the conversation going</h3>
+              <p>Tighten your intent, sharpen your success criteria, and let Claude pressure-test your thinking with the lenses from section 5. Try <strong>Plan Mode</strong>: ask Claude to plan an approach first and list its assumptions, then correct the ones that are off before any work happens.</p>
+            </div>
+          </div>
+          <div class="check-step">
+            <span class="cs-num">2</span>
+            <div class="cs-body">
+              <h3 class="cs-title">Add your power-ups <span class="cs-optional">optional</span></h3>
+              <p>Two skills make the work easier. Skip them and you'll still arrive with a PRD, which is what matters.</p>
+            </div>
+          </div>
+          <div class="check-step">
+            <span class="cs-num">3</span>
+            <div class="cs-body">
+              <h3 class="cs-title">Draft the PRD into <code>docs/</code></h3>
+              <p>By hand or via the <code>brainstorming</code> skill, the finish line is a draft PRD sitting in your <code>docs/</code> folder. Lock that in and you walk into Session 2 ready to build.</p>
+            </div>
+          </div>
+        </div>
+
+        <h3>Plan Mode prompt</h3>
 <pre><code>Enter Plan Mode and plan an approach for my project based on docs/intent.md. List your assumptions explicitly so I can correct the ones that are wrong before we build.</code></pre>
 
-        <h3>2 · Add a couple of skills — your power-ups</h3>
-        <p style="margin:0 0 10px;">This part is <strong>optional</strong>. If you skip it, you'll still arrive next week with a PRD, which is what matters. But if you have ten extra minutes, two skills make the work easier.</p>
-
         <div class="why-it-matters">
-          <p style="margin:0;">A <strong>skill</strong> is reusable, packaged context that aligns Claude automatically. Instead of explaining what you want from scratch every time, a skill hands Claude the right background and instructions the moment it's relevant. It's the Day-1 thesis (better inputs, sharper output) leveled up and made reusable. For the fuller explainer, see <a href="../../claude-code-agents/">what is a skill?</a> from the agents lesson on this hub.</p>
+          <p style="margin:0;">A <strong>skill</strong> is reusable, packaged context that aligns Claude automatically: the Day-1 thesis (better inputs, sharper output) made reusable. The easiest way to add one is to run <code>/plugin</code> in Claude Code, which opens the marketplace. For the fuller explainer, see <a href="../../claude-code-agents/">what is a skill?</a> from the agents lesson on this hub.</p>
         </div>
 
-        <p style="margin:14px 0 8px;">The easiest way to add skills is the interactive menu. In Claude Code, run:</p>
-<pre><code>/plugin</code></pre>
-        <p style="margin:8px 0 14px;">That opens the plugin marketplace. Browse it, find the two skills below by name, and install them. (Each name has a <code>@claude-plugins-official</code> tag — that's the marketplace they come from, and what you'll look for in the menu.)</p>
-
-        <div class="heads-up" style="margin-bottom:10px;">
-          <strong>playground</strong> &nbsp;·&nbsp; <code>playground@claude-plugins-official</code><br>
-          A quick interactive explorer that lets you see and tweak what "success" looks like, visually, before you commit to it.
+        <!-- the two power-ups as move cards -->
+        <div class="move-grid">
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18M3 9h6"></path>
+                </svg>
+              </span>
+              <span class="move-name">playground</span>
+            </div>
+            <p class="move-does"><code>playground@claude-plugins-official</code></p>
+            <p class="move-body">A quick interactive explorer that lets you see and tweak what "success" looks like, visually, before you commit to it.</p>
+          </div>
+          <div class="move">
+            <div class="move-top">
+              <span class="move-icon">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="13 2 4 14 11 14 10 22 19 9 12 9 13 2"></polygon>
+                </svg>
+              </span>
+              <span class="move-name">superpowers</span>
+            </div>
+            <p class="move-does"><code>superpowers@claude-plugins-official</code></p>
+            <p class="move-body">Unlocks <strong>brainstorming</strong> (turns your idea into a spec or PRD through guided back-and-forth) and <strong>deep-research</strong> (real market and competitor research on your idea).</p>
+          </div>
         </div>
-        <div class="heads-up">
-          <strong>superpowers</strong> &nbsp;·&nbsp; <code>superpowers@claude-plugins-official</code><br>
-          Unlocks two moves you'll use a lot: <strong>brainstorming</strong> (turns your idea into a spec or PRD through guided back-and-forth) and <strong>deep-research</strong> (real market and competitor research on your idea).
-        </div>
 
-        <h3>3 · Draft the PRD into <code>docs/</code></h3>
-        <p>However you get there, whether by hand or by running the <code>brainstorming</code> skill (which ends by writing a spec for you), the finish line for this week is a <strong>draft PRD sitting in your <code>docs/</code> folder</strong>. Lock that in and you walk into Session 2 ready to build instead of ready to start thinking.</p>
-
-        <div class="why-it-matters">
-          <p style="margin:0;">Everything this week is the same skill you practiced today: reduce ambiguity, write it down, let the files shape the next guess. Do it on your own project and Session 2 starts from a running start.</p>
+        <div class="takeaway">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3l1.9 5.6L19.5 9l-4.5 3.3L16.7 18 12 14.6 7.3 18l1.7-5.7L4.5 9l5.6-.4z"></path>
+          </svg>
+          <span>Same skill you practiced today: reduce ambiguity, write it down, let the files shape the next guess. Do it on your own project and Session 2 starts from a running start.</span>
         </div>
       </section>
 
       <!-- ===== Footer ===== -->
       <footer class="footer">
-        <p style="margin:0;">AI Summer Camp · Session 1 of a four-Friday beginner cohort from <a href="https://mvpclub.ai?utm_source=summer-camp&utm_medium=referral&utm_campaign=ai-summer-camp&utm_content=company">MVP Club</a> — the community for people learning to build with AI. <a href="../">Back to camp overview</a>.</p>
+        <p style="margin:0;">AI Summer Camp · Session 1 of a four-Friday beginner cohort from <a href="https://mvpclub.ai?utm_source=summer-camp&utm_medium=referral&utm_campaign=ai-summer-camp&utm_content=company">MVP Club</a>, the community for people learning to build with AI. <a href="../">Back to camp overview</a>.</p>
       </footer>
     </main>
   </div>
