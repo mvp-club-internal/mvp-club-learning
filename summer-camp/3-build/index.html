@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>AI Summer Camp — members only</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--warm-stone:#faf5f0;--navy:#081f3f;--amber:#d97706;--golden:#fbbf24;--golden-soft:#fef3c7;--card-bg:#fff;--border:rgba(8,31,63,.12)}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;
+      background:var(--warm-stone);color:var(--navy);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+    .lock{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;
+      box-shadow:0 1px 2px rgba(8,31,63,.04),0 10px 30px rgba(8,31,63,.08);
+      padding:40px 40px 34px;max-width:440px;width:100%;text-align:center}
+    .kicker{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin:0 0 12px}
+    h1{font-family:'Zilla Slab',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1;margin:0 0 10px}
+    p.sub{font-size:15px;opacity:.8;margin:0 0 22px;line-height:1.5}
+    form{display:flex;flex-direction:column;gap:12px}
+    input[type=password]{font-family:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--border);
+      border-radius:10px;background:var(--warm-stone);color:var(--navy);width:100%}
+    input[type=password]:focus{outline:2px solid var(--amber);outline-offset:1px;border-color:var(--amber)}
+    button{font-family:inherit;font-size:15px;font-weight:600;padding:12px 14px;border:none;border-radius:10px;
+      background:var(--amber);color:var(--warm-stone);cursor:pointer}
+    button:hover{background:var(--navy)}
+    .row{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;opacity:.75}
+    .err{color:#9c4221;font-size:13px;min-height:18px;margin:2px 0 0;font-weight:600}
+    .foot{margin-top:18px;font-size:12px;opacity:.6}
+    .foot a{color:var(--amber);text-decoration:none}
+  </style>
+</head>
+<body>
+  <main class="lock">
+    <p class="kicker">MVP Club · AI Summer Camp</p>
+    <h1>Members only</h1>
+    <p class="sub">This page is for AI Summer Camp cohort members. Enter the password to continue.</p>
+    <form id="lockform" autocomplete="off">
+      <input id="lockpw" type="password" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit">Unlock</button>
+      <label class="row"><input id="lockremember" type="checkbox" checked> Remember me on this device</label>
+      <p id="lockerr" class="err" role="alert"></p>
+    </form>
+    <p class="foot">Not in the cohort? <a href="https://mvpclub.ai/summer-camp?utm_source=lessons&amp;utm_medium=referral&amp;utm_campaign=ai-summer-camp&amp;utm_content=company">Join AI Summer Camp →</a></p>
+  </main>
+  <script>var ENC={salt:"VW80RGFaX9+gKm6TrT0Q1w==",iv:"pZzwSeuNJfMWNRTA",ct:"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",iter:200000};</script>
+  <script>
+(function(){
+  var STORE="mvpcamp_key_v1";
+  var dec=new TextDecoder(), enc=new TextEncoder();
+  function b64b(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)});}
+  function bb64(buf){return btoa(String.fromCharCode.apply(null,new Uint8Array(buf)));}
+  function deriveKey(pw){
+    return crypto.subtle.importKey("raw",enc.encode(pw),"PBKDF2",false,["deriveKey"]).then(function(base){
+      return crypto.subtle.deriveKey({name:"PBKDF2",salt:b64b(ENC.salt),iterations:ENC.iter,hash:"SHA-256"},
+        base,{name:"AES-GCM",length:256},true,["decrypt"]);
+    });
+  }
+  function decryptWith(key){
+    return crypto.subtle.decrypt({name:"AES-GCM",iv:b64b(ENC.iv)},key,b64b(ENC.ct)).then(function(buf){return dec.decode(buf);});
+  }
+  function reveal(html){document.open();document.write(html);document.close();}
+  function unlock(pw,remember){
+    return deriveKey(pw).then(function(key){
+      return decryptWith(key).then(function(html){
+        if(remember){crypto.subtle.exportKey("raw",key).then(function(raw){try{localStorage.setItem(STORE,bb64(raw));}catch(e){}});}
+        reveal(html);return true;
+      });
+    }).catch(function(){return false;});
+  }
+  function tryStored(){
+    var raw=null;try{raw=localStorage.getItem(STORE);}catch(e){}
+    if(!raw)return Promise.resolve(false);
+    return crypto.subtle.importKey("raw",b64b(raw),{name:"AES-GCM"},false,["decrypt"]).then(function(key){
+      return decryptWith(key).then(function(html){reveal(html);return true;});
+    }).catch(function(){try{localStorage.removeItem(STORE);}catch(e){}return false;});
+  }
+  document.addEventListener("DOMContentLoaded",function(){
+    if(!window.crypto||!crypto.subtle){document.getElementById("lockerr").textContent="This browser can't unlock the page (needs a secure context).";return;}
+    tryStored();
+    var f=document.getElementById("lockform"), err=document.getElementById("lockerr");
+    f.addEventListener("submit",function(e){
+      e.preventDefault();err.textContent="";
+      var pw=document.getElementById("lockpw").value;
+      var remember=document.getElementById("lockremember").checked;
+      unlock(pw,remember).then(function(ok){if(!ok){err.textContent="Incorrect password.";document.getElementById("lockpw").select();}});
+    });
+  });
+})();
+</script>
+</body>
+</html>

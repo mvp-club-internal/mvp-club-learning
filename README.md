@@ -6,6 +6,12 @@ Free, hands-on lessons from [MVP Club](https://mvpclub.ai) on building with AI.
 
 ## Lessons
 
+- **AI Summer Camp** (`summer-camp/`) — a four-Friday beginner cohort delivered as a multi-page
+  site (camp overview + one folder per session). **Published pages are password-protected**
+  (client-side AES-256-GCM gate; cohort password required) — the editable plaintext source lives
+  on the private `summer-camp` branch and is encrypted to `main` via `scripts/encrypt-camp.cjs`
+  in the bizops-tool repo. `camp.css` and `the-one-big-idea.html` (a standalone shareable card)
+  are served public. Session 1 is built; Sessions 2–4 are stubs.
 - **The Four Moves of Knowledge Work with AI** (`knowledge-work-with-ai/`) — a self-contained
   HTML page teaching a tool-agnostic model (Data, Intent, Instructions, Evaluation) for getting
   good work out of any AI chat, applied to three use cases: drafting comms, project management,
