@@ -673,6 +673,8 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
   gap: 20px;
   flex-wrap: wrap;
 }
+/* A section's title row MUST be wrapped in .section-head to get the flex layout
+   and the move-tag/guess-meter cluster on the right — copy this pattern for Sessions 2-4. */
 .section-head .section-title-row { flex: 1 1 320px; margin-bottom: 0; }
 .head-aside {
   display: flex;
@@ -768,6 +770,11 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
 }
 .step-rail .sr-step.current .sr-num { background: var(--amber); color: var(--warm-stone); }
 .step-rail .sr-step.done .sr-num { background: var(--navy); color: var(--warm-stone); }
+/* Accessibility: replace the digit with a ✓ on completed steps so "done" is
+   readable without color (colorblind / grayscale users). Only .done gets the
+   checkmark; .current keeps its highlighted digit. */
+.step-rail .sr-step.done .sr-num { font-size: 0; }
+.step-rail .sr-step.done .sr-num::after { content: "✓"; font-size: 12px; line-height: 1; color: var(--warm-stone); }
 
 /* ===== §2 ladder + bell side-by-side grid ===== */
 .idea-grid {
