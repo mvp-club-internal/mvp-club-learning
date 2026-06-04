@@ -589,7 +589,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
 
 @keyframes bell-sharpen {
   0%   { transform: translateX(0)    scaleX(1)    scaleY(1); }
-  100% { transform: translateX(26%)  scaleX(0.34) scaleY(2.3); }
+  100% { transform: translateX(28%)  scaleX(0.34) scaleY(1.7); }
 }
 @keyframes bell-avg-fade {
   0%   { opacity: 1; }
@@ -642,7 +642,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: 13px; }
   .bell.animate .bell-marker.target .bell-marker-dot {
     animation: none;
   }
-  .bell-svg .curve { transform: translateX(26%) scaleX(0.34) scaleY(2.3); }
+  .bell-svg .curve { transform: translateX(28%) scaleX(0.34) scaleY(1.7); }
   .bell-marker.avg { opacity: 0.3; }
   .bell-marker.target { opacity: 1; border-left-style: solid; }
   .bell-chip {

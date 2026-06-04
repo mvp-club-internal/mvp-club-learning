@@ -6,6 +6,11 @@ Free, hands-on lessons from [MVP Club](https://mvpclub.ai) on building with AI.
 
 ## Lessons
 
+- **AI Summer Camp** (`summer-camp/`) — a four-Friday beginner cohort delivered as a multi-page
+  site: a camp overview plus one folder per session. Session 1 (`1-get-clear/`) is built out;
+  Sessions 2–4 are stubs that go live as the cohort runs. Shares a `camp.css` design system.
+  Also includes `the-one-big-idea.html`, a standalone shareable version of the Session 1
+  "shape the guess" card. Open `summer-camp/index.html` in any browser; there is no build step.
 - **The Four Moves of Knowledge Work with AI** (`knowledge-work-with-ai/`) — a self-contained
   HTML page teaching a tool-agnostic model (Data, Intent, Instructions, Evaluation) for getting
   good work out of any AI chat, applied to three use cases: drafting comms, project management,

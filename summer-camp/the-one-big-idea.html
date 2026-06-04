@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The one big idea — shape the guess</title>
+  <meta name="description" content="The one big idea behind working well with AI: the model is always guessing, and your job is to shape the guess by adding context. An animated bell curve shows how more context narrows the guess from the generic average to what you actually meant.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --warm-stone: #faf5f0;
+      --navy: #081f3f;
+      --amber: #d97706;
+      --golden: #fbbf24;
+      --golden-soft: #fef3c7;
+      --navy-soft: rgba(8, 31, 63, 0.06);
+      --card-bg: #ffffff;
+      --border-subtle: rgba(8, 31, 63, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--warm-stone);
+      color: var(--navy);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      /* center the single card in the viewport */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+    }
+    h2 { font-family: 'Zilla Slab', Georgia, serif; font-weight: 400; color: var(--navy); line-height: 1.2; }
+    p { margin: 0 0 16px; }
+    strong { font-weight: 600; }
+
+    .share-wrap { width: 100%; max-width: 940px; }
+
+    /* ===== Card ===== */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 48px 56px;
+      margin: 0;
+      box-shadow: 0 1px 2px rgba(8, 31, 63, 0.04), 0 8px 24px rgba(8, 31, 63, 0.06);
+    }
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .section-head .section-title-row { flex: 1 1 320px; margin-bottom: 0; }
+    .section-title-row { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; }
+    .section-title {
+      font-family: 'Zilla Slab', Georgia, serif;
+      font-weight: 400;
+      font-size: 44px;
+      line-height: 1.05;
+      margin: 0;
+    }
+    .section-subtitle {
+      font-style: italic;
+      color: var(--amber);
+      font-size: 16px;
+      margin: 8px 0 24px;
+      letter-spacing: 0.02em;
+    }
+    .lede {
+      font-size: 18px;
+      line-height: 1.5;
+      margin: 0 0 28px;
+      color: var(--navy);
+      max-width: 760px;
+    }
+    .head-aside {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      padding-top: 4px;
+    }
+
+    /* THE MOVE pill */
+    .move-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--golden-soft);
+      color: var(--amber);
+      border: 1px solid rgba(217, 118, 6, 0.22);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .move-tag svg { display: block; }
+    .move-tag .move-tag-sep { opacity: 0.45; font-weight: 400; }
+    .move-tag .move-tag-skill { letter-spacing: 0.06em; }
+
+    /* shape-the-guess mini glyph */
+    .guess-meter { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .guess-meter svg { display: block; }
+    .guess-meter .gm-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--navy);
+      opacity: 0.4;
+    }
+
+    /* ===== Idea grid: ladder + bell ===== */
+    .idea-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+      gap: 24px;
+      align-items: stretch;
+      margin: 8px 0 4px;
+    }
+    .idea-grid .bell { margin: 0; height: 100%; }
+
+    /* Abstraction ladder */
+    .ladder {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 24px 22px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .ladder-label {
+      position: absolute;
+      top: -10px; left: 18px;
+      background: var(--amber);
+      color: var(--warm-stone);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .ladder-rungs { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+    .rung {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      border: 1px solid var(--border-subtle);
+      background: var(--card-bg);
+      color: var(--navy);
+      position: relative;
+    }
+    .rung.r-machine  { width: 64%;  opacity: 0.42; }
+    .rung.r-assembly { width: 76%;  opacity: 0.54; }
+    .rung.r-lang     { width: 88%;  opacity: 0.7; }
+    .rung.r-english {
+      width: 100%;
+      opacity: 1;
+      background: var(--golden-soft);
+      border-color: var(--amber);
+      box-shadow: 0 6px 16px rgba(217, 118, 6, 0.12);
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .rung .rung-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--navy); opacity: 0.5; }
+    .rung.r-english .rung-dot { background: var(--amber); opacity: 1; }
+    .rung .rung-name { flex: 1; }
+    .rung .here-tag {
+      flex: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--amber);
+      background: var(--card-bg);
+      border: 1px solid rgba(217, 118, 6, 0.3);
+      border-radius: 999px;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+    .ladder-spine {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      color: var(--navy);
+      opacity: 0.78;
+    }
+    .ladder-spine strong { color: var(--amber); font-weight: 600; }
+    .ladder-spine svg { flex: none; }
+
+    /* ===== The animated bell curve ===== */
+    .bell {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px 28px 22px;
+      position: relative;
+    }
+    .bell-label {
+      position: absolute;
+      top: -10px; left: 18px;
+      background: var(--amber);
+      color: var(--warm-stone);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .bell-stage { display: flex; flex-direction: column; gap: 18px; }
+    .bell-plot { position: relative; width: 100%; }
+    .bell-svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .bell-svg .axis { stroke: var(--border-subtle); stroke-width: 1; }
+
+    /* The curve group. transform-origin centered on the baseline so scaling
+       pinches symmetrically; the .animate state narrows + heightens + slides
+       it right so the peak lands ON the target marker. */
+    .bell-svg .curve {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      transition: none;
+    }
+    .bell-svg .curve-fill { fill: var(--golden); opacity: 0.22; }
+    .bell-svg .curve-line {
+      fill: none;
+      stroke: var(--amber);
+      stroke-width: 3;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .bell-marker {
+      position: absolute;
+      top: 4px; bottom: 26px;
+      width: 0;
+      border-left: 2px dashed var(--border-subtle);
+      transition: opacity 0.4s ease;
+    }
+    .bell-marker .bell-marker-cap {
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--navy);
+      opacity: 0.65;
+    }
+    .bell-marker.avg { left: 50%; }
+    .bell-marker.target { left: 76%; border-left-color: var(--amber); opacity: 0.35; }
+    .bell-marker.target .bell-marker-cap { color: var(--amber); opacity: 1; }
+    .bell .bell-marker.target .bell-marker-dot {
+      position: absolute;
+      top: -5px; left: 50%;
+      width: 9px; height: 9px;
+      margin-left: -4.5px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 0 0 rgba(217, 118, 6, 0.4);
+    }
+
+    .bell-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .bell-chip {
+      flex: 1 1 0;
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 10px 14px;
+      opacity: 0.4;
+      transform: translateY(4px);
+      transition: opacity 0.35s ease, transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+    .bell-chip .bell-chip-num {
+      flex: none;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--navy-soft);
+      color: var(--navy);
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+    .bell-chip .bell-chip-text { line-height: 1.25; }
+    .bell-chip .bell-chip-name { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--navy); font-weight: 400; }
+    .bell-chip .bell-chip-role { font-family: 'Inter', sans-serif; font-size: 11px; color: var(--navy); opacity: 0.6; }
+
+    /* Animated state (gated behind .animate) */
+    .bell.animate .bell-svg .curve { animation: bell-sharpen 1.7s cubic-bezier(0.45, 0.05, 0.2, 1) forwards; }
+    .bell.animate .bell-marker.avg { animation: bell-avg-fade 1.7s ease forwards; }
+    .bell.animate .bell-marker.target { animation: bell-target-rise 1.7s ease forwards; }
+    .bell.animate .bell-marker.target .bell-marker-dot { animation: bell-target-pulse 1.4s ease-out 1s 1; }
+    .bell.animate .bell-chip.lit {
+      opacity: 1;
+      transform: translateY(0);
+      border-color: var(--amber);
+      box-shadow: 0 6px 16px rgba(217, 118, 6, 0.12);
+    }
+    .bell.animate .bell-chip.lit .bell-chip-num { background: var(--amber); color: var(--warm-stone); }
+    .bell.animate .bell-chip:nth-child(1) { transition-delay: 0.55s; }
+    .bell.animate .bell-chip:nth-child(2) { transition-delay: 0.95s; }
+    .bell.animate .bell-chip:nth-child(3) { transition-delay: 1.35s; }
+
+    /* end-peak translate tuned so the narrowed peak lands ON the 76% target */
+    @keyframes bell-sharpen {
+      0%   { transform: translateX(0)    scaleX(1)    scaleY(1); }
+      100% { transform: translateX(28%)  scaleX(0.34) scaleY(1.7); }
+    }
+    @keyframes bell-avg-fade { 0% { opacity: 1; } 100% { opacity: 0.3; } }
+    @keyframes bell-target-rise {
+      0%   { opacity: 0.35; border-left-style: dashed; }
+      60%  { opacity: 1; }
+      100% { opacity: 1; border-left-style: solid; }
+    }
+    @keyframes bell-target-pulse {
+      0%   { box-shadow: 0 0 0 0 rgba(217, 118, 6, 0.5); }
+      100% { box-shadow: 0 0 0 14px rgba(217, 118, 6, 0); }
+    }
+
+    .bell-replay {
+      align-self: flex-start;
+      margin-top: 2px;
+      background: transparent;
+      color: var(--amber);
+      border: 1px solid var(--amber);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .bell-replay:hover { background: var(--amber); color: var(--warm-stone); }
+    .bell-replay:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+    .bell-caption { font-size: 13px; opacity: 0.72; margin: 14px 0 0; font-style: italic; }
+
+    /* closing takeaway strip */
+    .takeaway {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: var(--navy);
+      color: var(--warm-stone);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 24px 0 0;
+      font-size: 14.5px;
+      line-height: 1.5;
+    }
+    .takeaway svg { flex: none; margin-top: 2px; }
+    .takeaway strong { color: var(--golden); font-weight: 600; }
+
+    /* narrow screens: pull the two marker captions apart so they never collide */
+    @media (max-width: 560px) {
+      .bell-marker.avg .bell-marker-cap { left: auto; right: 6px; transform: none; }
+      .bell-marker.target .bell-marker-cap { left: 6px; right: auto; transform: none; }
+    }
+    @media (max-width: 760px) {
+      .section-card { padding: 32px 26px; }
+      .section-title { font-size: 34px; }
+      .idea-grid { grid-template-columns: 1fr; }
+    }
+
+    /* reduced motion: show the END state directly */
+    @media (prefers-reduced-motion: reduce) {
+      .bell.animate .bell-svg .curve,
+      .bell.animate .bell-marker.avg,
+      .bell.animate .bell-marker.target,
+      .bell.animate .bell-marker.target .bell-marker-dot { animation: none; }
+      .bell-svg .curve { transform: translateX(28%) scaleX(0.34) scaleY(1.7); }
+      .bell-marker.avg { opacity: 0.3; }
+      .bell-marker.target { opacity: 1; border-left-style: solid; }
+      .bell-chip { opacity: 1; transform: none; border-color: var(--amber); box-shadow: 0 6px 16px rgba(217, 118, 6, 0.12); transition: none; }
+      .bell-chip .bell-chip-num { background: var(--amber); color: var(--warm-stone); }
+    }
+  </style>
+</head>
+<body>
+  <div class="share-wrap">
+    <section class="section-card" id="s2">
+      <div class="section-head">
+        <div class="section-title-row">
+          <h2 class="section-title">The one big idea</h2>
+        </div>
+        <div class="head-aside">
+          <span class="move-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3.2"></circle>
+            </svg>
+            The move <span class="move-tag-sep">·</span> <span class="move-tag-skill">shape the guess</span>
+          </span>
+          <div class="guess-meter" title="The guess starts wide and flat">
+            <svg width="52" height="26" viewBox="0 0 52 26" fill="none" aria-hidden="true">
+              <path d="M2 24 C 14 23, 18 6, 26 6 C 34 6, 38 23, 50 24" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fbbf24" fill-opacity="0.18"></path>
+            </svg>
+            <span class="gm-label">the guess</span>
+          </div>
+        </div>
+      </div>
+      <div class="section-subtitle">Claude is guessing — your job is to shape the guess</div>
+
+      <p class="lede">Claude doesn't look up answers. It predicts the most likely continuation: a weighted average of everything that fits what you said. It's always guessing. Your job is to shape the guess by reducing ambiguity.</p>
+
+      <div class="idea-grid">
+        <!-- The abstraction ladder -->
+        <div class="ladder" aria-label="The abstraction ladder, from machine code at the bottom to English at the top, with English highlighted as the new layer you work in.">
+          <span class="ladder-label">The ladder</span>
+          <div class="ladder-rungs">
+            <div class="rung r-english">
+              <span class="rung-dot"></span>
+              <span class="rung-name">English</span>
+              <span class="here-tag">the new layer · you are here</span>
+            </div>
+            <div class="rung r-lang">
+              <span class="rung-dot"></span>
+              <span class="rung-name">Python / JavaScript</span>
+            </div>
+            <div class="rung r-assembly">
+              <span class="rung-dot"></span>
+              <span class="rung-name">assembly</span>
+            </div>
+            <div class="rung r-machine">
+              <span class="rung-dot"></span>
+              <span class="rung-name">machine code</span>
+            </div>
+          </div>
+          <div class="ladder-spine">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="20" x2="12" y2="4"></line><polyline points="6 10 12 4 18 10"></polyline>
+            </svg>
+            <span><strong>English</strong> is the new abstraction layer.</span>
+          </div>
+        </div>
+
+        <!-- Signature visual: the animated bell curve -->
+        <div class="bell" id="bell">
+          <span class="bell-label">Shape the guess</span>
+          <div class="bell-stage">
+            <div class="bell-plot">
+              <svg class="bell-svg" viewBox="0 0 600 220" role="img"
+                   aria-label="A wide, flat probability curve centered on a generic-average marker narrows into a tall, sharp peak that slides right to the what-you-meant target as context is added.">
+                <!-- baseline axis -->
+                <line class="axis" x1="20" y1="190" x2="580" y2="190"></line>
+                <!-- curve group: drawn wide & flat, centered at x=300; the .animate
+                     state narrows + heightens + slides it right via transform -->
+                <g class="curve">
+                  <path class="curve-fill"
+                        d="M 20 190
+                           C 150 188, 200 70, 300 70
+                           C 400 70, 450 188, 580 190
+                           L 580 190 L 20 190 Z"></path>
+                  <path class="curve-line"
+                        d="M 20 190
+                           C 150 188, 200 70, 300 70
+                           C 400 70, 450 188, 580 190"></path>
+                </g>
+              </svg>
+              <!-- markers overlaid on the plot -->
+              <div class="bell-marker avg">
+                <span class="bell-marker-cap">generic average</span>
+              </div>
+              <div class="bell-marker target">
+                <span class="bell-marker-dot"></span>
+                <span class="bell-marker-cap">what you meant</span>
+              </div>
+            </div>
+
+            <div class="bell-chips">
+              <div class="bell-chip">
+                <span class="bell-chip-num">1</span>
+                <span class="bell-chip-text">
+                  <span class="bell-chip-name">prompt</span><br>
+                  <span class="bell-chip-role">what you ask for</span>
+                </span>
+              </div>
+              <div class="bell-chip">
+                <span class="bell-chip-num">2</span>
+                <span class="bell-chip-text">
+                  <span class="bell-chip-name">context</span><br>
+                  <span class="bell-chip-role">what you tell it</span>
+                </span>
+              </div>
+              <div class="bell-chip">
+                <span class="bell-chip-num">3</span>
+                <span class="bell-chip-text">
+                  <span class="bell-chip-name">directory</span><br>
+                  <span class="bell-chip-role">what it can read</span>
+                </span>
+              </div>
+            </div>
+
+            <button type="button" class="bell-replay" id="bell-replay" aria-label="Replay the bell-curve animation">▶ replay</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="bell-caption">More context narrows the guess from the generic average to what you actually meant: your prompt, the background you share, and the files Claude can read.</p>
+
+      <div class="takeaway">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l1.9 5.6L19.5 9l-4.5 3.3L16.7 18 12 14.6 7.3 18l1.7-5.7L4.5 9l5.6-.4z"></path>
+        </svg>
+        <span>Giving the model the right context, deliberately, through dialogue has a name: <strong>context engineering</strong>.</span>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // ===== Bell-curve animation control =====
+    const bell = document.getElementById('bell');
+    const replayBtn = document.getElementById('bell-replay');
+
+    function runBell() {
+      if (!bell) return;
+      bell.classList.remove('animate');
+      const chips = bell.querySelectorAll('.bell-chip');
+      chips.forEach(c => c.classList.remove('lit'));
+      // Force reflow so removing/re-adding .animate restarts the keyframes.
+      void bell.offsetWidth;
+      bell.classList.add('animate');
+      chips.forEach(c => c.classList.add('lit'));
+    }
+
+    // Trigger once when the bell scrolls into view at >=50% visibility.
+    let bellPlayed = false;
+    if (bell) {
+      const bellObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !bellPlayed) {
+            bellPlayed = true;
+            runBell();
+            bellObserver.disconnect();
+          }
+        });
+      }, { threshold: [0, 0.5, 1] });
+      bellObserver.observe(bell);
+
+      // Fallback: this is a single-card page, so the curve is visible immediately.
+      // If the observer hasn't fired shortly after load, play it anyway.
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          if (!bellPlayed) { bellPlayed = true; runBell(); }
+        }, 600);
+      });
+
+      if (replayBtn) replayBtn.addEventListener('click', runBell);
+    }
+  </script>
+</body>
+</html>
