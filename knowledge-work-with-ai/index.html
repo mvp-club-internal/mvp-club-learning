@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Four Moves of Knowledge Work with AI — MVP Club</title>
+  <meta name="description" content="A simple, tool-agnostic model for getting genuinely good work out of any AI chat — Data, Intent, Instructions, Evaluation — applied to drafting comms, project management, and research.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --warm-stone: #faf5f0;
+      --navy: #081f3f;
+      --navy-soft: #e5e9f0;
+      --amber: #d97706;
+      --golden: #fbbf24;
+      --golden-soft: #fef3c7;
+      --card-bg: #ffffff;
+      --border-subtle: rgba(8, 31, 63, 0.12);
+      /* four-move accent colors (used to color-code the chat mockups) */
+      --m-data: #2f6f8f;
+      --m-intent: #d97706;
+      --m-instr: #a16207;
+      --m-eval: #3f7d5a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--warm-stone);
+      color: var(--navy);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    html { scroll-behavior: smooth; }
+    .layout {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      max-width: 1180px;
+      margin: 0 auto;
+      gap: 24px;
+      padding: 32px 24px 64px;
+    }
+    .toc { position: sticky; top: 24px; align-self: start; font-size: 12px; }
+    .toc ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+    .toc li { margin: 0; }
+    .toc a {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; border-radius: 50%;
+      color: var(--navy); background: transparent;
+      border: 1px solid var(--border-subtle); text-decoration: none;
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px;
+      opacity: 0.6; position: relative;
+      transition: opacity 0.15s, background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .toc a:hover, .toc a.active {
+      opacity: 1; background: var(--amber); color: var(--warm-stone); border-color: var(--amber);
+    }
+    .toc a::after {
+      content: attr(data-label);
+      position: absolute; left: calc(100% + 10px); top: 50%;
+      transform: translateY(-50%);
+      background: var(--navy); color: var(--warm-stone);
+      padding: 4px 10px; border-radius: 4px;
+      font-size: 11px; font-weight: 500; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity 0.15s;
+    }
+    .toc a:hover::after { opacity: 1; }
+    .content { min-width: 0; }
+
+    h1, h2, h3 { font-family: 'Zilla Slab', Georgia, serif; font-weight: 400; color: var(--navy); line-height: 1.2; }
+    p { margin: 0 0 16px; }
+    strong { font-weight: 600; }
+    a { color: var(--amber); text-decoration: underline; text-underline-offset: 3px; }
+    em { color: var(--navy); }
+    code, pre, .mono { font-family: 'JetBrains Mono', 'Consolas', monospace; }
+    code { background: var(--navy-soft); padding: 1px 6px; border-radius: 3px; font-size: 13px; }
+    pre {
+      background: var(--navy); color: var(--warm-stone);
+      padding: 18px 20px; border-radius: 8px; overflow-x: auto;
+      position: relative; margin: 14px 0; font-size: 13px; line-height: 1.65;
+    }
+    pre code { background: none; padding: 0; color: inherit; font-size: 13px; white-space: pre; }
+    .copy-btn {
+      position: absolute; top: 8px; right: 8px;
+      background: var(--amber); color: var(--warm-stone); border: none;
+      padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer;
+      font-family: 'Inter', sans-serif; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .copy-btn:hover, .copy-btn.copied { background: var(--golden); color: var(--navy); }
+
+    /* ===== Section cards ===== */
+    .section-card {
+      background: var(--card-bg); border: 1px solid var(--border-subtle);
+      border-radius: 14px; padding: 44px 52px; margin: 28px 0;
+      box-shadow: 0 1px 2px rgba(8,31,63,0.04), 0 8px 24px rgba(8,31,63,0.06);
+      scroll-margin-top: 24px;
+    }
+    .section-card.hero { padding-bottom: 40px; }
+    .section-title-row { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; }
+    .section-num { font-family: 'Zilla Slab', Georgia, serif; font-size: 46px; color: var(--amber); line-height: 1; opacity: 0.4; }
+    .section-num.move-glyph { opacity: 0.9; display: inline-flex; align-items: center; line-height: 1; }
+    .section-num.move-glyph svg { width: 42px; height: 42px; display: block; }
+    .section-title { font-family: 'Zilla Slab', Georgia, serif; font-size: 38px; line-height: 1.05; margin: 0; }
+    .section-subtitle { font-style: italic; color: var(--amber); font-size: 16px; margin: 6px 0 22px; letter-spacing: 0.02em; }
+    .lede { font-size: 18px; line-height: 1.55; margin: 0 0 22px; color: var(--navy); }
+    .footnote { margin-top: 26px; font-size: 13px; font-style: italic; opacity: 0.72; border-left: 2px solid var(--amber); padding-left: 12px; }
+
+    /* Two-column pillar layout */
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .card-grid > * { min-width: 0; }
+    .example-panel { background: var(--warm-stone); border-radius: 10px; padding: 22px 24px; }
+    .example-panel .ex-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 700; margin-bottom: 10px; }
+    .example-panel .ex-text { font-size: 14px; line-height: 1.55; }
+    .example-panel .ex-text em { font-style: italic; opacity: 0.95; }
+
+    /* Hero ===== */
+    .hero .kicker { color: var(--amber); font-size: 13px; margin-bottom: 12px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; }
+    .hero .byline { font-size: 14px; opacity: 0.7; margin: 6px 0 0; }
+    .hero .outcome { font-size: 18px; color: var(--navy); opacity: 0.9; margin-top: 18px; }
+    .hero .credit { font-size: 13px; opacity: 0.72; margin-top: 18px; border-left: 2px solid var(--amber); padding-left: 12px; }
+    .hero .credit a { font-weight: 600; }
+    .chip-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 26px 0 4px; }
+    .chip-grid .c { background: var(--warm-stone); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px 14px; text-align: center; }
+    .chip-grid .c .t { font-family: 'Zilla Slab', serif; font-size: 19px; }
+    .chip-grid .c .s { font-size: 11px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+
+    /* ===== DIIE bar ===== */
+    .diie-bar { display: flex; align-items: stretch; gap: 0; margin: 24px 0 10px; flex-wrap: wrap; }
+    .diie-bar .chip {
+      flex: 1; min-width: 150px; background: var(--golden-soft); border: 1px solid var(--golden);
+      border-radius: 10px; padding: 16px 18px;
+    }
+    .diie-bar .chip .step { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 700; }
+    .diie-bar .chip .name { font-family: 'Zilla Slab', serif; font-size: 21px; line-height: 1.1; margin: 2px 0 6px; }
+    .diie-bar .chip .one { font-size: 13px; line-height: 1.45; }
+    .diie-bar .arrow { display: flex; align-items: center; color: var(--amber); font-size: 22px; font-weight: 600; padding: 0 8px; }
+
+    /* Small inline loop marker for vignettes */
+    .loop-marker { display: inline-flex; gap: 6px; align-items: center; margin: 0 0 18px; flex-wrap: wrap; }
+    .loop-marker .m { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--amber);
+      background: var(--golden-soft); border: 1px solid var(--golden); border-radius: 20px; padding: 3px 11px; font-family: 'Inter', sans-serif; }
+    .loop-marker .sep { color: var(--amber); opacity: 0.6; font-size: 12px; }
+
+    /* ===== Four-move stack (vignettes) ===== */
+    .moves { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 4px 0 22px; }
+    .moves .move {
+      background: var(--warm-stone); border-left: 3px solid var(--amber);
+      border-radius: 0 8px 8px 0; padding: 12px 16px;
+      display: grid; grid-template-columns: 130px 1fr; gap: 16px; align-items: baseline;
+    }
+    .moves .move .mlabel { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber); font-weight: 700; font-family: 'Inter', sans-serif; }
+    .moves .move .mtext { font-size: 14px; line-height: 1.5; }
+
+    .scenario { background: var(--navy); color: var(--warm-stone); padding: 14px 18px; border-radius: 8px; font-size: 15px; margin: 0 0 20px; }
+    .scenario strong { color: var(--golden); }
+
+    .block-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 700; margin: 24px 0 4px; font-family: 'Inter', sans-serif; }
+
+    /* Weak vs strong */
+    .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0 4px; }
+    .vs .col { border-radius: 10px; padding: 16px 18px; font-size: 14px; }
+    .vs .weak { background: var(--navy-soft); }
+    .vs .strong { background: var(--golden-soft); border: 1px solid var(--golden); }
+    .vs .col .vs-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 8px; font-family: 'Inter', sans-serif; }
+    .vs .weak .vs-tag { color: var(--navy); opacity: 0.6; }
+    .vs .strong .vs-tag { color: var(--amber); }
+    .vs .col .vs-prompt { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.5; }
+
+    .why-it-matters { font-size: 14px; color: var(--navy); opacity: 0.92; border-left: 3px solid var(--amber); padding: 10px 18px; margin: 18px 0 0; }
+    .why-it-matters strong { color: var(--amber); }
+    .catches { background: var(--golden-soft); border-left: 4px solid var(--golden); padding: 16px 20px; margin: 22px 0 0; border-radius: 0 8px 8px 0; }
+    .catches h3 { margin: 0 0 8px; font-size: 15px; color: var(--navy); }
+    .catches ul { margin: 0; padding-left: 20px; font-size: 14px; }
+    .catches ul li { margin: 5px 0; }
+
+    /* ===== Chat-UI mockup (the vignette graphic) ===== */
+    .chat-ui {
+      background: var(--card-bg); border: 1px solid var(--border-subtle);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 14px 36px rgba(8,31,63,0.13); margin: 10px 0 4px;
+    }
+    .chat-ui .bar {
+      background: var(--navy); color: var(--warm-stone);
+      padding: 11px 16px; display: flex; align-items: center; gap: 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    }
+    .chat-ui .bar .dots { display: flex; gap: 6px; }
+    .chat-ui .bar .dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(250,245,240,0.28); }
+    .chat-ui .bar .title { opacity: 0.85; }
+    .chat-ui .thread { background: var(--warm-stone); padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .bubble { max-width: 88%; padding: 12px 15px; border-radius: 16px; font-size: 13.5px; line-height: 1.5; }
+    .bubble .who { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; font-family: 'Inter', sans-serif; opacity: 0.6; margin-bottom: 5px; display: block; }
+    .bubble.user { align-self: flex-end; background: var(--navy); color: var(--warm-stone); border-bottom-right-radius: 5px; }
+    .bubble.ai { align-self: flex-start; background: var(--card-bg); border: 1px solid var(--border-subtle); border-bottom-left-radius: 5px; }
+    .bubble.dim { opacity: 0.6; }
+    .bubble .verdict { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; font-family: 'Inter', sans-serif; padding: 2px 9px; border-radius: 20px; }
+    .bubble .verdict.bad { background: rgba(8,31,63,0.10); color: var(--navy); }
+    .rethink {
+      align-self: center; text-align: center; font-size: 11px; letter-spacing: 0.03em;
+      color: var(--amber); font-weight: 700; font-family: 'Inter', sans-serif;
+      background: var(--golden-soft); border: 1px solid var(--golden); padding: 5px 14px; border-radius: 20px;
+    }
+    /* Composer built from the four moves */
+    .composer {
+      align-self: flex-end; width: 100%; max-width: 92%;
+      background: var(--card-bg); border: 1px solid var(--border-subtle);
+      border-radius: 14px; padding: 10px; box-shadow: 0 2px 10px rgba(8,31,63,0.06);
+    }
+    .composer .comp-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 700; font-family: 'Inter', sans-serif; padding: 2px 6px 9px; }
+    .pm-row {
+      display: grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: center;
+      padding: 9px 12px; border-radius: 9px; margin-bottom: 6px;
+      background: var(--warm-stone); border-left: 3px solid var(--border-subtle);
+    }
+    .pm-row .tag { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-family: 'Inter', sans-serif; }
+    .pm-row .val { font-size: 12.5px; line-height: 1.4; }
+    .pm-row .val .ph { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; background: rgba(8,31,63,0.06); padding: 0 5px; border-radius: 3px; }
+    .pm-row.data { border-color: var(--m-data); } .pm-row.data .tag { color: var(--m-data); }
+    .pm-row.intent { border-color: var(--m-intent); } .pm-row.intent .tag { color: var(--m-intent); }
+    .pm-row.instr { border-color: var(--m-instr); } .pm-row.instr .tag { color: var(--m-instr); }
+    .pm-row.eval { border-color: var(--m-eval); } .pm-row.eval .tag { color: var(--m-eval); }
+    .composer .send-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 6px 2px; }
+    .composer .send-row .hint { font-size: 11px; opacity: 0.5; font-family: 'JetBrains Mono', monospace; }
+    .composer .send { background: var(--amber); color: var(--warm-stone); border-radius: 9px; padding: 7px 16px; font-size: 12px; font-weight: 700; font-family: 'Inter', sans-serif; }
+    /* AI result preview inside the bubble */
+    .result-card { border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden; margin-top: 2px; }
+    .result-card .rc-head { background: var(--warm-stone); padding: 8px 12px; font-size: 11px; font-family: 'JetBrains Mono', monospace; border-bottom: 1px solid var(--border-subtle); }
+    .result-card .rc-body { padding: 11px 13px; font-size: 12.5px; line-height: 1.55; }
+    .result-card .rc-body .hl { background: var(--golden-soft); padding: 0 3px; border-radius: 3px; }
+    .eval-checks { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .eval-checks .chk { font-size: 11px; font-weight: 600; font-family: 'Inter', sans-serif; color: var(--m-eval); background: rgba(63,125,90,0.10); border: 1px solid rgba(63,125,90,0.30); padding: 3px 10px; border-radius: 20px; }
+    /* Legend mapping move colors -> chat */
+    .move-legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 16px 0 0; }
+    .move-legend .lg { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 600; font-family: 'Inter', sans-serif; }
+    .move-legend .lg .sw { width: 12px; height: 12px; border-radius: 3px; }
+    .move-legend .lg.data .sw { background: var(--m-data); }
+    .move-legend .lg.intent .sw { background: var(--m-intent); }
+    .move-legend .lg.instr .sw { background: var(--m-instr); }
+    .move-legend .lg.eval .sw { background: var(--m-eval); }
+    /* "Catches" as compact chips */
+    .catch-chips { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; }
+    .catch-chips .cc { display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start; font-size: 13px; background: var(--golden-soft); border-left: 3px solid var(--golden); border-radius: 0 8px 8px 0; padding: 9px 13px; }
+    .catch-chips .cc .ic { color: var(--amber); font-weight: 700; }
+    /* Collapsible full prompt */
+    details.full-prompt { margin-top: 14px; }
+    details.full-prompt summary { cursor: pointer; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--amber); font-family: 'Inter', sans-serif; list-style: none; display: inline-flex; align-items: center; gap: 6px; padding: 6px 0; }
+    details.full-prompt summary::-webkit-details-marker { display: none; }
+    details.full-prompt summary::before { content: '\25B8'; font-size: 11px; }
+    details.full-prompt[open] summary::before { content: '\25BE'; }
+
+    /* ===== Naive vs Robust toggle ===== */
+    .vig-toggle { display: inline-flex; background: var(--warm-stone); border: 1px solid var(--border-subtle); border-radius: 999px; padding: 4px; gap: 4px; margin: 6px 0 2px; }
+    .vig-btn { padding: 8px 18px; border-radius: 999px; border: none; background: transparent; color: var(--navy); font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; opacity: 0.65; transition: background .2s, color .2s, opacity .2s; }
+    .vig-btn .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .vig-btn.naive .dot { background: #9aa6b2; }
+    .vig-btn.robust .dot { background: var(--amber); }
+    .vig-btn:hover { opacity: 1; }
+    .vig-btn.active { opacity: 1; }
+    .vig-btn.naive.active { background: #e6eaf0; }
+    .vig-btn.robust.active { background: var(--golden-soft); box-shadow: inset 0 0 0 1px var(--golden); }
+    .vig-views { margin-top: 12px; }
+    .vig-view { display: none; }
+    .vig-view.active { display: block; animation: viewIn .42s cubic-bezier(.2,.7,.2,1); transform-origin: top center; }
+    @keyframes viewIn { from { opacity: 0; transform: perspective(1200px) translateY(10px) scale(0.975); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) { .vig-view.active { animation: none; } }
+    .result-card.weak .rc-body { opacity: 0.92; }
+    .eval-misses { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .eval-misses .miss { font-size: 11px; font-weight: 600; font-family: 'Inter', sans-serif; color: #9c4221; background: rgba(156,66,33,0.08); border: 1px solid rgba(156,66,33,0.28); padding: 3px 10px; border-radius: 20px; }
+    /* Pillar spotlight: mini composer with one move lit, the rest faded */
+    .composer.spotlight { box-shadow: none; max-width: 100%; align-self: stretch; }
+    .composer.spotlight .comp-label { color: var(--amber); }
+    .pm-row.faded { opacity: 0.34; }
+    /* Structured list output (PM run-sheet, research shortlist) */
+    .out-list { display: flex; flex-direction: column; gap: 9px; }
+    .out-row { display: grid; grid-template-columns: 92px 1fr; gap: 10px; align-items: start; }
+    .out-row .ol-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--amber); font-family: 'Inter', sans-serif; padding-top: 2px; }
+    .out-row .ol-val { font-size: 12.5px; line-height: 1.5; }
+    .out-note { margin-top: 10px; font-size: 11.5px; font-style: italic; color: var(--m-eval); border-top: 1px dashed var(--border-subtle); padding-top: 8px; }
+    .result-card .vf { font-size: 9px; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #9c4221; background: rgba(156,66,33,0.10); border: 1px solid rgba(156,66,33,0.28); padding: 0 6px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
+
+    /* ===== Framing (pillar) cards: larger & crisper ===== */
+    .section-card:has(.card-grid) { padding: 54px 60px; }
+    .card-grid .lede { font-size: 21px; line-height: 1.5; margin-bottom: 20px; }
+    .card-grid .why-it-matters { font-size: 15px; margin: 0; }
+    .composer.spotlight { padding: 14px; }
+    .composer.spotlight .comp-label { font-size: 11px; padding: 2px 8px 12px; }
+    .composer.spotlight .pm-row { grid-template-columns: 120px 1fr; padding: 14px 16px; margin-bottom: 8px; border-left-width: 4px; }
+    .composer.spotlight .pm-row .tag { font-size: 11px; }
+    .composer.spotlight .pm-row .val { font-size: 15px; line-height: 1.45; }
+    /* "Next step" callout under each pillar's stacked moves */
+    .next-step { margin-top: 16px; background: var(--navy); color: var(--warm-stone); border-radius: 12px; padding: 18px 20px; }
+    .next-step .ns-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--golden); font-weight: 700; font-family: 'Inter', sans-serif; margin-bottom: 8px; }
+    .next-step .ns-text { font-size: 14px; line-height: 1.55; }
+    .next-step .ns-text strong { color: var(--golden); font-weight: 600; }
+    .next-step .ns-tools { margin-top: 10px; font-size: 11px; opacity: 0.65; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; }
+
+    /* ===== Scenario header (vignettes) ===== */
+    .scenario-head { margin: 10px 0 26px; }
+    .scenario-head .eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); font-weight: 700; font-family: 'Inter', sans-serif; margin-bottom: 10px; }
+    .scenario-head .stext { font-family: 'Zilla Slab', Georgia, serif; font-size: 27px; line-height: 1.28; color: var(--navy); }
+
+    /* ===== Four-move approach list (vignettes) ===== */
+    .approach { display: flex; flex-direction: column; gap: 10px; margin: 10px 0 6px; }
+    .approach .ar { display: grid; grid-template-columns: 140px 1fr; gap: 20px; align-items: baseline; background: var(--warm-stone); border-left: 4px solid var(--border-subtle); border-radius: 0 10px 10px 0; padding: 16px 20px; }
+    .approach .ar .atag { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; font-family: 'Inter', sans-serif; }
+    .approach .ar .aval { font-size: 16px; line-height: 1.5; }
+    .approach .ar .aval .ph { font-family: 'JetBrains Mono', monospace; font-size: 14px; background: rgba(8,31,63,0.06); padding: 0 6px; border-radius: 3px; }
+    .approach .ar.data { border-color: var(--m-data); } .approach .ar.data .atag { color: var(--m-data); }
+    .approach .ar.intent { border-color: var(--m-intent); } .approach .ar.intent .atag { color: var(--m-intent); }
+    .approach .ar.instr { border-color: var(--m-instr); } .approach .ar.instr .atag { color: var(--m-instr); }
+    .approach .ar.eval { border-color: var(--m-eval); } .approach .ar.eval .atag { color: var(--m-eval); }
+
+    /* ===== Scroll-driven "card in focus" effect ===== */
+    /* Cards settle into the frame, and the centered card scales up to full size
+       while neighbors shrink + dim. Pure CSS scroll timeline — no JS, no scroll-jacking.
+       Desktop + motion-OK only; everything else just renders normal static cards. */
+    @media (min-width: 821px) {
+      html { scroll-snap-type: y proximity; }
+      .content > section { scroll-snap-align: center; }
+    }
+    @supports (animation-timeline: view()) {
+      @media (min-width: 821px) and (prefers-reduced-motion: no-preference) {
+        @keyframes cardFocus {
+          0%       { transform: scale(0.9); opacity: 0.5; }
+          35%, 65% { transform: scale(1);   opacity: 1; }
+          100%     { transform: scale(0.9); opacity: 0.5; }
+        }
+        .content > section:not(#top) {
+          animation: cardFocus linear both;
+          animation-timeline: view();
+          animation-range: entry exit;
+        }
+      }
+    }
+
+    /* Recap */
+    .recap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 18px 0 8px; }
+    .recap-grid .r { background: var(--warm-stone); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px 18px; }
+    .recap-grid .r .rn { font-family: 'Zilla Slab', serif; font-size: 18px; color: var(--amber); }
+    .recap-grid .r .rd { font-size: 14px; line-height: 1.5; margin-top: 4px; }
+    .one-rule { background: var(--navy); color: var(--warm-stone); border-radius: 10px; padding: 20px 24px; margin-top: 20px; font-size: 17px; }
+    .one-rule strong { color: var(--golden); }
+
+    /* CTA */
+    .cta { background: var(--golden-soft); border: 1px solid var(--golden); border-radius: 12px; padding: 28px 30px; margin-top: 8px; }
+    .cta h3 { margin: 0 0 8px; font-size: 22px; }
+    .cta p { margin: 0 0 16px; font-size: 15px; }
+    .cta .btn { display: inline-block; background: var(--amber); color: var(--warm-stone); text-decoration: none; font-weight: 600; padding: 11px 22px; border-radius: 8px; font-size: 15px; }
+    .cta .btn:hover { background: var(--navy); }
+
+    .footer { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--border-subtle); font-size: 13px; opacity: 0.78; }
+    .footer a { color: var(--amber); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc { position: static; margin-bottom: 8px; }
+      .toc ol { flex-direction: row; flex-wrap: wrap; }
+      .section-card { padding: 30px 24px; }
+      .card-grid { grid-template-columns: 1fr; gap: 26px; }
+      .chip-grid { grid-template-columns: repeat(2, 1fr); }
+      .diie-bar .arrow { display: none; }
+      .diie-bar .chip { min-width: 45%; }
+      .vs { grid-template-columns: 1fr; }
+      .recap-grid { grid-template-columns: 1fr; }
+      .moves .move { grid-template-columns: 1fr; gap: 4px; }
+      .section-title { font-size: 30px; }
+      .bubble { max-width: 95%; }
+      .composer { max-width: 100%; }
+      .pm-row { grid-template-columns: 1fr; gap: 3px; }
+      .pm-row .tag { font-size: 9px; }
+      .section-card:has(.card-grid) { padding: 30px 24px; }
+      .composer.spotlight .pm-row { grid-template-columns: 1fr; gap: 3px; }
+      .approach .ar { grid-template-columns: 1fr; gap: 4px; padding: 14px 16px; }
+      .scenario-head .stext { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="toc" aria-label="Table of contents">
+      <ol>
+        <li><a href="#top" data-label="Top">&#9650;</a></li>
+        <li><a href="#hook" data-label="Why AI starts from zero">&#10022;</a></li>
+        <li><a href="#moves" data-label="The four moves">&#9670;</a></li>
+        <li><a href="#data" data-label="Data">D</a></li>
+        <li><a href="#intent" data-label="Intent">I</a></li>
+        <li><a href="#instructions" data-label="Instructions">&#8801;</a></li>
+        <li><a href="#evaluation" data-label="Evaluation">&#10003;</a></li>
+        <li><a href="#comms" data-label="Drafting comms">1</a></li>
+        <li><a href="#pm" data-label="Project management">2</a></li>
+        <li><a href="#research" data-label="Research">3</a></li>
+        <li><a href="#recap" data-label="Recap">&#9733;</a></li>
+        <li><a href="#next" data-label="Where to go next">&#8594;</a></li>
+      </ol>
+    </nav>
+
+    <main class="content">
+
+      <!-- ===== Hero ===== -->
+      <section class="section-card hero" id="top">
+        <div class="kicker">A lesson &middot; MVP Club</div>
+        <h1 style="font-size:50px;margin:8px 0 4px;line-height:1.05;">The Four Moves of Knowledge Work with AI</h1>
+        <div class="byline">Matt &middot; MVP Club</div>
+        <p class="outcome">In the next 20&ndash;30 minutes you'll learn a simple, tool-agnostic model for getting genuinely good work out of <strong>any</strong> AI chat &mdash; then watch it run, move for move, across three everyday jobs: drafting comms, managing a project, and doing research.</p>
+
+        <div class="chip-grid">
+          <div class="c"><div class="t">Data</div><div class="s">what you give it</div></div>
+          <div class="c"><div class="t">Intent</div><div class="s">what it's for</div></div>
+          <div class="c"><div class="t">Instructions</div><div class="s">how to do it</div></div>
+          <div class="c"><div class="t">Evaluation</div><div class="s">how you check it</div></div>
+        </div>
+
+        <p class="credit">This model is our distillation of <a href="https://www.natebjones.com/" target="_blank" rel="noopener">Nate B Jones'</a> approach to knowledge work with AI &mdash; the idea that good output comes from preparing the sources, defining what you're making, constraining how it's made, and verifying it like a skeptical reviewer.</p>
+      </section>
+
+      <!-- ===== Hook ===== -->
+      <section class="section-card" id="hook">
+        <div class="section-title-row">
+          <div class="section-num">&#10022;</div>
+          <h2 class="section-title">Why your AI starts from zero</h2>
+        </div>
+        <div class="section-subtitle">every new chat is a blank slate</div>
+
+        <p class="lede">AI doesn't look up the right answer the way you might hope. It <strong>predicts the most likely continuation</strong> of what you put in front of it &mdash; a kind of weighted average of everything that fits. And every new chat starts from zero: it knows nothing about your situation except what's in the box.</p>
+
+        <p>So the quality of the answer depends almost entirely on the quality of the input. Vague in, vague out. A one-line request gets a generic guess. A rich, well-aimed request gets something you can actually use. The whole skill is learning what to put in the box.</p>
+
+        <div class="why-it-matters">
+          <p style="margin:0;"><strong>The one idea to hold onto:</strong> AI is always guessing. Your job is to <strong>shape the guess</strong>. There are four moves that do the shaping &mdash; and they're the same four whether you're writing an email, planning a project, or researching a decision.</p>
+        </div>
+      </section>
+
+      <!-- ===== The four moves ===== -->
+      <section class="section-card" id="moves">
+        <div class="section-title-row">
+          <div class="section-num">&#9670;</div>
+          <h2 class="section-title">The four moves</h2>
+        </div>
+        <div class="section-subtitle">one loop &middot; Data &rarr; Intent &rarr; Instructions &rarr; Evaluation</div>
+
+        <p class="lede">Four moves turn a vague request into a strong one. Make all four and the guess gets sharp. Skip one and you can usually feel exactly which one is missing.</p>
+
+        <div class="diie-bar" aria-label="The four moves: Data, Intent, Instructions, Evaluation">
+          <div class="chip"><div class="step">Move 1</div><div class="name">Data</div><div class="one">The raw material you hand it &mdash; context, files, examples.</div></div>
+          <div class="arrow" aria-hidden="true">&rarr;</div>
+          <div class="chip"><div class="step">Move 2</div><div class="name">Intent</div><div class="one">What this output is <em>for</em>, and what "done" looks like.</div></div>
+          <div class="arrow" aria-hidden="true">&rarr;</div>
+          <div class="chip"><div class="step">Move 3</div><div class="name">Instructions</div><div class="one">The explicit how &mdash; format, constraints, what to avoid.</div></div>
+          <div class="arrow" aria-hidden="true">&rarr;</div>
+          <div class="chip"><div class="step">Move 4</div><div class="name">Evaluation</div><div class="one">Criteria you can test &mdash; you judge the guess.</div></div>
+        </div>
+
+        <p class="footnote">The rest of this page is these four moves, one at a time &mdash; and then three times over, on real work.</p>
+      </section>
+
+      <!-- ===== Data ===== -->
+      <section class="section-card" id="data">
+        <div class="card-grid">
+          <div>
+            <div class="section-title-row">
+              <div class="section-num move-glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="3" width="10" height="13" rx="1.5"/>
+                  <rect x="9.5" y="7.5" width="10" height="13" rx="1.5" fill="var(--card-bg)"/>
+                  <path d="M12 12h5M12 15h5"/>
+                </svg>
+              </div>
+              <h2 class="section-title">Data</h2>
+            </div>
+            <div class="section-subtitle">prepare the sources</div>
+            <p class="lede">Every chat starts blank. Paste the real material &mdash; your files, the context, an example of what "good" looks like.</p>
+            <div class="why-it-matters"><p style="margin:0;"><strong>If it isn't in the box, it doesn't exist.</strong></p></div>
+          </div>
+          <div class="card-right-col">
+            <div class="composer spotlight" aria-label="Where Data sits in the full prompt">
+              <div class="comp-label">In the full prompt</div>
+              <div class="pm-row data"><span class="tag">Data</span><span class="val">Paste the <span class="ph">playbook</span> + this event's date, roles, what to bring</span></div>
+              <div class="pm-row intent faded"><span class="tag">Intent</span><span class="val">what it's for</span></div>
+              <div class="pm-row instr faded"><span class="tag">Instructions</span><span class="val">format &amp; constraints</span></div>
+              <div class="pm-row eval faded"><span class="tag">Evaluation</span><span class="val">checks to run</span></div>
+            </div>
+            <div class="next-step">
+              <div class="ns-label">Next step &rarr;</div>
+              <div class="ns-text">Don't just add context to a prompt &mdash; <strong>preserve it.</strong> Move this context into a <strong>Project</strong> so you can reuse and maintain it, instead of rebuilding it every time.</div>
+              <div class="ns-tools">Claude Projects &middot; ChatGPT Projects &middot; Custom GPTs</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Intent ===== -->
+      <section class="section-card" id="intent">
+        <div class="card-grid">
+          <div>
+            <div class="section-title-row">
+              <div class="section-num move-glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="8.5"/>
+                  <circle cx="12" cy="12" r="4.5"/>
+                  <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/>
+                </svg>
+              </div>
+              <h2 class="section-title">Intent</h2>
+            </div>
+            <div class="section-subtitle">define what you're actually making</div>
+            <p class="lede">Name the job the output has to do, not just its topic. "An email" gets you mush; "an email that gets each volunteer to show up prepared" aims the guess.</p>
+            <div class="why-it-matters"><p style="margin:0;"><strong>Topic gets you words. Intent gets you the right words.</strong></p></div>
+          </div>
+          <div class="card-right-col">
+            <div class="composer spotlight" aria-label="Where Intent sits in the full prompt">
+              <div class="comp-label">In the full prompt</div>
+              <div class="pm-row data faded"><span class="tag">Data</span><span class="val">the sources</span></div>
+              <div class="pm-row intent"><span class="tag">Intent</span><span class="val">Each volunteer arrives knowing their role and what to expect</span></div>
+              <div class="pm-row instr faded"><span class="tag">Instructions</span><span class="val">format &amp; constraints</span></div>
+              <div class="pm-row eval faded"><span class="tag">Evaluation</span><span class="val">checks to run</span></div>
+            </div>
+            <div class="next-step">
+              <div class="ns-label">Next step &rarr;</div>
+              <div class="ns-text">Don't just add context to a prompt &mdash; <strong>preserve it.</strong> Move this context into a <strong>Project</strong> so you can reuse and maintain it, instead of rebuilding it every time.</div>
+              <div class="ns-tools">Claude Projects &middot; ChatGPT Projects &middot; Custom GPTs</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Instructions ===== -->
+      <section class="section-card" id="instructions">
+        <div class="card-grid">
+          <div>
+            <div class="section-title-row">
+              <div class="section-num move-glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 8h9M19 8h1"/>
+                  <circle cx="16" cy="8" r="2.2"/>
+                  <path d="M4 16h2M11 16h9"/>
+                  <circle cx="8" cy="16" r="2.2"/>
+                </svg>
+              </div>
+              <h2 class="section-title">Instructions</h2>
+            </div>
+            <div class="section-subtitle">constrain how it's made</div>
+            <p class="lede">Spell out the <em>how</em> &mdash; format, length, tone, what to avoid. The standards that live silently in your head are exactly what the model needs said out loud.</p>
+            <div class="why-it-matters"><p style="margin:0;"><strong>Say the quiet part.</strong> Constraints don't limit the output &mdash; they're what make it land.</p></div>
+          </div>
+          <div class="card-right-col">
+            <div class="composer spotlight" aria-label="Where Instructions sit in the full prompt">
+              <div class="comp-label">In the full prompt</div>
+              <div class="pm-row data faded"><span class="tag">Data</span><span class="val">the sources</span></div>
+              <div class="pm-row intent faded"><span class="tag">Intent</span><span class="val">what it's for</span></div>
+              <div class="pm-row instr"><span class="tag">Instructions</span><span class="val">Warm, skimmable; cover role &amp; logistics; end with one RSVP ask</span></div>
+              <div class="pm-row eval faded"><span class="tag">Evaluation</span><span class="val">checks to run</span></div>
+            </div>
+            <div class="next-step">
+              <div class="ns-label">Next step &rarr;</div>
+              <div class="ns-text">Don't just add context to a prompt &mdash; <strong>preserve it.</strong> Move this context into a <strong>Project</strong> so you can reuse and maintain it, instead of rebuilding it every time.</div>
+              <div class="ns-tools">Claude Projects &middot; ChatGPT Projects &middot; Custom GPTs</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Evaluation ===== -->
+      <section class="section-card" id="evaluation">
+        <div class="card-grid">
+          <div>
+            <div class="section-title-row">
+              <div class="section-num move-glyph" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="6.5"/>
+                  <path d="M16 16l4 4"/>
+                  <path d="M8.4 11l2 2 3.4-3.6"/>
+                </svg>
+              </div>
+              <h2 class="section-title">Evaluation</h2>
+            </div>
+            <div class="section-subtitle">verify like a skeptical reviewer</div>
+            <p class="lede">Decide what "good" means up front, and write the checks <em>into the prompt</em> &mdash; so the model tests its own draft against your bar before you ever read it.</p>
+            <div class="why-it-matters"><p style="margin:0;"><strong>Plausible isn't the same as right.</strong> The model won't tell you it's wrong; you have to check.</p></div>
+          </div>
+          <div class="card-right-col">
+            <div class="composer spotlight" aria-label="Where Evaluation sits in the full prompt">
+              <div class="comp-label">In the full prompt</div>
+              <div class="pm-row data faded"><span class="tag">Data</span><span class="val">the sources</span></div>
+              <div class="pm-row intent faded"><span class="tag">Intent</span><span class="val">what it's for</span></div>
+              <div class="pm-row instr faded"><span class="tag">Instructions</span><span class="val">format &amp; constraints</span></div>
+              <div class="pm-row eval"><span class="tag">Evaluation</span><span class="val">Before showing me: real specifics, not filler? what would they still ask?</span></div>
+            </div>
+            <div class="next-step">
+              <div class="ns-label">Next step &rarr;</div>
+              <div class="ns-text">Don't just add context to a prompt &mdash; <strong>preserve it.</strong> Move this context into a <strong>Project</strong> so you can reuse and maintain it, instead of rebuilding it every time.</div>
+              <div class="ns-tools">Claude Projects &middot; ChatGPT Projects &middot; Custom GPTs</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Vignette 1 · Drafting comms ===== -->
+      <section class="section-card" id="comms">
+        <div class="section-title-row">
+          <div class="section-num">1</div>
+          <h2 class="section-title">Drafting comms</h2>
+        </div>
+        <div class="section-subtitle">the four moves, applied to rallying volunteers for an event</div>
+
+        <div class="scenario-head">
+          <div class="eyebrow">The scenario</div>
+          <div class="stext">Emailing volunteer groups about an upcoming event &mdash; and the details are scattered across your planning docs and playbooks.</div>
+        </div>
+
+        <div class="approach">
+          <div class="ar data"><span class="atag">Data</span><span class="aval">Paste the <span class="ph">playbook</span> plus this event's date, place, roles, and what to bring.</span></div>
+          <div class="ar intent"><span class="atag">Intent</span><span class="aval">Volunteers arrive knowing their role and what to expect &mdash; not just that an event is happening.</span></div>
+          <div class="ar instr"><span class="atag">Instructions</span><span class="aval">Warm, skimmable; cover role, logistics, and what to bring; end with one clear RSVP ask.</span></div>
+          <div class="ar eval"><span class="atag">Evaluation</span><span class="aval">Before showing me: real specifics from my docs, not filler? What would a first-timer still have to ask?</span></div>
+        </div>
+
+        <details class="full-prompt">
+          <summary>See / copy the full prompt</summary>
+          <pre><code>You're helping me write an email inviting a volunteer group to an
+upcoming event.
+
+DATA:
+[paste the relevant planning-doc / playbook sections + this event's details]
+- Event: [what it is, date, time, location].
+- What volunteers will actually do: [roles / tasks].
+- Audience: [which group], who [already know us / are brand new].
+
+INTENT:
+After reading, each volunteer should know exactly what they'll be doing and
+what to expect on the day &mdash; so they show up prepared and I get fewer
+follow-up questions. Pull the specifics for THIS event and THIS group out of
+the material above; don't speak in generalities.
+
+INSTRUCTIONS:
+- Warm, concrete, skimmable. Short paragraphs or a few bullets.
+- Cover: their role, logistics (when / where), what to bring, who to find on arrival.
+- End with one clear ask: confirm by [date] / RSVP here.
+- Don't invent details that aren't in my material &mdash; if something's missing,
+  leave a [BRACKET] for me to fill.
+
+EVALUATION &mdash; before showing me:
+- Would a first-time volunteer know what to do and what to expect?
+- Did you use the real specifics from my docs, or generic filler?
+- List anything they'd still have to email me to ask.</code></pre>
+        </details>
+
+        <div class="block-label">What evaluation catches</div>
+        <div class="catch-chips">
+          <div class="cc"><span class="ic">&#9888;</span><span>Generic "come join us!" filler instead of the real role and logistics from your playbook.</span></div>
+          <div class="cc"><span class="ic">&#9888;</span><span>Invented times or locations that aren't in your material.</span></div>
+          <div class="cc"><span class="ic">&#9888;</span><span>Gaps a first-timer trips on &mdash; what to bring, where to go, who to find.</span></div>
+        </div>
+      </section>
+
+      <!-- ===== Vignette 2 · Project management ===== -->
+      <section class="section-card" id="pm">
+        <div class="section-title-row">
+          <div class="section-num">2</div>
+          <h2 class="section-title">Project management</h2>
+        </div>
+        <div class="section-subtitle">the same four moves, turning a sprawling event into a plan you won't drop</div>
+
+        <div class="scenario-head">
+          <div class="eyebrow">The scenario</div>
+          <div class="stext">You're running an event &mdash; a drive to add people to a registry you manage. Tasks to finish, supplies to bring, people to coordinate, and nothing can slip.</div>
+        </div>
+
+        <div class="approach">
+          <div class="ar data"><span class="atag">Data</span><span class="aval">Dump all my <span class="ph">notes</span> plus the event date, location, goal (40 sign-ups), and past runs.</span></div>
+          <div class="ar intent"><span class="atag">Intent</span><span class="aval">A plan I can run the day from &mdash; nothing forgotten. Not a summary of my notes.</span></div>
+          <div class="ar instr"><span class="atag">Instructions</span><span class="aval">Three tracks &mdash; tasks to finish &middot; things to bring &middot; people to coordinate &mdash; sequenced by date.</span></div>
+          <div class="ar eval"><span class="atag">Evaluation</span><span class="aval">Before showing me: what did I forget? Are the "bring" and "contact" lists complete enough to run the day?</span></div>
+        </div>
+
+        <details class="full-prompt">
+          <summary>See / copy the full prompt</summary>
+          <pre><code>Turn everything I'm juggling for this event into one plan I won't drop
+anything from.
+
+DATA:
+[dump all your notes, to-dos, and reminders here &mdash; unstructured is fine]
+- Event: a drive to add people to a registry I manage.
+- Date / location: [...]. My goal: [e.g. 40 sign-ups].
+- Past runs / playbook notes: [paste if you have them].
+
+INTENT:
+I need a plan I can actually run the event from &mdash; everything I have to do
+before, everything I have to bring, and everyone I have to coordinate with &mdash;
+organized so nothing slips. Not a summary of my notes.
+
+INSTRUCTIONS:
+- Organize into three tracks: (1) Tasks to finish before, (2) Things to bring on
+  the day, (3) People to contact / coordinate.
+- Within each, sequence by when it has to happen ("2 weeks out", "day before",
+  "morning of").
+- Mark anything I didn't specify as "UNKNOWN &mdash; needs confirming". Don't invent it.
+
+EVALUATION &mdash; before showing me:
+- What's commonly needed for an event like this that I forgot to mention? List it
+  separately under "you may be missing...".
+- Are the "bring" and "coordinate" lists complete enough to run the day?
+- What is the single next thing I should do today?</code></pre>
+        </details>
+
+        <div class="block-label">What evaluation catches</div>
+        <div class="catch-chips">
+          <div class="cc"><span class="ic">&#9888;</span><span>Things you simply forgot to mention &mdash; the prompt asks Claude to surface them.</span></div>
+          <div class="cc"><span class="ic">&#9888;</span><span>A "bring" or "contact" list that looks done but misses a day-of essential.</span></div>
+          <div class="cc"><span class="ic">&#9888;</span><span>Invented tasks or deadlines presented as if they came from you.</span></div>
+        </div>
+      </section>
+
+      <!-- ===== Vignette 3 · Research ===== -->
+      <section class="section-card" id="research">
+        <div class="section-title-row">
+          <div class="section-num">3</div>
+          <h2 class="section-title">Research</h2>
+        </div>
+        <div class="section-subtitle">the same four moves &mdash; with evaluation doing the heavy lifting</div>
+
+        <div class="scenario-head">
+          <div class="eyebrow">The scenario</div>
+          <div class="stext">You want to grow your volunteer base in a region &mdash; systematically finding the people and groups who fit, and how to reach out and invite them.</div>
+        </div>
+
+        <div class="approach">
+          <div class="ar data"><span class="atag">Data</span><span class="aval">The <span class="ph">region</span> plus the persona I want &mdash; who they are, their groups, why they'd care &mdash; and what collaboration means.</span></div>
+          <div class="ar intent"><span class="atag">Intent</span><span class="aval">A systematic, actionable shortlist I can work this week &mdash; not a general overview of the area.</span></div>
+          <div class="ar instr"><span class="atag">Instructions</span><span class="aval">Group candidates by type; why each fits; a contact path and tailored opener; flag what to verify.</span></div>
+          <div class="ar eval"><span class="atag">Evaluation</span><span class="aval">Before showing me: my persona or generic? Flag every invented or unverified name and contact.</span></div>
+        </div>
+
+        <details class="full-prompt">
+          <summary>See / copy the full prompt</summary>
+          <pre><code>Help me systematically find volunteers in a region &mdash; and how to reach them.
+
+DATA:
+- Region: [city / area].
+- The persona I'm looking for: [who they are, groups they belong to, what would
+  make them care].
+- What collaborating with me looks like: [volunteering at registry drives, etc.].
+- Constraints: [time commitment, travel, anything disqualifying].
+
+INTENT:
+Give me a systematic shortlist of groups and people in this region who fit the
+persona, plus how to approach each one &mdash; something I can act on this week,
+not a general overview of the area.
+
+INSTRUCTIONS:
+- Group candidates by type (community orgs, faith groups, campus clubs,
+  workplaces, etc.). For each: why they fit, a contact path, and a one-line
+  opener tailored to them.
+- Separate what you actually know from what you're inferring.
+- Flag every name, contact, or claim I should verify myself before reaching out.
+
+EVALUATION &mdash; before showing me:
+- Did you use my persona and region, or fall back on generic suggestions?
+- Is anything &mdash; org names, contacts, facts &mdash; invented or unverified?
+  Mark each one clearly so I don't email a dead end.</code></pre>
+        </details>
+
+        <div class="block-label">What evaluation catches</div>
+        <div class="catch-chips">
+          <div class="cc"><span class="ic">&#9888;</span><span>Plausible-sounding org names or contacts that don't actually exist.</span></div>
+          <div class="cc"><span class="ic">&#9888;</span><span>Generic "reach out to local nonprofits" advice instead of your specific persona.</span></div>
+          <div class="cc"><span class="ic">&#9888;</span><span>Inferences about a group's interest stated as if they were established fact.</span></div>
+        </div>
+      </section>
+
+      <!-- ===== Recap ===== -->
+      <section class="section-card" id="recap">
+        <div class="section-title-row">
+          <div class="section-num">&#9733;</div>
+          <h2 class="section-title">Recap</h2>
+        </div>
+        <div class="section-subtitle">four moves, any job</div>
+
+        <p class="lede">Across a volunteer email, an event plan, and a regional research sweep, the loop never changed. That's the whole point &mdash; it's portable. Learn the four moves once and you have a method for almost anything you'd hand to an AI.</p>
+
+        <div class="recap-grid">
+          <div class="r"><div class="rn">Data</div><div class="rd">Put the real material in the box. If it isn't there, it doesn't exist.</div></div>
+          <div class="r"><div class="rn">Intent</div><div class="rd">Name the job the output has to do, not just its topic.</div></div>
+          <div class="r"><div class="rn">Instructions</div><div class="rd">Say the quiet part &mdash; format, constraints, what to avoid.</div></div>
+          <div class="r"><div class="rn">Evaluation</div><div class="rd">Decide what "good" means and make the model check before you read.</div></div>
+        </div>
+
+        <div class="one-rule">If a result disappoints you, don't retype it louder &mdash; ask <strong>which of the four moves you skipped</strong>. It's almost always one of them.</div>
+      </section>
+
+      <!-- ===== Where to go next ===== -->
+      <section class="section-card" id="next">
+        <div class="section-title-row">
+          <div class="section-num">&#8594;</div>
+          <h2 class="section-title">Where to go next</h2>
+        </div>
+        <div class="section-subtitle">practice the moves with people doing the same thing</div>
+
+        <p class="lede">Reading the loop is one thing; running it on your own work until it's second nature is another. That's what we do together at MVP Club.</p>
+
+        <div class="cta">
+          <h3>AI Summer Camp</h3>
+          <p>A four-Friday beginner cohort where you build and demo something real &mdash; practicing exactly these moves, live, with a group. Become the AI person on your team.</p>
+          <a class="btn" href="https://mvpclub.ai/summer-camp?utm_source=lessons&amp;utm_medium=referral&amp;utm_campaign=knowledge-work-with-ai&amp;utm_content=company" target="_blank" rel="noopener">See AI Summer Camp &rarr;</a>
+        </div>
+
+        <div class="footer">
+          <p style="margin:0 0 6px;">Built by <a href="https://mvpclub.ai?utm_source=lessons&amp;utm_medium=referral&amp;utm_campaign=knowledge-work-with-ai&amp;utm_content=company">MVP Club</a> &mdash; the community for people learning to build with AI.</p>
+          <p style="margin:0;">The four-move model is our distillation of <a href="https://www.natebjones.com/" target="_blank" rel="noopener">Nate B Jones'</a> work on knowledge work with AI.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Copy buttons on any code blocks.
+    document.querySelectorAll('pre').forEach((pre) => {
+      if (!pre.querySelector('code')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code').innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+        } catch (e) {
+          btn.textContent = 'Press Ctrl+C';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+
+    // Active-state sync for the sticky TOC as sections scroll into view.
+    const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+    const byId = id => tocLinks.find(a => a.getAttribute('href') === '#' + id);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(a => a.classList.remove('active'));
+          const link = byId(entry.target.id);
+          if (link) link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('main.content > section[id]').forEach(s => observer.observe(s));
+
+    // Naive vs Robust toggle inside each vignette.
+    document.querySelectorAll('.vig').forEach((vig) => {
+      const btns = vig.querySelectorAll('.vig-btn');
+      const views = vig.querySelectorAll('.vig-view');
+      btns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const v = btn.dataset.view;
+          btns.forEach(b => b.classList.toggle('active', b.dataset.view === v));
+          views.forEach(view => view.classList.toggle('active', view.dataset.view === v));
+        });
+      });
+    });
+  </script>
+</body>
+</html>
