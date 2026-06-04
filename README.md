@@ -6,6 +6,11 @@ Free, hands-on lessons from [MVP Club](https://mvpclub.ai) on building with AI.
 
 ## Lessons
 
+- **The Four Moves of Knowledge Work with AI** (`knowledge-work-with-ai/`) — a self-contained
+  HTML page teaching a tool-agnostic model (Data, Intent, Instructions, Evaluation) for getting
+  good work out of any AI chat, applied to three use cases: drafting comms, project management,
+  and research. A distillation of Nate B Jones' approach. Open
+  `knowledge-work-with-ai/index.html` in any browser; there is no build step.
 - **Claude Code Agents** (`claude-code-agents/`) — a self-contained HTML page used during a
   live 45–60 minute teaching session about building agents *with* Claude Code (CLAUDE.md,
   commands, skills, subagents). Open `claude-code-agents/index.html` in any browser; there
