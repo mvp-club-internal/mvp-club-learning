@@ -289,28 +289,118 @@
           <div class="sr-step"><span class="sr-num">4</span><span class="sr-label">Document</span></div>
         </div>
 
-        <p class="lede">Everything on your computer is files and folders. Software is no different: you describe what you want, and Claude translates that intent into the right files. Your job is to keep a sensible structure and direct Claude as it works inside it.</p>
+        <p class="lede">Before you make a folder, it helps to see what an app actually <em>is</em>. Take one you already use — LinkedIn. Whether you open it as a desktop app or in a Chrome tab, underneath it's the same thing: <strong>files and folders a computer reads</strong> to draw what you see and store what you do.</p>
 
-        <!-- files-and-folders visual: a simple project folder with a docs/ folder -->
-        <div class="fs-view" aria-label="A simple project folder on your Desktop containing a docs folder">
-          <div class="fs-zone">
-            <div class="zone-label">A project folder on your Desktop</div>
-            <div class="fs-row" style="margin-top:6px;">~/Desktop/wardrobe-app/<span class="badge project">your workspace</span></div>
-            <div class="fs-row" style="padding-left:16px;">└── docs/</div>
-            <div class="fs-row" style="padding-left:32px;">└── (your intent &amp; success criteria land here next)</div>
+        <!-- §3 visual: x-ray reveal (a desktop app AND a Chrome tab resolve to the
+             same files) then "grow" those into the wardrobe-app folder we build.
+             Reveal animation is gated behind `.js .s3viz.animate` (see camp.css) so
+             the content stays fully visible if JS never runs. -->
+        <div class="s3viz" id="s3viz" aria-label="LinkedIn, shown as a desktop app and a Chrome tab, breaks down into files and folders; your computer reads them to render the site, and we then grow our own wardrobe-app folder the same way.">
+          <span class="s3viz-label">What an app really is</span>
+
+          <!-- Beat 1 · what you see: a familiar app (LinkedIn), two ways to open it -->
+          <div class="ax-devices">
+            <figure class="ax-device">
+              <div class="ax-bar">
+                <span class="ax-dot"></span><span class="ax-dot"></span><span class="ax-dot"></span>
+                <span class="ax-bar-title">LinkedIn</span>
+              </div>
+              <div class="ax-ui linkedin" aria-hidden="true">
+                <div class="li-top"><span class="li-logo">in</span><span class="li-search"></span></div>
+                <div class="li-post"><span class="li-avatar"></span><span class="li-meta"><span class="li-line name"></span><span class="li-line sub"></span></span></div>
+                <span class="li-line li-text"></span>
+                <span class="li-line li-text short"></span>
+                <div class="li-actions"><span>Like</span><span>Comment</span><span>Share</span></div>
+              </div>
+              <figcaption>a desktop app</figcaption>
+            </figure>
+            <figure class="ax-device">
+              <div class="ax-bar browser">
+                <span class="ax-dot"></span><span class="ax-dot"></span><span class="ax-dot"></span>
+                <span class="ax-url">linkedin.com</span>
+              </div>
+              <div class="ax-ui linkedin" aria-hidden="true">
+                <div class="li-top"><span class="li-logo">in</span><span class="li-search"></span></div>
+                <div class="li-post"><span class="li-avatar"></span><span class="li-meta"><span class="li-line name"></span><span class="li-line sub"></span></span></div>
+                <span class="li-line li-text"></span>
+                <span class="li-line li-text short"></span>
+                <div class="li-actions"><span>Like</span><span>Comment</span><span>Share</span></div>
+              </div>
+              <figcaption>or a Chrome tab</figcaption>
+            </figure>
           </div>
-        </div>
-        <p class="footnote">One folder named for your project, with room for a <code>docs/</code> folder inside it. You'll write your first document into <code>docs/</code> later this session.</p>
 
-        <div class="try-it">
-          <h3>Try it · make your workspace and connect Claude to it</h3>
-          <p style="margin:0 0 6px;">Pick the path that matches what you have open. Either way the goal is the same: a folder on your Desktop, with Claude Code pointed at it.</p>
+          <div class="ax-seam"><span>underneath, it's files a computer reads</span></div>
+
+          <!-- Beat 2 · how it reaches you: the computer reads the files, then renders the site -->
+          <div class="ax-pipe" aria-label="Your computer reads the files and folders, then renders the site you see.">
+            <div class="pipe-stage pipe-files">
+              <div class="pipe-cap">the files &amp; folders</div>
+              <div class="pipe-box">
+                <div class="ax-file"><code>index.html</code></div>
+                <div class="ax-file"><code>style.css</code></div>
+                <div class="ax-file"><code>app.js</code></div>
+                <div class="ax-file"><code>data/</code></div>
+              </div>
+            </div>
+            <div class="pipe-flow" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="pipe-stage pipe-cpu">
+              <div class="pipe-cap">your computer reads them</div>
+              <div class="pipe-box pipe-cpu-box">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#081f3f" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="7" y="7" width="10" height="10" rx="1.5"></rect>
+                  <rect x="9.6" y="9.6" width="4.8" height="4.8" rx="0.6"></rect>
+                  <path d="M9 7V4M12 7V4M15 7V4M9 20v-3M12 20v-3M15 20v-3M7 9H4M7 12H4M7 15H4M20 9h-3M20 12h-3M20 15h-3"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="pipe-flow" aria-hidden="true"><span></span><span></span><span></span></div>
+            <div class="pipe-stage pipe-render">
+              <div class="pipe-cap">…and draws the site</div>
+              <div class="pipe-box pipe-screen">
+                <div class="ax-ui linkedin mini" aria-hidden="true">
+                  <div class="li-top"><span class="li-logo">in</span><span class="li-search"></span></div>
+                  <div class="li-post"><span class="li-avatar"></span><span class="li-meta"><span class="li-line name"></span><span class="li-line sub"></span></span></div>
+                  <span class="li-line li-text"></span>
+                  <span class="li-line li-text short"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p class="ax-pivot">So we won't <em>download</em> a finished app like LinkedIn, arriving as a folder already stuffed with files. We'll make one empty folder and <strong>grow it locally</strong>, a file at a time. Here's where we're headed:</p>
+
+          <!-- Beat 2 · grow: the wardrobe-app folder we build up across camp -->
+          <div class="fs-view">
+            <div class="fs-zone grow">
+              <div class="zone-label">The folder we'll grow · wardrobe-app/</div>
+              <div class="fs-row" style="margin-top:6px;">~/Desktop/wardrobe-app/<span class="badge project">your workspace</span></div>
+              <div class="fs-row" style="padding-left:16px;">├── docs/</div>
+              <div class="fs-row" style="padding-left:32px;">└── intent.md<span class="badge local">you write this · Session 1</span></div>
+              <div class="fs-row" style="padding-left:16px;">├── index.html<span class="badge later">grows in later weeks</span></div>
+              <div class="fs-row" style="padding-left:16px;">├── style.css<span class="badge later">later</span></div>
+              <div class="fs-row" style="padding-left:16px;">├── app.js<span class="badge later">later</span></div>
+              <div class="fs-row" style="padding-left:16px;">└── data/<span class="badge later">later</span></div>
+            </div>
+          </div>
+
+          <p class="ax-caption">A computer reads these files to draw what you see and store what you do — desktop app or browser tab, same idea. You'll grow this folder yourself, starting with a single document this session.</p>
+          <button type="button" class="ax-replay" id="s3viz-replay" aria-label="Replay the animation">▶ replay</button>
+        </div>
+
+        <!-- "Try it" pulled into its own subcard, following the concept above -->
+        <div class="try-card" aria-label="Try it: make your workspace and connect Claude to it">
+          <div class="try-card-head">
+            <span class="try-card-eyebrow">Try it</span>
+            <h3>Make your workspace and connect Claude to it</h3>
+          </div>
+          <p style="margin:0 0 10px;">Start with just an empty folder — that's the seed you'll grow. Pick the path that matches what you have open; either way the goal is the same: a folder on your Desktop with Claude Code pointed at it.</p>
           <div class="setup-paths">
             <div class="path">
               <h3>Terminal path</h3>
               <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code CLI in VS Code, Terminal, or PowerShell.</p>
               <ol>
-                <li>Create a folder on your Desktop named <code>wardrobe-app</code> (right-click → New Folder).</li>
+                <li>Create an empty folder on your Desktop named <code>wardrobe-app</code> (right-click → New Folder).</li>
                 <li><strong>Mac:</strong> right-click the folder → <em>"New Terminal at Folder."</em> · <strong>Windows:</strong> right-click inside it in Explorer → <em>"Open in Terminal."</em></li>
                 <li>Type <code>claude</code> and press Enter.</li>
               </ol>
@@ -319,18 +409,18 @@
               <h3>Desktop App path</h3>
               <p style="font-size:13px;opacity:0.75;margin:0 0 8px;">Claude Code Desktop App on Mac or Windows.</p>
               <ol>
-                <li>Create a folder on your Desktop named <code>wardrobe-app</code>.</li>
+                <li>Create an empty folder on your Desktop named <code>wardrobe-app</code>.</li>
                 <li>Open the Desktop App → click the <strong>Code</strong> tab.</li>
                 <li>Select <strong>Local</strong> → <strong>Select folder</strong> → pick <code>wardrobe-app</code>.</li>
                 <li>Pick a model (Sonnet is fine).</li>
               </ol>
             </div>
           </div>
-          <p style="font-size:13px;opacity:0.8;margin:10px 0 0;">The full install steps live on the <a href="../">camp home page</a> if you don't have Claude Code open yet.</p>
+          <p style="font-size:13px;opacity:0.8;margin:10px 0 0;">No need to put anything inside the folder yet — Claude will create files there as you go. The full install steps live on the <a href="../">camp home page</a> if you don't have Claude Code open yet.</p>
         </div>
 
         <div class="why-it-matters">
-          <p style="margin:0;">Choosing a folder and pointing Claude at it is your <strong>first act of context engineering</strong>. You've drawn a boundary around the work: the only files Claude can see are the ones you put here. A clean workspace is the start of a clean conversation.</p>
+          <p style="margin:0;">Choosing a folder and pointing Claude at it is your <strong>first act of context engineering</strong>. You've drawn a boundary around the work: the only files Claude can see are the ones in here. Starting empty and adding only what you need keeps that boundary clean.</p>
         </div>
       </section>
 
@@ -778,6 +868,10 @@
   </div>
 
   <script>
+    // Progressive-enhancement flag: CSS gates the §3 reveal-animation start
+    // states behind `.js` so the content stays fully visible if JS never runs.
+    document.documentElement.classList.add('js');
+
     // Copy buttons on any code blocks (kept identical to the index so behavior
     // is the same site-wide as code blocks land in later sections).
     document.querySelectorAll('pre').forEach((pre) => {
@@ -848,6 +942,33 @@
 
       // Manual replay re-runs from the start every time.
       if (replayBtn) replayBtn.addEventListener('click', runBell);
+    }
+
+    // ===== §3 "what an app really is" x-ray → grow visual =====
+    const s3viz = document.getElementById('s3viz');
+    const s3replay = document.getElementById('s3viz-replay');
+
+    function runS3viz() {
+      if (!s3viz) return;
+      s3viz.classList.remove('animate');
+      void s3viz.offsetWidth; // restart the staggered transitions
+      s3viz.classList.add('animate');
+    }
+
+    let s3Played = false;
+    if (s3viz) {
+      const s3Observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4 && !s3Played) {
+            s3Played = true;
+            runS3viz();
+            s3Observer.disconnect();
+          }
+        });
+      }, { threshold: [0, 0.4, 1] });
+      s3Observer.observe(s3viz);
+
+      if (s3replay) s3replay.addEventListener('click', runS3viz);
     }
   </script>
 </body>
