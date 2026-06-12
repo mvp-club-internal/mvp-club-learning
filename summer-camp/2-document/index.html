@@ -3,37 +3,616 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Session 2 · Document → Scope → Build — AI Summer Camp</title>
-  <meta name="description" content="Session 2 of AI Summer Camp: arrive with a clear idea (intent.md); turn it into a PRD, technical doc, and implementation plan, set up a systematic build, and start building.">
+  <meta name="robots" content="noindex">
+  <title>Session 2 · Document — AI Summer Camp</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../camp.css">
+  <style>
+    /* ===== Phase track — 7-phase loop visual ===== */
+    .phase-track {
+      display: flex;
+      gap: 6px;
+      margin: 20px 0 6px;
+      flex-wrap: wrap;
+    }
+    .phase-box {
+      flex: 1 1 0;
+      min-width: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px 8px 12px;
+      text-align: center;
+    }
+    .phase-box.today {
+      background: var(--golden-soft);
+      border-color: var(--amber);
+      box-shadow: 0 4px 12px rgba(217,118,6,0.10);
+    }
+    .phase-box.later { opacity: 0.38; }
+    .phase-circle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--navy-soft);
+      color: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; font-weight: 600;
+      flex: none;
+    }
+    .phase-box.today .phase-circle {
+      background: var(--amber);
+      color: var(--warm-stone);
+    }
+    .phase-box-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 600;
+      color: var(--navy); line-height: 1.2;
+    }
+    .phase-week-tag {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--navy); opacity: 0.55;
+    }
+    .phase-track-caption {
+      font-size: 12px; opacity: 0.65;
+      margin: 6px 0 20px; font-style: italic;
+    }
+
+    /* ===== Wardrobe example box ===== */
+    .wardrobe-example {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px 12px;
+      margin: 18px 0 8px;
+    }
+    .wardrobe-example-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 600; color: var(--amber);
+      display: block; margin-bottom: 8px;
+    }
+    .wardrobe-example p {
+      font-size: 14px; margin: 0 0 8px;
+      color: var(--navy); line-height: 1.55;
+    }
+    .wardrobe-example p:last-child { margin-bottom: 0; }
+    .wardrobe-example ul {
+      margin: 4px 0 0; padding-left: 18px;
+      font-size: 14px; line-height: 1.7; color: var(--navy);
+    }
+    .wardrobe-example ul li { margin: 2px 0; }
+
+    /* ===== Tech reference card — expandable, consequence framing ===== */
+    .tech-ref {
+      background: var(--warm-stone);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      margin: 18px 0 8px;
+      overflow: hidden;
+    }
+    .tech-ref-summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 20px;
+      user-select: none;
+    }
+    .tech-ref-summary::-webkit-details-marker { display: none; }
+    .tech-ref[open] .tech-ref-summary { border-bottom: 1px solid var(--border-subtle); }
+    .tech-ref-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 600; color: var(--amber);
+      display: block;
+    }
+    .tech-ref-summary-right { display: flex; align-items: center; gap: 8px; flex: none; }
+    .tech-ref-hint {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; color: var(--navy); opacity: 0.55;
+    }
+    .tech-ref-hint::after { content: "Click to expand"; }
+    .tech-ref[open] .tech-ref-hint::after { content: "Click to collapse"; }
+    .tech-ref-chevron { color: var(--amber); transition: transform 0.2s ease; flex: none; }
+    .tech-ref[open] .tech-ref-chevron { transform: rotate(180deg); }
+    .tech-ref-body { padding: 12px 20px 18px; }
+    .tech-ref-intro {
+      font-size: 13px; line-height: 1.55; color: var(--navy);
+      opacity: 0.75; margin: 0; font-style: italic;
+    }
+    .tech-ref dl { margin: 0; }
+    .tech-ref dt {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600; font-size: 14px;
+      color: var(--navy); margin-top: 16px;
+    }
+    .tech-ref dd {
+      margin: 3px 0 0; padding: 0;
+      font-size: 14px; line-height: 1.55; color: var(--navy);
+    }
+    .tech-ref dd.consequence { margin-top: 4px; opacity: 0.9; }
+    .tech-ref dd.consequence strong { color: var(--amber); }
+    .tech-ref dd.analogy { margin-top: 4px; font-style: italic; opacity: 0.85; }
+    .tech-ref dd.analogy strong { color: var(--navy); font-style: normal; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .phase-box { min-width: 56px; padding: 10px 6px; }
+      .phase-box-name { font-size: 10px; }
+      .phase-circle { width: 24px; height: 24px; font-size: 11px; }
+    }
+  </style>
 </head>
-<body>
-  <div class="layout">
+<body class="js">
+  <div class="layout has-rail">
+
+    <!-- ===== Sticky TOC ===== -->
     <nav class="toc" aria-label="Table of contents">
       <ol>
-        <li><a href="#top" data-label="Top">▲</a></li>
+        <li><a href="#hero" data-label="Top">★</a></li>
+        <li><a href="#s1" data-label="The Loop">1</a></li>
+        <li><a href="#s2" data-label="Problem">2</a></li>
+        <li><a href="#s3" data-label="Users">3</a></li>
+        <li><a href="#s4" data-label="Scope">4</a></li>
+        <li><a href="#s5" data-label="Tech">5</a></li>
+        <li><a href="#s6" data-label="PRD">6</a></li>
+        <li><a href="#s7" data-label="Next week">7</a></li>
       </ol>
     </nav>
 
+    <!-- ===== Main content ===== -->
     <main class="content">
-      <section class="section-card hero" id="top">
-        <div class="kicker">MVP Club · AI Summer Camp · Session 2</div>
-        <div class="section-title-row">
-          <div class="section-num">2</div>
-          <h1 class="section-title">Document → Scope → Build</h1>
-        </div>
-        <p class="lede">Arrive with a clear idea in <code>intent.md</code>. This session turns it into a PRD, a technical doc, and an implementation plan, then sets up a systematic build (a CLAUDE.md, a high-level plan broken into sprints, and tracking docs) and gets you building.</p>
 
-        <div class="heads-up">This session unlocks the week we run it — check back then.</div>
+      <!-- HERO -->
+      <header class="hero" id="hero">
+        <p class="kicker">AI Summer Camp · Week 2 of 4</p>
+        <h1>Document.</h1>
+        <p class="section-subtitle" style="margin-bottom:22px;">Turn your intent into a spec AI can build from</p>
+
+        <div class="step-rail" style="margin-bottom:26px;">
+          <div class="sr-step done">
+            <span class="sr-num">1</span>
+            <span class="sr-label">Get Clear</span>
+          </div>
+          <div class="sr-step current">
+            <span class="sr-num">2</span>
+            <span class="sr-label">Document</span>
+          </div>
+          <div class="sr-step">
+            <span class="sr-num">3</span>
+            <span class="sr-label">Build</span>
+          </div>
+          <div class="sr-step">
+            <span class="sr-num">4</span>
+            <span class="sr-label">Demo</span>
+          </div>
+        </div>
+
+        <p class="outcome">By the end of this session you'll have worked through five phases of the spec-first loop and walk away with a PRD, the source of truth Claude Code builds from next week.</p>
+
+        <div class="prereq">
+          <strong>Bring your intent.md from last week.</strong> Make sure it's in your project folder, since that's where Claude Code reads it from. No intent.md yet? Follow along with the MVP Club wardrobe app example on each card.
+        </div>
+      </header>
+
+      <!-- ===== §1 THE LOOP ===== -->
+      <section class="section-card" id="s1">
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">1</div>
+            <h2 class="section-title">The Spec-First Loop</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">Seven phases. Today we run 1 through 5</p>
+
+        <p class="lede">Last week you got clear on your goal and captured your intent. Today we formalize it. Each of today's five phases writes its piece into one file, your PRD, so the document builds up as you go instead of living only in the chat. Phases 6 and 7 happen next week when we build.</p>
+
+        <div class="phase-track" role="list" aria-label="Seven-phase spec-first loop">
+          <div class="phase-box today" role="listitem">
+            <span class="phase-circle">1</span>
+            <span class="phase-box-name">Problem</span>
+          </div>
+          <div class="phase-box today" role="listitem">
+            <span class="phase-circle">2</span>
+            <span class="phase-box-name">Users</span>
+          </div>
+          <div class="phase-box today" role="listitem">
+            <span class="phase-circle">3</span>
+            <span class="phase-box-name">Scope</span>
+          </div>
+          <div class="phase-box today" role="listitem">
+            <span class="phase-circle">4</span>
+            <span class="phase-box-name">Tech</span>
+          </div>
+          <div class="phase-box today" role="listitem">
+            <span class="phase-circle">5</span>
+            <span class="phase-box-name">PRD</span>
+          </div>
+          <div class="phase-box later" role="listitem" aria-label="Phase 6 Setup, Week 3">
+            <span class="phase-circle">6</span>
+            <span class="phase-box-name">Setup</span>
+            <span class="phase-week-tag">Week 3</span>
+          </div>
+          <div class="phase-box later" role="listitem" aria-label="Phase 7 Build, Week 3">
+            <span class="phase-circle">7</span>
+            <span class="phase-box-name">Build</span>
+            <span class="phase-week-tag">Week 3</span>
+          </div>
+        </div>
+        <p class="phase-track-caption">Phases 1–5 today · Phases 6–7 in Week 3: Build</p>
+
+        <div class="heads-up">
+          <strong>Vocab for today. </strong>
+          <strong>PRD</strong> (Product Requirements Document): the spec, or what you're building toward this session.
+          <strong>User story</strong>: one sentence about what a person wants to do and why.
+          <strong>Scope</strong>: what's in v1.
+          <strong>Out of scope</strong>: what isn't, which matters just as much.
+        </div>
+      </section>
+
+      <!-- ===== §2 PHASE 1 — PROBLEM ===== -->
+      <section class="section-card" id="s2">
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">01</div>
+            <h2 class="section-title">Problem</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">What are we solving, for whom, and why?</p>
+
+        <p class="lede">You already worked this out last week. Now you're distilling it. You pull the core problem out of your intent file and state it clearly in two or three sentences.</p>
+
+        <div class="wardrobe-example">
+          <span class="wardrobe-example-label">Wardrobe app · MVP Club's example</span>
+          <p>"When I see someone wearing an outfit I love, I have no easy way to find pieces that actually look like it. Searching by hand is slow, and what I turn up is usually close in name but not in look, or it costs way more than I want to spend on the whole outfit."</p>
+        </div>
+
+        <div class="try-it">
+          <h3>Phase 1 · Problem</h3>
+          <ol>
+            <li>Open Claude Code in your project folder so it can read your intent.md. It stays available for all five phases.</li>
+            <li>Start with the first prompt to open things up. The second one asks Claude where your problem description has gaps.</li>
+            <li>Use the third when you're ready to lock in your problem statement. It starts your PRD file, so the doc is building from phase one.</li>
+          </ol>
+        </div>
+        <pre><code>Read my intent.md and tell me in one sentence what you think the core problem is.</code></pre>
+        <pre><code>What's unclear or underspecified about how I've described the problem?</code></pre>
+        <pre><code>Write a 2–3 sentence problem statement and start a new file, docs/prd.md, with it under a 'Problem' heading.</code></pre>
+      </section>
+
+      <!-- ===== §3 PHASE 2 — USERS ===== -->
+      <section class="section-card" id="s3">
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">02</div>
+            <h2 class="section-title">Users</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">Who shows up to use this, and what do they need?</p>
+
+        <p class="lede">User stories make a vague idea concrete. Each one is a sentence about who wants to do what, and why. Three to five is the right number. If you're writing eight, your scope is already too big.</p>
+
+        <div class="wardrobe-example">
+          <span class="wardrobe-example-label">Wardrobe app · MVP Club's example</span>
+          <p><strong>Single user: Jill.</strong> Uses saved outfit photos from Instagram, magazines, screenshots. Sets a budget for the whole outfit. Wants near-identical matches she can actually buy, not a flood of options.</p>
+          <ul>
+            <li>As Jill, I want to upload or paste an outfit photo so I can find the pieces in it.</li>
+            <li>As Jill, I want to set a single price range so every match stays within my budget.</li>
+            <li>As Jill, I want to see 1–2 close matches per item so I have clear choices, not noise.</li>
+            <li>As Jill, I want each look auto-saved to my library so I can come back and buy later.</li>
+          </ul>
+        </div>
+
+        <div class="try-it">
+          <h3>Phase 2 · Users</h3>
+          <ol>
+            <li>Claude Code already has your intent.md from the project folder, so you don't need to add it again.</li>
+            <li>This phase is a conversation. Talk with Claude about who really uses this and what they need before anyone writes a single user story. Tell it where it's wrong, and let it ask you questions back.</li>
+            <li>Once you've talked it through, the last prompt turns the discussion into your final list and adds it to your PRD.</li>
+          </ol>
+        </div>
+        <pre><code>Based on my intent.md, who do you think actually uses this app? Let's talk it through before we write anything down.</code></pre>
+        <pre><code>Here's who I think uses it and why: [your thoughts]. Where am I wrong, and what am I not thinking about?</code></pre>
+        <pre><code>Now that we've talked it through, turn it into 3–5 user stories and add them to docs/prd.md under a 'Users' heading. Flag any that feel redundant or out of scope.</code></pre>
+      </section>
+
+      <!-- ===== §4 PHASE 3 — SCOPE ===== -->
+      <section class="section-card" id="s4">
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">03</div>
+            <h2 class="section-title">Scope</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">What's in v1, and what's explicitly not</p>
+
+        <p class="lede">This is a critical phase. A lot of builds get too big and become hard to manage when we try to fit everything into the scope of an MVP or V1. The way through is to be disciplined about what's in v1 and honest about what isn't.</p>
+
+        <div class="takeaway">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 9l-4.5 3.3L16.7 18 12 14.6 7.3 18l1.7-5.7L4.5 9l5.6-.4z"></path></svg>
+          <span>The out-of-scope list is the more important one. It's how you actually finish. When in doubt, put it out of scope. You can always add it back in Week 3.</span>
+        </div>
+
+        <div class="wardrobe-example" style="margin-top:18px;">
+          <span class="wardrobe-example-label">Wardrobe app · MVP Club's example</span>
+          <p><strong>In v1:</strong> photo upload or paste · price range slider · outfit analysis · 1–2 product matches per item within budget · look page with Buy links · auto-save to library</p>
+          <p><strong>Out of scope:</strong> per-item budgets · login or accounts · cross-device sync · mobile app · paid shopping API · refresh stale matches</p>
+        </div>
+
+        <div class="try-it">
+          <h3>Phase 3 · Scope</h3>
+          <ol>
+            <li>The first prompt asks Claude for the smallest version that still works. It forces a real choice.</li>
+            <li>The second builds your out-of-scope list. Push Claude to be aggressive here. Longer is better.</li>
+            <li>The third is a scope check. Run it before you leave this phase.</li>
+            <li>The last one saves both lists into your PRD.</li>
+          </ol>
+        </div>
+        <pre><code>What's the smallest version of this that still solves the core problem?</code></pre>
+        <pre><code>Give me an out-of-scope list, and make it at least as long as the feature list.</code></pre>
+        <pre><code>What am I most likely to try to add mid-build that we just said is out of scope?</code></pre>
+        <pre><code>Add our in-scope and out-of-scope lists to docs/prd.md under a 'Scope' heading.</code></pre>
+      </section>
+
+      <!-- ===== §5 PHASE 4 — TECH ===== -->
+      <section class="section-card" id="s5">
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">04</div>
+            <h2 class="section-title">Tech</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">Where does this live, and how is it built?</p>
+
+        <p class="lede">You don't need to know anything about tech to run this phase. Claude asks you questions you can answer from your own experience, and it makes the technical calls based on what you tell it.</p>
+
+        <div class="heads-up">
+          <strong>What Claude will ask you:</strong> Where should this run? Should your data still be there if you close the browser? Does anyone else need to access it? You describe what you need, and Claude picks the stack.
+        </div>
+
+        <div class="wardrobe-example">
+          <span class="wardrobe-example-label">Wardrobe app · MVP Club's example</span>
+          <p><strong>Stack:</strong> Next.js. It runs in the browser, with one small server route to hold the API key.</p>
+          <p><strong>Data:</strong> the library is stored inside the browser (IndexedDB), so there's no database to set up. It works the same locally or deployed to Vercel.</p>
+          <p><strong>Hosting:</strong> local first, with the option to deploy to Vercel later for a real URL.</p>
+          <p><strong>Trade-off accepted:</strong> the library is tied to the browser it lives in, which is good enough for a personal tool.</p>
+        </div>
+
+        <details class="tech-ref">
+          <summary class="tech-ref-summary">
+            <span class="tech-ref-label">Tech terms · what they do for your build</span>
+            <span class="tech-ref-summary-right">
+              <span class="tech-ref-hint"></span>
+              <svg class="tech-ref-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+            </span>
+          </summary>
+          <div class="tech-ref-body">
+            <p class="tech-ref-intro">You don't need to memorize these. They're here so Claude's recommendations make sense. Each one is framed by what it does for you and what it costs.</p>
+            <dl>
+            <dt>Front end</dt>
+            <dd>The part people see and click: your screens, buttons, and layout.</dd>
+            <dd class="consequence"><strong>For your build:</strong> this is where your time goes on look and feel. More polish means more iterating, but it's also what makes the app feel like yours.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> the dining room, what guests see and touch.</dd>
+
+            <dt>Back end</dt>
+            <dd>The part that runs behind the scenes, where the real work happens and where secrets like API keys are kept.</dd>
+            <dd class="consequence"><strong>For your build:</strong> you need one as soon as your app uses a paid service or handles anything you don't want sitting out in the open. It's one more piece to run and host.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> the kitchen, where the food actually gets made. Guests never go back there.</dd>
+
+            <dt>Node.js</dt>
+            <dd>The engine your app's behind-the-scenes code runs on. Most beginner web apps use it.</dd>
+            <dd class="consequence"><strong>For your build:</strong> you install it once at the start, and after that it just quietly runs your app while you work. Claude handles the rest.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> the gas and electricity the kitchen runs on. Turn it on once and everything works.</dd>
+
+            <dt>Database</dt>
+            <dd>Where your app's data is kept so it's still there after you close the tab.</dd>
+            <dd class="consequence"><strong>For your build:</strong> add one when your data needs to survive a refresh or follow you across devices. Skip it and you can store data right in the browser instead, simpler, but tied to that one computer. That's the trade-off our wardrobe app made.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> the walk-in fridge, where things are kept so they're still there tomorrow.</dd>
+
+            <dt>API keys</dt>
+            <dd>A password that lets your app use a paid service, like an AI model.</dd>
+            <dd class="consequence"><strong>For your build:</strong> it has to live in the back end, never the front end. Leave it exposed and anyone can grab it and run up your bill.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> the company card behind the bar. Great for serving the premium stuff, but leave it on the counter and anyone runs up the tab.</dd>
+
+            <dt>Language</dt>
+            <dd>What your code is written in, like Python or TypeScript. Same idea as different spoken languages.</dd>
+            <dd class="consequence"><strong>For your build:</strong> Claude picks it, and you rarely need to care which one.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> the language the recipes are written in. English or French, same dish.</dd>
+
+            <dt>Framework</dt>
+            <dd>A starter kit so you're not building from scratch, like Next.js or Angular.</dd>
+            <dd class="consequence"><strong>For your build:</strong> it saves you a huge amount of time, but you build things its way.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> a meal-kit. The structure's done, you just finish it their way.</dd>
+
+            <dt>Packages</dt>
+            <dd>Ready-made pieces of code you drop in for a feature, like an image uploader or a calendar.</dd>
+            <dd class="consequence"><strong>For your build:</strong> each one adds something useful and one more thing your app now leans on.</dd>
+            <dd class="analogy"><strong>Like a restaurant:</strong> appliances you add. A blender lets you make smoothies, but it's one more machine to maintain.</dd>
+            </dl>
+          </div>
+        </details>
+
+        <div class="try-it">
+          <h3>Phase 4 · Tech</h3>
+          <ol>
+            <li>The first prompt tells Claude to ask you questions before it decides anything. Answer in plain language.</li>
+            <li>The second gets you a recommendation with the trade-offs explained in plain terms. Push back if anything feels off.</li>
+            <li>The third captures the stack and constraints and adds them to your PRD.</li>
+          </ol>
+        </div>
+        <pre><code>Before recommending anything, ask me the questions you need answered.</code></pre>
+        <pre><code>Recommend the simplest option. Explain the trade-offs in plain language.</code></pre>
+        <pre><code>What constraints should I write down so we don't forget them during the build? Add the stack and constraints to docs/prd.md under a 'Tech' heading.</code></pre>
+      </section>
+
+      <!-- ===== §6 PHASE 5 — PRD ===== -->
+      <section class="section-card" id="s6">
+        <div class="section-head">
+          <div class="section-title-row">
+            <div class="section-num">05</div>
+            <h2 class="section-title">PRD</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">It's been building all session. Read it as one, then check it</p>
+
+        <p class="lede">You've done the hard thinking, and your PRD has been building the whole way. Each phase wrote its piece into docs/prd.md, so the document already exists. It's the single source of truth for your build. A solid PRD doesn't guarantee you get exactly what you pictured, but it gets you building something much closer to it from the start, instead of way off base and facing a lot of rework. Next week Claude Code reads it straight from your project folder so it knows what you're going for.</p>
+
+        <div class="heads-up">
+          <strong>What a PRD contains:</strong> problem · users · user stories · core features (v1 only) · out-of-scope list · tech stack and constraints. One screen. Short is better.
+        </div>
+
+        <div class="try-it">
+          <h3>Read it as one, then run 3 checks</h3>
+          <ol>
+            <li><strong>Does it hold together?</strong> Read the whole PRD start to finish. This catches gaps between phases, repeats, and anything vague.</li>
+            <li><strong>What's true for the user?</strong> Looks at the finished app from your user's side.</li>
+            <li><strong>What's true for you as the builder?</strong> Deploying it, running it, what it costs, and keeping it going.</li>
+          </ol>
+        </div>
+        <pre><code>Read docs/prd.md back to me as one document, and flag anything that's missing, repeated, or contradictory.</code></pre>
+        <pre><code>If we build exactly what's in this PRD, what will be true for the user?</code></pre>
+        <pre><code>And what will be true for me as the builder? Think about deploying it, running it, what it costs, and keeping it going over time.</code></pre>
+
+        <div class="heads-up">
+          <strong>Good enough beats perfect.</strong> If your checks come back lining up with what you want for the user and for yourself, the PRD is ready. You're not chasing a flawless document, just one solid enough to build from. You'll keep refining as you go next week.
+        </div>
+
+        <div class="why-it-matters">
+          <strong>It's already saved:</strong> because you built it phase by phase, your PRD already lives in <code>docs/prd.md</code>. That file travels with the project, and Claude Code reads it automatically in every build session.
+        </div>
+      </section>
+
+      <!-- ===== §7 BEFORE NEXT WEEK ===== -->
+      <section class="section-card" id="s7">
+        <div class="section-head">
+          <div class="section-title-row">
+            <h2 class="section-title">Before next week</h2>
+          </div>
+        </div>
+        <p class="section-subtitle">Turn your PRD into a build plan, then get set up safely</p>
+
+        <p class="lede">Your PRD says what you're building. The last step today turns it into a build tracker, a plain checklist of the steps to get there, so next week you work straight off it instead of staring at a blank screen.</p>
+
+        <div class="try-it">
+          <h3>Make your build tracker</h3>
+          <p>Ask Claude to turn your PRD into a step-by-step build plan, then save it next to your PRD so it travels with the project.</p>
+        </div>
+        <pre><code>Using my PRD, write a build tracker: a checklist of the steps to build this, in order, that I can work through and check off. Save it to docs/build-tracker.md.</code></pre>
+
+        <div class="why-it-matters">
+          <strong>How you'll use it:</strong> next week you'll open your project folder, open the tracker, and see exactly where you are. Pull it up every time you sit down with Claude so you always know the next step.
+        </div>
+
+        <div class="heads-up">
+          <strong>Make a safety copy first.</strong> Before you build, copy your whole project folder (Cmd-C, then Cmd-V) and build in the copy. If a build session gets messy, your clean PRD and tracker are still sitting safe in the original, ready to start fresh from.
+        </div>
+
+        <p class="section-subtitle" style="margin-top:24px;">This week</p>
+        <div class="checklist">
+          <div class="check-step">
+            <span class="cs-num">1</span>
+            <div class="cs-body">
+              <p class="cs-title">Post your PRD in the cohort channel</p>
+              <p>Share your problem statement or a key user story. Feedback from the group sharpens your scope better than any prompt can.</p>
+            </div>
+          </div>
+          <div class="check-step">
+            <span class="cs-num">2</span>
+            <div class="cs-body">
+              <p class="cs-title">Check your folder is ready</p>
+              <p>Make sure both <code>docs/prd.md</code> and <code>docs/build-tracker.md</code> are saved in your project folder. That's what Week 3 looks for.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="takeaway">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          <span><strong>Week 3: Build.</strong> You'll open your project folder in Claude Code, work through your tracker one step at a time, and steer as you go. Your job from here is to direct, review, and iterate.</span>
+        </div>
+
+        <p class="footnote">AI Summer Camp · Cohort 1 · June 12, 2026</p>
       </section>
 
       <footer class="footer">
-        <p style="margin:0;"><a href="../index.html">← Back to camp overview</a></p>
+        <p style="margin:0;">AI Summer Camp · Session 2 of a four-Friday beginner cohort from <a href="https://mvpclub.ai?utm_source=summer-camp&utm_medium=referral&utm_campaign=ai-summer-camp&utm_content=company">MVP Club</a>, the community for people learning to build with AI. <a href="../">Back to camp overview</a>.</p>
       </footer>
+
     </main>
+
+    <!-- ===== Session nav rail ===== -->
+    <nav class="session-rail" aria-label="Session navigation">
+      <p class="rail-label">Sessions</p>
+      <ol>
+        <li>
+          <a href="../1-get-clear/">
+            <span class="rail-num">1</span>Get Clear
+          </a>
+        </li>
+        <li>
+          <a href="../2-document/" aria-current="page" style="background:var(--golden-soft);border-left-color:var(--amber);">
+            <span class="rail-num" style="background:var(--amber);color:var(--warm-stone);">2</span>Document
+          </a>
+        </li>
+        <li>
+          <a href="../3-build/">
+            <span class="rail-num">3</span>Build
+          </a>
+        </li>
+        <li>
+          <a href="../4-demo/">
+            <span class="rail-num">4</span>Demo
+          </a>
+        </li>
+      </ol>
+    </nav>
+
   </div>
+
+  <script>
+    // ===== Copy-to-clipboard — injected into every pre > code block =====
+    document.querySelectorAll('pre').forEach(pre => {
+      if (!pre.querySelector('code')) return;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy prompt to clipboard');
+      btn.addEventListener('click', async () => {
+        const text = pre.querySelector('code').innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+        } catch {
+          btn.textContent = 'Press Ctrl+C';
+          setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+
+    // ===== TOC scrollspy =====
+    const tocLinks = document.querySelectorAll('.toc a');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        tocLinks.forEach(a => a.classList.remove('active'));
+        document.querySelector(`.toc a[href="#${e.target.id}"]`)?.classList.add('active');
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    document.querySelectorAll('.section-card, .hero').forEach(s => obs.observe(s));
+  </script>
 </body>
 </html>
